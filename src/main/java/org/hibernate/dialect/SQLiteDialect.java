@@ -7,6 +7,12 @@
  *    May you share freely, never taking more than you give.
  *
  * Original source code at https://github.com/gwenn/sqlite-dialect. Not available in mvn repo yet.
+ * See also:
+ * https://github.com/skuarch/SQLiteDialect
+ * https://github.com/savimar/DialectSQLite
+ * https://github.com/EnigmaBridge/hibernate4-sqlite-dialect
+ * https://github.com/tjhart/hibernate-sqlite-dialect
+ * https://github.com/gzsombor/hibernate-sqlite
  */
 package org.hibernate.dialect;
 
@@ -46,53 +52,67 @@ public class SQLiteDialect extends Dialect {
 	private final UniqueDelegate uniqueDelegate;
 
 	public SQLiteDialect() {
-		registerColumnType( Types.BIT, "boolean" );
-		//registerColumnType(Types.FLOAT, "float");
-		//registerColumnType(Types.DOUBLE, "double");
-		registerColumnType( Types.DECIMAL, "decimal" );
-		registerColumnType( Types.CHAR, "char" );
-		registerColumnType( Types.LONGVARCHAR, "longvarchar" );
-		registerColumnType( Types.TIMESTAMP, "datetime" );
-		registerColumnType( Types.BINARY, "blob" );
-		registerColumnType( Types.VARBINARY, "blob" );
-		registerColumnType( Types.LONGVARBINARY, "blob" );
+		registerColumnType(Types.BIT, "boolean");
+		registerColumnType(Types.DECIMAL, "decimal");
+		registerColumnType(Types.CHAR, "char");
+		registerColumnType(Types.LONGVARCHAR, "longvarchar");
+		registerColumnType(Types.TIMESTAMP, "datetime");
+		registerColumnType(Types.BINARY, "blob");
+		registerColumnType(Types.VARBINARY, "blob");
+		registerColumnType(Types.LONGVARBINARY, "blob");
+		registerColumnType(Types.TINYINT, "tinyint");
+		registerColumnType(Types.SMALLINT, "smallint");
+		registerColumnType(Types.INTEGER, "integer");
+		registerColumnType(Types.BIGINT, "bigint");
+		registerColumnType(Types.FLOAT, "float");
+		registerColumnType(Types.REAL, "real");
+		registerColumnType(Types.DOUBLE, "double");
+		registerColumnType(Types.NUMERIC, "numeric");
+		registerColumnType(Types.VARCHAR, "varchar");
+		registerColumnType(Types.DATE, "date");
+		registerColumnType(Types.TIME, "time");
+		// registerColumnType(Types.NULL, "null");
+		registerColumnType(Types.BLOB, "blob");
+		registerColumnType(Types.CLOB, "clob");
+		registerColumnType(Types.BOOLEAN, "integer");
 
-		registerFunction( "concat", new VarArgsSQLFunction( StandardBasicTypes.STRING, "", "||", "" ) );
-		registerFunction( "mod", new SQLFunctionTemplate( StandardBasicTypes.INTEGER, "?1 % ?2" ) );
-		registerFunction( "quote", new StandardSQLFunction( "quote", StandardBasicTypes.STRING ) );
-		registerFunction( "random", new NoArgSQLFunction( "random", StandardBasicTypes.INTEGER ) );
-		registerFunction( "round", new StandardSQLFunction( "round" ) );
-		registerFunction( "substr", new StandardSQLFunction( "substr", StandardBasicTypes.STRING ) );
-		registerFunction( "trim", new AbstractAnsiTrimEmulationFunction() {
+		registerFunction("concat", new VarArgsSQLFunction(StandardBasicTypes.STRING, "", "||", ""));
+		registerFunction("mod", new SQLFunctionTemplate(StandardBasicTypes.INTEGER, "?1 % ?2"));
+		registerFunction("quote", new StandardSQLFunction("quote", StandardBasicTypes.STRING));
+		registerFunction("random", new NoArgSQLFunction("random", StandardBasicTypes.INTEGER));
+		registerFunction("round", new StandardSQLFunction("round"));
+		registerFunction("substr", new StandardSQLFunction("substr", StandardBasicTypes.STRING));
+		registerFunction("substring", new StandardSQLFunction("substr", StandardBasicTypes.STRING));
+		registerFunction("trim", new AbstractAnsiTrimEmulationFunction() {
 			protected SQLFunction resolveBothSpaceTrimFunction() {
-				return new SQLFunctionTemplate( StandardBasicTypes.STRING, "trim(?1)" );
+				return new SQLFunctionTemplate(StandardBasicTypes.STRING, "trim(?1)");
 			}
 
 			protected SQLFunction resolveBothSpaceTrimFromFunction() {
-				return new SQLFunctionTemplate( StandardBasicTypes.STRING, "trim(?2)" );
+				return new SQLFunctionTemplate(StandardBasicTypes.STRING, "trim(?2)");
 			}
 
 			protected SQLFunction resolveLeadingSpaceTrimFunction() {
-				return new SQLFunctionTemplate( StandardBasicTypes.STRING, "ltrim(?1)" );
+				return new SQLFunctionTemplate(StandardBasicTypes.STRING, "ltrim(?1)");
 			}
 
 			protected SQLFunction resolveTrailingSpaceTrimFunction() {
-				return new SQLFunctionTemplate( StandardBasicTypes.STRING, "rtrim(?1)" );
+				return new SQLFunctionTemplate(StandardBasicTypes.STRING, "rtrim(?1)");
 			}
 
 			protected SQLFunction resolveBothTrimFunction() {
-				return new SQLFunctionTemplate( StandardBasicTypes.STRING, "trim(?1, ?2)" );
+				return new SQLFunctionTemplate(StandardBasicTypes.STRING, "trim(?1, ?2)");
 			}
 
 			protected SQLFunction resolveLeadingTrimFunction() {
-				return new SQLFunctionTemplate( StandardBasicTypes.STRING, "ltrim(?1, ?2)" );
+				return new SQLFunctionTemplate(StandardBasicTypes.STRING, "ltrim(?1, ?2)");
 			}
 
 			protected SQLFunction resolveTrailingTrimFunction() {
-				return new SQLFunctionTemplate( StandardBasicTypes.STRING, "rtrim(?1, ?2)" );
+				return new SQLFunctionTemplate(StandardBasicTypes.STRING, "rtrim(?1, ?2)");
 			}
-		} );
-		uniqueDelegate = new SQLiteUniqueDelegate( this );
+		});
+		uniqueDelegate = new SQLiteUniqueDelegate(this);
 	}
 
 	// database type mapping support ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -100,12 +120,13 @@ public class SQLiteDialect extends Dialect {
 	@Override
 	public String getCastTypeName(int code) {
 		// FIXME
-		return super.getCastTypeName( code );
+		return super.getCastTypeName(code);
 	}
 
 	// IDENTITY support ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	private static final SQLiteDialectIdentityColumnSupport IDENTITY_COLUMN_SUPPORT = new SQLiteDialectIdentityColumnSupport();
+
 	@Override
 	public IdentityColumnSupport getIdentityColumnSupport() {
 		return IDENTITY_COLUMN_SUPPORT;
@@ -115,7 +136,7 @@ public class SQLiteDialect extends Dialect {
 	private static final AbstractLimitHandler LIMIT_HANDLER = new AbstractLimitHandler() {
 		@Override
 		public String processSql(String sql, RowSelection selection) {
-			final boolean hasOffset = LimitHelper.hasFirstRow( selection );
+			final boolean hasOffset = LimitHelper.hasFirstRow(selection);
 			return sql + (hasOffset ? " limit ? offset ?" : " limit ?");
 		}
 
@@ -152,12 +173,11 @@ public class SQLiteDialect extends Dialect {
 		return false;
 	}
 
-  /*
-	@Override
-  public boolean dropTemporaryTableAfterUse() {
-    return true; // temporary tables are only dropped when the connection is closed. If the connection is pooled...
-  }
-  */
+	/*
+	 * @Override public boolean dropTemporaryTableAfterUse() { return true; //
+	 * temporary tables are only dropped when the connection is closed. If the
+	 * connection is pooled... }
+	 */
 
 	// current timestamp support ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -180,10 +200,10 @@ public class SQLiteDialect extends Dialect {
 	private static final int SQLITE_BUSY = 5;
 	private static final int SQLITE_LOCKED = 6;
 	private static final int SQLITE_IOERR = 10;
-//	private static final int SQLITE_CORRUPT = 11;
-//	private static final int SQLITE_NOTFOUND = 12;
-//	private static final int SQLITE_FULL = 13;
-//	private static final int SQLITE_CANTOPEN = 14;
+	// private static final int SQLITE_CORRUPT = 11;
+	// private static final int SQLITE_NOTFOUND = 12;
+	// private static final int SQLITE_FULL = 13;
+	// private static final int SQLITE_CANTOPEN = 14;
 	private static final int SQLITE_PROTOCOL = 15;
 	private static final int SQLITE_TOOBIG = 18;
 	private static final int SQLITE_CONSTRAINT = 19;
@@ -195,15 +215,13 @@ public class SQLiteDialect extends Dialect {
 		return new SQLExceptionConversionDelegate() {
 			@Override
 			public JDBCException convert(SQLException sqlException, String message, String sql) {
-				final int errorCode = JdbcExceptionHelper.extractErrorCode( sqlException );
+				final int errorCode = JdbcExceptionHelper.extractErrorCode(sqlException);
 				if (errorCode == SQLITE_TOOBIG || errorCode == SQLITE_MISMATCH) {
-					return new DataException( message, sqlException, sql );
-				}
-				else if (errorCode == SQLITE_BUSY || errorCode == SQLITE_LOCKED) {
-					return new LockAcquisitionException( message, sqlException, sql );
-				}
-				else if ((errorCode >= SQLITE_IOERR && errorCode <= SQLITE_PROTOCOL) || errorCode == SQLITE_NOTADB) {
-					return new JDBCConnectionException( message, sqlException, sql );
+					return new DataException(message, sqlException, sql);
+				} else if (errorCode == SQLITE_BUSY || errorCode == SQLITE_LOCKED) {
+					return new LockAcquisitionException(message, sqlException, sql);
+				} else if ((errorCode >= SQLITE_IOERR && errorCode <= SQLITE_PROTOCOL) || errorCode == SQLITE_NOTADB) {
+					return new JDBCConnectionException(message, sqlException, sql);
 				}
 
 				// returning null allows other delegates to operate
@@ -219,9 +237,9 @@ public class SQLiteDialect extends Dialect {
 	private static final ViolatedConstraintNameExtracter EXTRACTER = new TemplatedViolatedConstraintNameExtracter() {
 		@Override
 		protected String doExtractConstraintName(SQLException sqle) throws NumberFormatException {
-			final int errorCode = JdbcExceptionHelper.extractErrorCode( sqle );
+			final int errorCode = JdbcExceptionHelper.extractErrorCode(sqle);
 			if (errorCode == SQLITE_CONSTRAINT) {
-				return extractUsingTemplate( "constraint ", " failed", sqle.getMessage() );
+				return extractUsingTemplate("constraint ", " failed", sqle.getMessage());
 			}
 			return null;
 		}
@@ -264,19 +282,18 @@ public class SQLiteDialect extends Dialect {
 
 	@Override
 	public String getDropForeignKeyString() {
-		throw new UnsupportedOperationException( "No drop foreign key syntax supported by SQLiteDialect" );
+		throw new UnsupportedOperationException("No drop foreign key syntax supported by SQLiteDialect");
 	}
 
 	@Override
-	public String getAddForeignKeyConstraintString(String constraintName,
-			String[] foreignKey, String referencedTable, String[] primaryKey,
-			boolean referencesPrimaryKey) {
-		throw new UnsupportedOperationException( "No add foreign key syntax supported by SQLiteDialect" );
+	public String getAddForeignKeyConstraintString(String constraintName, String[] foreignKey, String referencedTable,
+			String[] primaryKey, boolean referencesPrimaryKey) {
+		throw new UnsupportedOperationException("No add foreign key syntax supported by SQLiteDialect");
 	}
 
 	@Override
 	public String getAddPrimaryKeyConstraintString(String constraintName) {
-		throw new UnsupportedOperationException( "No add primary key syntax supported by SQLiteDialect" );
+		throw new UnsupportedOperationException("No add primary key syntax supported by SQLiteDialect");
 	}
 
 	@Override
@@ -285,15 +302,19 @@ public class SQLiteDialect extends Dialect {
 	}
 
 	@Override
+	public boolean supportsCascadeDelete() {
+		return false;
+	}
+
+	@Override
 	public boolean supportsIfExistsBeforeTableName() {
 		return true;
 	}
 
-  /* not case insensitive for unicode characters by default (ICU extension needed)
-	public boolean supportsCaseInsensitiveLike() {
-    return true;
-  }
-  */
+	/*
+	 * not case insensitive for unicode characters by default (ICU extension
+	 * needed) public boolean supportsCaseInsensitiveLike() { return true; }
+	 */
 
 	@Override
 	public boolean doesReadCommittedCauseWritersToBlockReaders() {
@@ -311,18 +332,32 @@ public class SQLiteDialect extends Dialect {
 	}
 
 	public int getInExpressionCountLimit() {
-		// Compile/runtime time option: http://sqlite.org/limits.html#max_variable_number
+		// Compile/runtime time option:
+		// http://sqlite.org/limits.html#max_variable_number
 		return 1000;
+	}
+
+	@Override
+	public boolean supportsLimit() {
+		return true;
+	}
+
+	@Override
+	public String getLimitString(String query, boolean hasOffset) {
+		return new StringBuffer(query.length() + 20).append(query).append(hasOffset ? " limit ? offset ?" : " limit ?")
+				.toString();
 	}
 
 	@Override
 	public UniqueDelegate getUniqueDelegate() {
 		return uniqueDelegate;
 	}
+
 	private static class SQLiteUniqueDelegate extends DefaultUniqueDelegate {
 		public SQLiteUniqueDelegate(Dialect dialect) {
-			super( dialect );
+			super(dialect);
 		}
+
 		@Override
 		public String getColumnDefinitionUniquenessFragment(Column column) {
 			return " unique";

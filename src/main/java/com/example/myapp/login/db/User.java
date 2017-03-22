@@ -59,7 +59,7 @@ public class User {
 		this.surname = surname;
 	}
 
-	@Column(name="BORTHDATE")
+	@Column(name="BIRTHDATE")
 	@Temporal(value = TemporalType.DATE)
 	public Date getBirthdate() {
 		return birthdate;
