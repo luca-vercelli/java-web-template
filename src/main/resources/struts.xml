@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts  
+Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+
+<struts>
+	<constant name="struts.multipart.maxSize" value="52428800" />
+
+	<constant name="struts.custom.i18n.resources" value="global" />
+	<constant name="struts.ui.theme" value="simple" /> <!-- i.e. no theme -->
+
+	<package name="MyWebApp" namespace="/"
+		extends="struts-default, json-default">
+
+		<!-- <default-action-ref name="Error" /> -->
+
+		<interceptors>
+			<interceptor name="LoginInterceptor"
+				class="com.example.myapp.login.interceptors.LoginInterceptor" />
+			<interceptor name="AuthInterceptor"
+				class="com.example.myapp.authorization.interceptors.AuthorizationInterceptor" />
+			<interceptor-stack name="loginStack">
+				<interceptor-ref name="AuthInterceptor" />
+				<interceptor-ref name="LoginInterceptor" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref name="loginStack"></default-interceptor-ref>
+
+		<global-results>
+			<result name="login">/WEB-INF/pages/login.jsp</result>
+			<result name="error">/WEB-INF/pages/error.jsp</result>
+		</global-results>
+
+		<!-- Pages -->
+
+		<action name="Login" class="com.example.myapp.login.actions.Login">
+			<result name="login">/login.jsp</result>
+			<result name="success">/index.jsp</result> <!-- browser-redirect to Home -->
+		</action>
+
+		<action name="Home" class="com.example.myapp.main.actions.HomePage">
+			<result name="success">/WEB-INF/pages/homePage.jsp</result>
+		</action>
+
+		<!-- JSON Services -->
+
+	</package>
+
+</struts>
