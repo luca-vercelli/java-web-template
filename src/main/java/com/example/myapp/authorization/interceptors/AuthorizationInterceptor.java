@@ -46,24 +46,31 @@ public class AuthorizationInterceptor implements Interceptor {
 	public String intercept(ActionInvocation invocation) throws Exception {
 
 		String actionClassName = invocation.getAction().getClass().getName();
-
+		
 		AuthUser user = (AuthUser) ActionContext.getContext().getSession().get(Login.SESSION_ATTRIBUTE);
 		assert user != null;
+
+		boolean auth = false;
 
 		EntityManager em = EntityManagerFactory.createEntityManager(); // FIXME
 																		// ...
 		EntityTransaction tx = em.getTransaction();
-		tx.begin();
+		try {
+			tx.begin();
 
-		TypedQuery<AuthUser> query = em.createQuery("from AuthUser u join fetch Page p where u.role = p.allowedRole ",
-				AuthUser.class);
+			TypedQuery<AuthUser> query = em
+					.createQuery("from AuthUser u join fetch Page p where u.role = p.allowedRole ", AuthUser.class);
 
-		// TODO
+			// TODO
 
-		boolean auth = !query.getResultList().isEmpty();
+			auth = !query.getResultList().isEmpty();
 
-		tx.commit();
-
+			tx.commit();
+		} catch (Exception exc) {
+			if (tx != null && tx.isActive())
+				tx.rollback();
+		}
+		
 		if (!auth) {
 			logger.info("Unauthorized access: " + actionClassName + " by user " + user.getId());
 			return ActionSupport.LOGIN; // FIXME should be another one?

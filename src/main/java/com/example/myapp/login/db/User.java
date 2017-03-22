@@ -21,6 +21,8 @@ public class User {
 
 	private Long id;
 	private String email;
+	private String userId; //you may decide to use email and / or userId
+	private String encryptedPassword;
 	private String name;
 	private String surname;
 	private Date birthdate;
@@ -83,4 +85,22 @@ public class User {
 		this.active = active;
 	}
 
+	@Column(name="PASSWD")
+	public String getEncryptedPassword() {
+		return encryptedPassword;
+	}
+
+	public void setEncryptedPassword(String encryptedPassword) {
+		this.encryptedPassword = encryptedPassword;
+	}
+
+	@Column(name="USER_ID")
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	
 }

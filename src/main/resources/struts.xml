@@ -16,10 +16,10 @@ Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
 		<interceptors>
 			<interceptor name="LoginInterceptor"
 				class="com.example.myapp.login.interceptors.LoginInterceptor" />
-			<interceptor name="AuthInterceptor"
-				class="com.example.myapp.authorization.interceptors.AuthorizationInterceptor" />
+			<!-- interceptor name="AuthInterceptor"
+				class="com.example.myapp.authorization.interceptors.AuthorizationInterceptor" /-->
 			<interceptor-stack name="loginStack">
-				<interceptor-ref name="AuthInterceptor" />
+				<!-- interceptor-ref name="AuthInterceptor" /-->
 				<interceptor-ref name="LoginInterceptor" />
 				<interceptor-ref name="defaultStack" />
 			</interceptor-stack>
@@ -28,7 +28,7 @@ Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
 		<default-interceptor-ref name="loginStack"></default-interceptor-ref>
 
 		<global-results>
-			<result name="login">/WEB-INF/pages/login.jsp</result>
+			<result name="login" type="redirectAction">Login</result>
 			<result name="error">/WEB-INF/pages/error.jsp</result>
 		</global-results>
 

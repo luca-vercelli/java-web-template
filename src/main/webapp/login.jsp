@@ -1,13 +1,13 @@
 <%@ taglib prefix="s" uri="/struts-tags"%>
 <html>
 <head>
-<title>Login page</title>
+<title><s:text name="login.title"/></title>
 </head>
 <body>
-<form action="Login" method="post">
-<s:text name="login.username"/><input name="username"/><br/>
-<s:text name="login.pwd"/><input type="password" name="pwd"/><br/>
-<input type="submit" />
-</form>
+<s:form action="Login" method="post">
+<s:textfield key="userid"/><br/>
+<s:textfield type="password" key="pwd"/><br/>
+<s:submit value="login.submit"/>
+</s:form>
 </body>
 </html>
