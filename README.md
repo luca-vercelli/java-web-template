@@ -5,18 +5,22 @@ Tools:
 * eclipse
 * java 8
 * maven 3
-* struts 2 (maybe + annotations?)
-* JPA + hibernate 5 + JTA + annotations + commons DBCP
-* commons logging + log4j
-* junit 4
+* MVC: struts 2 (maybe + annotations?)
+* persistence: JPA + hibernate 5 + annotations
+* transactions: JTA? +annotations?
+* connection pool: commons DBCP
+* logging: commons logging + log4j
+* testing: junit 4
 * SQLite as database (just for test)
 * Apache Tomcat v8
 * datasource? (webserver-dependent)
-* emails? (webserver-dependent, not supported by Tomcat)
+* emails? (webserver-dependent)
+
+Warning: Tomcat does not support JTA, nor sending emails. You need some libraries.
 
 Features:
 * JSP templating
-* CRUD (voia RESTful services)
+* CRUD (via RESTful services)
 * login page
 * accounts management
 * domain login
