@@ -1,3 +1,8 @@
+/*
+* WebTemplate 1.0
+* Luca Vercelli 2016
+* Released under GPLv3 
+*/
 package com.example.myapp.util.actions;
 
 import org.apache.log4j.Logger;
@@ -24,14 +29,14 @@ public class LoggingInterceptor implements Interceptor {
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
 
-		String className = invocation.getAction().getClass().getName();
+		String actionClassName = invocation.getAction().getClass().getName();
 		long startTime = System.currentTimeMillis();
-		log.info("Before calling action: " + className);
+		log.info("Before calling action: " + actionClassName);
 
 		String result = invocation.invoke();
 
 		long endTime = System.currentTimeMillis();
-		log.info("After calling action: " + className + " Time taken: " + (endTime - startTime) + " ms");
+		log.info("After calling action: " + actionClassName + " Time taken: " + (endTime - startTime) + " ms");
 
 		return result;
 	}

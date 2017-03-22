@@ -1,12 +1,19 @@
+/*
+* WebTemplate 1.0
+* Luca Vercelli 2016
+* Released under GPLv3 
+*/
 package com.example.myapp.authorization.interceptors;
-
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import com.example.myapp.login.actions.Login;
 import com.example.myapp.authorization.db.AuthUser;
-import com.example.myapp.crud.HibernateUtil;
+import com.example.myapp.crud.EntityManagerFactory;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
+import org.apache.log4j.Logger;
+
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.ActionSupport;
@@ -23,6 +30,8 @@ public class AuthorizationInterceptor implements Interceptor {
 
 	private static final long serialVersionUID = 294058339606947197L;
 
+	Logger logger = Logger.getLogger(AuthorizationInterceptor.class);
+
 	@Override
 	public void init() {
 		// NO OP
@@ -36,23 +45,29 @@ public class AuthorizationInterceptor implements Interceptor {
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
 
-		String className = invocation.getAction().getClass().getName();
+		String actionClassName = invocation.getAction().getClass().getName();
 
 		AuthUser user = (AuthUser) ActionContext.getContext().getSession().get(Login.SESSION_ATTRIBUTE);
 		assert user != null;
 
-		Session session = HibernateUtil.getSession();
-		Transaction tx = session.beginTransaction();
+		EntityManager em = EntityManagerFactory.createEntityManager(); // FIXME
+																		// ...
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
 
-		//TODO
-		Query query = session.createQuery("from User u join fetch Page p where u.role = p.allowedRole ");
+		TypedQuery<AuthUser> query = em.createQuery("from AuthUser u join fetch Page p where u.role = p.allowedRole ",
+				AuthUser.class);
 
-		boolean auth = !query.list().isEmpty();
+		// TODO
+
+		boolean auth = !query.getResultList().isEmpty();
 
 		tx.commit();
 
-		if (!auth)
+		if (!auth) {
+			logger.info("Unauthorized access: " + actionClassName + " by user " + user.getId());
 			return ActionSupport.LOGIN; // FIXME should be another one?
+		}
 
 		String result = invocation.invoke();
 

@@ -1,3 +1,8 @@
+/*
+* WebTemplate 1.0
+* Luca Vercelli 2016
+* Released under GPLv3 
+*/
 package com.example.myapp.authorization.db;
 
 import javax.persistence.Column;

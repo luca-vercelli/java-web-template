@@ -1,3 +1,8 @@
+/*
+* WebTemplate 1.0
+* Luca Vercelli 2016
+* Released under GPLv3 
+*/
 package com.example.myapp.login.db;
 
 import java.util.Date;
