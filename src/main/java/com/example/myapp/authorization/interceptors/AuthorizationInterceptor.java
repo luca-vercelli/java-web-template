@@ -1,6 +1,6 @@
 /*
 * WebTemplate 1.0
-* Luca Vercelli 2016
+* Luca Vercelli 2017
 * Released under GPLv3 
 */
 package com.example.myapp.authorization.interceptors;
