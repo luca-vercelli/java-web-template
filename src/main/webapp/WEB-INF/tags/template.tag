@@ -8,6 +8,8 @@
 
 <body>
 
+	<jsp:include page="/WEB-INF/jsp/tiles/scripts.jsp" />
+	
 	<!--  START HEADER -->
 	<jsp:include page="/WEB-INF/jsp/tiles/pageHeader.jsp" />
 	<!-- END HEADER -->

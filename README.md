@@ -10,6 +10,7 @@ Tools:
 * transactions: JTA? +annotations?
 * connection pool: commons DBCP
 * logging: commons logging + log4j
+* UI: jquery 3 + bootstrap 3
 * testing: junit 4
 * SQLite as database (just for test)
 * Apache Tomcat v8
