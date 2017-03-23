@@ -11,11 +11,7 @@
 	<!--  START HEADER -->
 	<jsp:include page="/WEB-INF/jsp/tiles/pageHeader.jsp" />
 	<!-- END HEADER -->
-
-	<!--  START MENU -->
-	<jsp:include page="/WEB-INF/jsp/tiles/pageMenu.jsp" />
-	<!--  END MENU -->
-
+	
 	<!-- START BODY -->
 	<div id="pageWrapper">
 

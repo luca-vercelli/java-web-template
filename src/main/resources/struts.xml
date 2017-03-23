@@ -34,18 +34,18 @@ Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
 
 		<global-results>
 			<result name="login" type="redirectAction">Login</result>
-			<result name="error">/WEB-INF/pages/error.jsp</result>
+			<result name="error">/WEB-INF/jsp/error.jsp</result>
 		</global-results>
 
 		<!-- Pages -->
 
 		<action name="Login" class="com.example.myapp.login.actions.Login">
-			<result name="login">/login.jsp</result>
+			<result name="login">/WEB-INF/jsp/login/login.jsp</result>
 			<result name="success">/index.jsp</result> <!-- browser-redirect to Home -->
 		</action>
 
 		<action name="Home" class="com.example.myapp.main.actions.HomePage">
-			<result name="success">/WEB-INF/pages/homePage.jsp</result>
+			<result name="success">/WEB-INF/jsp/pages/homePage.jsp</result>
 		</action>
 
 		<!-- JSON Services -->
