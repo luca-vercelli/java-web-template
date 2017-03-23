@@ -72,7 +72,6 @@ public class Login extends ActionSupport implements SessionAware {
 			tx.commit();
 
 			if (users.isEmpty()) {
-				checkThatOneUserExists();
 				addActionError(getText("login.err.auth"));
 				return LOGIN;
 			} else if (users.size() > 1) {
@@ -87,34 +86,6 @@ public class Login extends ActionSupport implements SessionAware {
 			if (tx != null && tx.isActive())
 				tx.rollback();
 			return ERROR;
-		}
-	}
-
-	protected void checkThatOneUserExists() {
-		EntityManager em = EntityManagerFactory.createEntityManager(); // FIXME
-																		// ...
-		EntityTransaction tx = em.getTransaction();
-		try {
-			tx.begin();
-
-			TypedQuery<Long> query;
-			query = em.createQuery("select count(*) from User", Long.class);
-			Long n = query.getSingleResult();
-			if (n == 0L) {
-				// first access to database. We have to create a default user:
-				// admin, with password admin
-				User u = new User();
-				u.setActive(true);
-				u.setName("Admin");
-				u.setUserId("admin");
-				u.setEmail("admin@example.com");
-				em.persist(u);
-			}
-			tx.commit();
-
-		} catch (Exception exc) {
-			if (tx != null && tx.isActive())
-				tx.rollback();
 		}
 	}
 

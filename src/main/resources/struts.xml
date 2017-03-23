@@ -39,6 +39,10 @@ Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
 
 		<!-- Pages -->
 
+		<action name="FirstRun" class="com.example.myapp.firstrun.actions.FirstRun">
+			<result name="success">/WEB-INF/jsp/firstrun/firstrun.jsp</result>
+		</action>
+
 		<action name="Login" class="com.example.myapp.login.actions.Login">
 			<result name="login">/WEB-INF/jsp/login/login.jsp</result>
 			<result name="success">/index.jsp</result> <!-- browser-redirect to Home -->
