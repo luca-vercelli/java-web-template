@@ -16,6 +16,7 @@ import org.apache.struts2.interceptor.SessionAware;
 
 import com.example.myapp.crud.EntityManagerFactory;
 import com.example.myapp.login.db.User;
+import com.example.myapp.login.util.PasswordAuthentication;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class Login extends ActionSupport implements SessionAware {
@@ -64,8 +65,8 @@ public class Login extends ActionSupport implements SessionAware {
 				query = em.createQuery("from User where email = :email and encryptedPassword = :pwd and active = :true",
 						User.class).setParameter("email", email);
 			}
-			query.setParameter("true", true).setParameter("encryptedPassword", pwd); // FIXME
-			// encrypt
+			query.setParameter("true", true).setParameter("encryptedPassword",
+					PasswordAuthentication.getInstance().hash(pwd));
 
 			List<User> users = query.getResultList();
 
@@ -74,6 +75,7 @@ public class Login extends ActionSupport implements SessionAware {
 			if (users.isEmpty()) {
 				addActionError(getText("login.err.auth"));
 				return LOGIN;
+
 			} else if (users.size() > 1) {
 				addActionError(getText("login.more.users", userId, email));
 				return ERROR;
