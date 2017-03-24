@@ -35,12 +35,12 @@ public class Factory {
 	 * Recursively search for replaced classes on DB, then instantiate object
 	 * with its nullary constructor.
 	 */
-	public Object createObject(Class clazz) {
+	public <T> T createObject(Class<T> clazz) {
 		try {
 
-			clazz = replaceClass(clazz);
+			Class<? extends T> newClazz = replaceClass(clazz);
 
-			return clazz.newInstance();
+			return newClazz.newInstance();
 		} catch (InstantiationException e) {
 			throw new RuntimeException(e);
 		} catch (IllegalAccessException e) {
@@ -52,23 +52,24 @@ public class Factory {
 	 * Recursively search for replaced classes on DB, then instantiate object
 	 * with appropriate constructor.
 	 */
-	public Object createObject(Class clazz, Object... args) {
+	public <T> T createObject(Class<T> clazz, Object... args) {
 		// FIXME current implementation is quite inefficient
-		
-		clazz = replaceClass(clazz);
-		
-		Object ret = null;
-		Constructor[] constructors = clazz.getConstructors();
-		for (Constructor constructor : constructors) {
+
+		Class<? extends T> newClazz = replaceClass(clazz);
+
+		T object = null;
+		// FIXME why this warning? it looks ok to me
+		Constructor<? extends T>[] constructors = (Constructor<? extends T>[]) newClazz.getConstructors();
+		for (Constructor<? extends T> constructor : constructors) {
 			try {
-				ret = constructor.newInstance(args);
+				object = constructor.newInstance(args);
 			} catch (InstantiationException e) {
 			} catch (IllegalAccessException e) {
 			} catch (IllegalArgumentException e) {
 			} catch (InvocationTargetException e) {
 			}
-			if (ret != null)
-				return ret;
+			if (object != null)
+				return object;
 		}
 		throw new RuntimeException("Cannot find such constructor: " + clazz.getName() + "," + Arrays.asList(args));
 	}
@@ -76,11 +77,15 @@ public class Factory {
 	/**
 	 * Recursively search for replaced classes on DB.
 	 */
-	public Class replaceClass(Class clazz) {
+	public <T> Class<? extends T> replaceClass(Class<T> clazz) {
 		String clazzName = clazz.getName();
-		clazzName = replaceClass(clazzName);
+		String newClazzName = replaceClass(clazzName);
 		try {
-			return Class.forName(clazzName);
+			Class<?> newClazz = Class.forName(newClazzName);
+			if (!clazz.isAssignableFrom(newClazz))
+				throw new IllegalStateException("Class " + clazzName + " cannot be replaced by " + newClazzName);
+			// FIXME this warning is ok, IMHO, how to avoid it?
+			return (Class<? extends T>) newClazz;
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
