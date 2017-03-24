@@ -6,6 +6,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
+import org.apache.struts2.convention.annotation.Action;
+
 import com.example.myapp.authorization.db.AuthUser;
 import com.example.myapp.authorization.db.Role;
 import com.example.myapp.crud.EntityManagerFactory;
@@ -20,8 +22,8 @@ public class FirstRun extends ActionSupport {
 
 	private static final long serialVersionUID = 2334736997192749615L;
 
-	@Override
-	public String execute() {
+	@Action("/firstrun/first-run")
+	public String index() {
 
 		EntityManager em = EntityManagerFactory.createEntityManager(); // FIXME
 																		// ...
@@ -64,6 +66,6 @@ public class FirstRun extends ActionSupport {
 			if (tx != null && tx.isActive())
 				tx.rollback();
 		}
-		return ERROR;
+		return SUCCESS;
 	}
 }

@@ -24,7 +24,7 @@
 		if (dest.substring(dest.length - 1) == "/") {
 			dest = dest.substring(0, dest.length - 1);
 		}
-		dest += "/Home";
+		dest += "/home";
 		location.href = dest;
 	</script>
 </body>

@@ -3,9 +3,9 @@
 
 <t:templateNoMenu>
 <s:actionerror/>
-<s:form action="Login" method="post">
+<s:form action="login" method="post">
 <s:textfield key="userid"/><br/>
-<s:textfield type="password" key="pwd"/><br/>
+<s:password key="pwd"/><br/>
 <s:submit value="login.submit"/>
 </s:form>
 

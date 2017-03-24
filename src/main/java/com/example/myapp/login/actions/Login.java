@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
+import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.interceptor.SessionAware;
 
 import com.example.myapp.crud.EntityManagerFactory;
@@ -31,8 +32,13 @@ public class Login extends ActionSupport implements SessionAware {
 
 	private Map<String, Object> sessionMap;
 
-	@Override
-	public String execute() {
+	@Action("/login/login")
+	public String index() {
+		return SUCCESS;
+	}
+
+	@Action("/login/dologin")
+	public String create() {
 
 		sessionMap.remove(SESSION_ATTRIBUTE);
 
@@ -43,7 +49,7 @@ public class Login extends ActionSupport implements SessionAware {
 
 			addActionError(getText("login.missing.parameters")); // FIXME can be
 																	// improved
-			return LOGIN;
+			return SUCCESS;
 		}
 
 		User user = null;
@@ -74,7 +80,7 @@ public class Login extends ActionSupport implements SessionAware {
 
 			if (users.isEmpty()) {
 				addActionError(getText("login.err.auth"));
-				return LOGIN;
+				return SUCCESS;
 
 			} else if (users.size() > 1) {
 				addActionError(getText("login.more.users", userId, email));
@@ -82,7 +88,7 @@ public class Login extends ActionSupport implements SessionAware {
 			}
 
 			sessionMap.put(SESSION_ATTRIBUTE, user);
-			return SUCCESS;
+			return "FIXME"; // FIXME
 
 		} catch (Exception exc) {
 			if (tx != null && tx.isActive())

@@ -3,19 +3,19 @@
 <html>
 
 <head>
-<jsp:include page="/WEB-INF/jsp/tiles/head.jsp" />
+<jsp:include page="/WEB-INF/content/tiles/head.jsp" />
 </head>
 
 <body>
 
-	<jsp:include page="/WEB-INF/jsp/tiles/scripts.jsp" />
+	<jsp:include page="/WEB-INF/content/tiles/scripts.jsp" />
 	
 	<!--  START HEADER -->
-	<jsp:include page="/WEB-INF/jsp/tiles/pageHeader.jsp" />
+	<jsp:include page="/WEB-INF/content/tiles/pageHeader.jsp" />
 	<!-- END HEADER -->
 
 	<!--  START MENU -->
-	<jsp:include page="/WEB-INF/jsp/tiles/pageMenu.jsp" />
+	<jsp:include page="/WEB-INF/content/tiles/pageMenu.jsp" />
 	<!--  END MENU -->
 
 	<!-- START BODY -->
@@ -26,7 +26,7 @@
 	</div>
 
 	<!--  START FOOTER -->
-	<jsp:include page="/WEB-INF/jsp/tiles/pageFooter.jsp" />
+	<jsp:include page="/WEB-INF/content/tiles/pageFooter.jsp" />
 	<!--  END FOOTER  -->
 
 </body>

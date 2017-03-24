@@ -5,7 +5,7 @@ Tools:
 * eclipse
 * java 8
 * maven 3
-* MVC: struts 2 (maybe + annotations?)
+* MVC: struts 2 + conventions plugin (+annotations plugin?)
 * persistence: JPA + hibernate 5 + annotations
 * transactions: JTA? +annotations?
 * connection pool: commons DBCP
@@ -20,7 +20,7 @@ Tools:
 Warning: Tomcat does not support JTA, nor sending emails. You need some libraries.
 
 Features:
-* JSP templating
+* JSP templating (and not struts tiles plugin)
 * CRUD (via RESTful services)
 * login page
 * accounts management
@@ -31,3 +31,5 @@ Features:
 This template is intended for small/medium intranet web applications. No EJB's here.
 
 Modules and interface should be independent: standalone Swing, or plain-HTML+AngularJS frontends should work as well.
+
+See e.g. http://www.sharpknight.com/index.php/blog/50-struts2-best-practices
