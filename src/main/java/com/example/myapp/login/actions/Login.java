@@ -15,8 +15,8 @@ import javax.persistence.TypedQuery;
 import org.apache.struts2.interceptor.SessionAware;
 
 import com.example.myapp.crud.EntityManagerFactory;
+import com.example.myapp.login.controllers.UsersController;
 import com.example.myapp.login.db.User;
-import com.example.myapp.login.util.PasswordAuthentication;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class Login extends ActionSupport implements SessionAware {
@@ -27,7 +27,7 @@ public class Login extends ActionSupport implements SessionAware {
 
 	private String userId;
 	private String email;
-	private String pwd;
+	private char[] pwd;
 
 	private Map<String, Object> sessionMap;
 
@@ -66,7 +66,7 @@ public class Login extends ActionSupport implements SessionAware {
 						User.class).setParameter("email", email);
 			}
 			query.setParameter("true", true).setParameter("encryptedPassword",
-					PasswordAuthentication.getInstance().hash(pwd));
+					UsersController.getInstance().getEncryptedPassword(pwd));
 
 			List<User> users = query.getResultList();
 
@@ -107,11 +107,11 @@ public class Login extends ActionSupport implements SessionAware {
 		this.email = email;
 	}
 
-	public String getPwd() {
+	public char[] getPwd() {
 		return pwd;
 	}
 
-	public void setPwd(String pwd) {
+	public void setPwd(char[] pwd) {
 		this.pwd = pwd;
 	}
 

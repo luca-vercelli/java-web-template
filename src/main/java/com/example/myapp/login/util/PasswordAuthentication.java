@@ -22,14 +22,6 @@ import javax.crypto.spec.PBEKeySpec;
  */
 public final class PasswordAuthentication {
 
-	private static PasswordAuthentication instance;
-
-	public static PasswordAuthentication getInstance() {
-		if (instance == null)
-			instance = new PasswordAuthentication();
-		return instance;
-	}
-
 	/**
 	 * Each token produced by this class uses this identifier as a prefix.
 	 */
