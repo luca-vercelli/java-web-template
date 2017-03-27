@@ -5,10 +5,12 @@
 */
 package com.example.myapp.authorization.db;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -23,9 +25,10 @@ public class Page {
 	private String action;
 	private String description;
 
-	private Set<Role> authorizedRoles;
+	private Set<Role> authorizedRoles = new HashSet<Role>();
 
 	@Id
+	@GeneratedValue
 	@Column(name = "ID")
 	public Long getId() {
 		return id;

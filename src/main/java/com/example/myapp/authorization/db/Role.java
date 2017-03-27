@@ -7,6 +7,7 @@ package com.example.myapp.authorization.db;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -19,6 +20,7 @@ public class Role {
 
 	@Id
 	@Column(name = "ID")
+	@GeneratedValue
 	public Long getId() {
 		return id;
 	}

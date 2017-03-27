@@ -34,11 +34,6 @@ public class Login extends ActionSupport implements SessionAware {
 
 	@Action("/login/login")
 	public String execute() {
-		return SUCCESS;
-	}
-
-	@Action("/login/dologin")
-	public String create() {
 
 		sessionMap.remove(SESSION_ATTRIBUTE);
 
@@ -47,8 +42,7 @@ public class Login extends ActionSupport implements SessionAware {
 			// This can also happen when user go to "Login" address for the
 			// first time
 
-			addActionError(getText("login.missing.parameters")); // FIXME can be
-																	// improved
+			//addActionError(getText("login.missing.parameters"));
 			return SUCCESS;
 		}
 

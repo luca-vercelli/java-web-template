@@ -5,6 +5,7 @@
 */
 package com.example.myapp.authorization.db;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -15,7 +16,7 @@ import javax.persistence.OneToMany;
 @Entity
 public class AuthUser extends com.example.myapp.login.db.User {
 
-	private Set<Role> roles;
+	private Set<Role> roles = new HashSet<Role>();
 
 	@OneToMany
 	@JoinTable(name = "APP_USER_ROLES", joinColumns = @JoinColumn(name = "USER_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
