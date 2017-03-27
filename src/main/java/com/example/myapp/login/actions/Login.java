@@ -16,8 +16,8 @@ import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.interceptor.SessionAware;
 
 import com.example.myapp.crud.EntityManagerFactory;
-import com.example.myapp.login.controllers.UsersController;
 import com.example.myapp.login.db.User;
+import com.example.myapp.login.helpers.UsersHelper;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class Login extends ActionSupport implements SessionAware {
@@ -72,7 +72,7 @@ public class Login extends ActionSupport implements SessionAware {
 						User.class).setParameter("email", email);
 			}
 			query.setParameter("true", true).setParameter("encryptedPassword",
-					UsersController.getInstance().getEncryptedPassword(pwd));
+					UsersHelper.getInstance().getEncryptedPassword(pwd));
 
 			List<User> users = query.getResultList();
 

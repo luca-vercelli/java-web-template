@@ -1,23 +1,23 @@
-package com.example.myapp.login.controllers;
+package com.example.myapp.login.helpers;
 
 import com.example.myapp.factory.Factory;
 import com.example.myapp.login.db.User;
 import com.example.myapp.login.util.PasswordAuthentication;
 
-public class UsersController {
+public class UsersHelper {
 
-	private static UsersController instance;
-	private static PasswordAuthentication PAinstance;
+	private static UsersHelper instance;
 
-	public static UsersController getInstance() {
+	private PasswordAuthentication PAinstance = Factory.getInstance().createObject(PasswordAuthentication.class);
+
+	public static UsersHelper getInstance() {
 		if (instance == null) {
-			instance = Factory.getInstance().createObject(UsersController.class);
-			PAinstance = Factory.getInstance().createObject(PasswordAuthentication.class);
+			instance = Factory.getInstance().createObject(UsersHelper.class);
 		}
 		return instance;
 	}
 
-	public UsersController() {
+	public UsersHelper() {
 	}
 
 	public String getEncryptedPassword(char[] unencryptedPassword) {
