@@ -13,16 +13,17 @@ import org.hibernate.Transaction;
 
 import com.example.myapp.crud.HibernateUtil;
 import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.ModelDriven;
 
-public class Crud<T> extends ActionSupport {
+public class Crud<T> extends ActionSupport implements ModelDriven<T> {
 
-	//FIXME..bisognava usare rest...
-	
+	// FIXME..bisognava usare rest...
+
 	private static final long serialVersionUID = -7641749620096312407L;
 
 	private Long objectId;
-	private String objectClass;
-	private T object;
+	private Class<T> objectClass;
+	private T object; //FIXME need some kind of interceptor
 	private List<T> objects;
 
 	/**
@@ -30,16 +31,17 @@ public class Crud<T> extends ActionSupport {
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public String list() {
 		Session session = HibernateUtil.getSession();
 		Transaction tx = null;
 		try {
+
 			tx = session.beginTransaction();
-			setObjects(session.createQuery(objectClass).list());
+			setModels(session.createQuery(objectClass.getName(), objectClass).getResultList());
 			tx.commit();
+
 		} catch (HibernateException exc) {
-			LOG.error("Error saving object", exc);
+			LOG.error("Error getting object", exc);
 			return ERROR;
 		}
 		return SUCCESS;
@@ -50,7 +52,6 @@ public class Crud<T> extends ActionSupport {
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public String edit() {
 		if (objectId != null) {
 
@@ -63,6 +64,8 @@ public class Crud<T> extends ActionSupport {
 				tx.commit();
 			} catch (HibernateException exc) {
 				LOG.error("Error loading object", exc);
+				if (tx != null && tx.isActive())
+					tx.rollback();
 				return ERROR;
 			}
 		}
@@ -87,6 +90,8 @@ public class Crud<T> extends ActionSupport {
 			tx.commit();
 		} catch (HibernateException exc) {
 			LOG.error("Error saving object", exc);
+			if (tx != null && tx.isActive())
+				tx.rollback();
 			return ERROR;
 		}
 		return SUCCESS;
@@ -95,7 +100,6 @@ public class Crud<T> extends ActionSupport {
 	/**
 	 * Delete object from db.
 	 */
-	@SuppressWarnings("unchecked")
 	public String delete() {
 		if (object == null && objectId == null) {
 			addActionError("crud.errNoObject");
@@ -111,41 +115,44 @@ public class Crud<T> extends ActionSupport {
 			tx.commit();
 		} catch (HibernateException exc) {
 			LOG.error("Error deleting object", exc);
+			if (tx != null && tx.isActive())
+				tx.rollback();
 			return ERROR;
 		}
 		return SUCCESS;
 	}
 
-	public T getObject() {
-		return object;
-	}
-
-	public void setObject(T object) {
-		this.object = object;
-	}
-
-	public Long getObjectId() {
+	public Long getModelId() {
 		return objectId;
 	}
 
-	public void setObjectId(Long objectId) {
+	public void setModelId(Long objectId) {
 		this.objectId = objectId;
 	}
 
-	public String getObjectClass() {
-		return objectClass;
+	public String getModelClass() {
+		return objectClass.getName();
 	}
 
-	public void setObjectClass(String objectClass) {
-		this.objectClass = objectClass;
+	public void setModelClass(String objectClass) throws ClassNotFoundException {
+		this.objectClass = (Class<T>) Class.forName(objectClass);
 	}
 
-	public List<T> getObjects() {
+	public List<T> getModels() {
 		return objects;
 	}
 
-	public void setObjects(List<T> objects) {
+	public void setModels(List<T> objects) {
 		this.objects = objects;
+	}
+
+	@Override
+	public T getModel() {
+		return object;
+	}
+
+	public void setModel(T object) {
+		this.object = object;
 	}
 
 }
