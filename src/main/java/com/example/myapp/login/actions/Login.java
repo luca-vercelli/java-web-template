@@ -28,12 +28,12 @@ public class Login extends ActionSupport implements SessionAware {
 
 	private String userId;
 	private String email;
-	private char[] pwd;
+	private String pwd;
 
 	private Map<String, Object> sessionMap;
 
 	@Action("/login/login")
-	public String index() {
+	public String execute() {
 		return SUCCESS;
 	}
 
@@ -113,11 +113,11 @@ public class Login extends ActionSupport implements SessionAware {
 		this.email = email;
 	}
 
-	public char[] getPwd() {
+	public String getPwd() {
 		return pwd;
 	}
 
-	public void setPwd(char[] pwd) {
+	public void setPwd(String pwd) {
 		this.pwd = pwd;
 	}
 

@@ -8,7 +8,6 @@
 Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
 
 <struts>
-	<constant name="struts.multipart.maxSize" value="52428800" />
 
 	<constant name="struts.custom.i18n.resources" value="global" />
 	<constant name="struts.ui.theme" value="simple" /> <!-- i.e. no theme -->

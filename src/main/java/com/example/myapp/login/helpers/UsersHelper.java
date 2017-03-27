@@ -20,27 +20,30 @@ public class UsersHelper {
 	public UsersHelper() {
 	}
 
-	public String getEncryptedPassword(char[] unencryptedPassword) {
-		return PAinstance.hash(unencryptedPassword);
+	/**
+	 * Return a hash for given password.
+	 * @param pwd
+	 * @return
+	 */
+	public String getEncryptedPassword(String pwd) {
+		return PAinstance.hash(pwd); //FIXME how to get char[] from Struts2 action?
 	}
 
 	/**
-	 * Set user password, then clear password array
+	 * Set user password
 	 * 
 	 * @param u
 	 * @param unencryptedPassword
 	 */
-	public void setPassword(User u, char[] unencryptedPassword) {
+	public void setPassword(User u, String unencryptedPassword) {
 		u.setEncryptedPassword(getEncryptedPassword(unencryptedPassword));
-		clearArray(unencryptedPassword);
 	}
 
 	/**
-	 * Test password, then clear password array
+	 * Test user password
 	 */
-	public boolean testPassword(User u, char[] unencryptedPassword) {
+	public boolean testPassword(User u, String unencryptedPassword) {
 		boolean ret = u.getEncryptedPassword().equals(getEncryptedPassword(unencryptedPassword));
-		clearArray(unencryptedPassword);
 		return ret;
 	}
 
