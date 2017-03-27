@@ -12,6 +12,7 @@ import com.example.myapp.authorization.db.AuthUser;
 import com.example.myapp.authorization.db.Role;
 import com.example.myapp.crud.EntityManagerFactory;
 import com.example.myapp.firstrun.db.Setup;
+import com.example.myapp.login.helpers.UsersHelper;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
@@ -51,6 +52,8 @@ public class FirstRun extends ActionSupport {
 				u.setName("Admin");
 				u.setUserId("admin");
 				u.setEmail("admin@example.com");
+				
+				UsersHelper.getInstance().setPassword(u, "admin");
 				em.persist(u);
 
 				u.getRoles().add(r);
