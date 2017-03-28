@@ -12,7 +12,7 @@ import java.util.Arrays;
 import org.hibernate.Session;
 
 import com.example.myapp.crud.HibernateUtil;
-import com.example.myapp.factory.db.ClassReplacement;
+import com.example.myapp.factory.db.Implementations;
 
 /**
  * You can use Factory.getInstance().creteObject(), instead of "new", throughout
@@ -103,7 +103,7 @@ public class Factory {
 			boolean searching = true;
 
 			while (searching) {
-				DetachedCriteria criteria = DetachedCriteria.forClass(ClassReplacement.class);
+				DetachedCriteria criteria = DetachedCriteria.forClass(Implementations.class);
 				criteria.add(Restrictions.eq("origClassName", clazzName));
 				criteria.setProjection(Projections.property("replaceClassName"));
 				String newClazzName = (String) criteria.getExecutableCriteria(session).uniqueResult();

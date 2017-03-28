@@ -12,8 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "APP_CLASS_REPLACEMENT")
-public class ClassReplacement {
+@Table(name = "APP_IMPLEMENTATIONS")
+public class Implementations {
 	private Long id;
 	private String origClassName;
 	private String replaceClassName;
