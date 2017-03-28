@@ -7,12 +7,18 @@ package com.example.myapp.main.actions;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+/**
+ * This Action is called before loading the homepage.
+ * Currently useless.
+ *
+ */
 public class Home extends ActionSupport {
 
 	private static final long serialVersionUID = 7397484529732988537L;
 
-	//FIXME this class is currently useless.
+	@Override
 	public String execute() {
+		LOG.debug("Entering Home action");
 		return SUCCESS;
 	}
 }

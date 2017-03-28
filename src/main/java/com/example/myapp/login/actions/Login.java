@@ -5,21 +5,21 @@
 */
 package com.example.myapp.login.actions;
 
-import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.TypedQuery;
-
-import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.InterceptorRef;
+import org.apache.struts2.convention.annotation.InterceptorRefs;
 import org.apache.struts2.interceptor.SessionAware;
 
-import com.example.myapp.crud.EntityManagerFactory;
 import com.example.myapp.login.db.User;
 import com.example.myapp.login.helpers.UsersHelper;
 import com.opensymphony.xwork2.ActionSupport;
 
+/**
+ * This Action is called before and after user login page. This Action is in the
+ * default namespace and uses the default interceptors stack.
+ */
+@InterceptorRefs({ @InterceptorRef("defaultStack") })
 public class Login extends ActionSupport implements SessionAware {
 
 	private static final long serialVersionUID = 7397484529732988537L;
@@ -32,62 +32,35 @@ public class Login extends ActionSupport implements SessionAware {
 
 	private Map<String, Object> sessionMap;
 
-	@Action("/login/login")
+	@Override
 	public String execute() {
 
+		LOG.debug("Entering login action");
 		sessionMap.remove(SESSION_ATTRIBUTE);
 
-		if ((userId == null || userId.equals("")) && (email == null || email.equals(""))) {
-
-			// This can also happen when user go to "Login" address for the
-			// first time
-
-			//addActionError(getText("login.missing.parameters"));
-			return SUCCESS;
-		}
-
 		User user = null;
-
-		EntityManager em = EntityManagerFactory.createEntityManager(); // FIXME
-																		// ...
-		EntityTransaction tx = em.getTransaction();
 		try {
-			tx.begin();
+			if (email != null && !email.equals(""))
+				user = UsersHelper.getInstance().getUserByEmailAndPassword(email, pwd);
+			else if (userId != null && !userId.equals(""))
+				user = UsersHelper.getInstance().getUserByUsernameAndPassword(userId, pwd);
+			else {
+				// This can also happen when user go to "Login" address for the
+				// first time
 
-			TypedQuery<User> query;
-			if (userId != null) {
-				query = em
-						.createQuery("from User where userId = :userId and encryptedPassword = :pwd and active = :true",
-								User.class)
-						.setParameter("userId", userId);
-			} else {
-
-				query = em.createQuery("from User where email = :email and encryptedPassword = :pwd and active = :true",
-						User.class).setParameter("email", email);
+				// addActionError(getText("login.missing.parameters"));
+				return INPUT;
 			}
-			query.setParameter("true", true).setParameter("encryptedPassword",
-					UsersHelper.getInstance().getEncryptedPassword(pwd));
-
-			List<User> users = query.getResultList();
-
-			tx.commit();
-
-			if (users.isEmpty()) {
+			if (user == null) {
 				addActionError(getText("login.err.auth"));
-				return SUCCESS;
+				return INPUT;
 
-			} else if (users.size() > 1) {
-				addActionError(getText("login.more.users", userId, email));
-				return ERROR;
 			}
-
 			sessionMap.put(SESSION_ATTRIBUTE, user);
-			return "FIXME"; // FIXME
+			return SUCCESS;
 
-		} catch (Exception exc) {
-			if (tx != null && tx.isActive())
-				tx.rollback();
-			return ERROR;
+		} finally {
+			pwd = null; // should trigger GC...
 		}
 	}
 
@@ -105,10 +78,6 @@ public class Login extends ActionSupport implements SessionAware {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getPwd() {
-		return pwd;
 	}
 
 	public void setPwd(String pwd) {

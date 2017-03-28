@@ -30,7 +30,7 @@ public class AuthorizationInterceptor implements Interceptor {
 
 	private static final long serialVersionUID = 294058339606947197L;
 
-	Logger logger = Logger.getLogger(AuthorizationInterceptor.class);
+	private static final Logger LOG = Logger.getLogger(AuthorizationInterceptor.class);
 
 	@Override
 	public void init() {
@@ -46,9 +46,10 @@ public class AuthorizationInterceptor implements Interceptor {
 	public String intercept(ActionInvocation invocation) throws Exception {
 
 		String actionClassName = invocation.getAction().getClass().getName();
-		
+
 		AuthUser user = (AuthUser) ActionContext.getContext().getSession().get(Login.SESSION_ATTRIBUTE);
 		assert user != null;
+		LOG.debug("AuthorizationInterceptor - User " + user + " accessing action " + actionClassName);
 
 		boolean auth = false;
 
@@ -70,9 +71,9 @@ public class AuthorizationInterceptor implements Interceptor {
 			if (tx != null && tx.isActive())
 				tx.rollback();
 		}
-		
+
 		if (!auth) {
-			logger.info("Unauthorized access: " + actionClassName + " by user " + user.getId());
+			LOG.info("Unauthorized access: " + actionClassName + " by user " + user.getId());
 			return ActionSupport.LOGIN; // FIXME should be another one?
 		}
 

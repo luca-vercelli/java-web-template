@@ -3,7 +3,7 @@
 * Luca Vercelli 2017
 * Released under GPLv3 
 */
-package com.example.myapp.util.actions;
+package com.example.myapp.util.interceptors;
 
 import org.apache.log4j.Logger;
 

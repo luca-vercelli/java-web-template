@@ -11,35 +11,38 @@ Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
 
 	<constant name="struts.custom.i18n.resources" value="global" />
 	<constant name="struts.ui.theme" value="simple" /> <!-- i.e. no theme -->
+	
+	<!-- AFAIK, this is the only way to change the default interceptors stack-->
+	<constant name="struts.convention.default.parent.package" value="default"/>
+	<package name="default" namespace="/"
+		extends="convention-default">
 
-	<package name="MyWebApp" namespace="/"
-		extends="struts-default">
-
-		<!-- <default-action-ref name="Error" /> -->
-
-<!-- FIXME usare @InterceptorRefs  -->
 		<interceptors>
+		
 			<interceptor name="LoginInterceptor"
 				class="com.example.myapp.login.interceptors.LoginInterceptor" />
+				
 			<interceptor name="AuthInterceptor"
 				class="com.example.myapp.authorization.interceptors.AuthorizationInterceptor" />
+				
 			<interceptor-stack name="loginStack">
 				<!-- interceptor-ref name="AuthInterceptor" /-->
-				<!-- >interceptor-ref name="LoginInterceptor" /-->
+				<interceptor-ref name="LoginInterceptor" />
 				<interceptor-ref name="defaultStack" />
 			</interceptor-stack>
 		</interceptors>
 
 		<default-interceptor-ref name="loginStack"></default-interceptor-ref>
 
+ 		<global-results>
+			<result name="login" type="redirectAction">login</result>
+			<result name="error">/WEB-INF/jsp/error.jsp</result>
+		</global-results>
+
 <!-- Conventions plugin:
 "login" chains to action Login
 "/home-page" maps to actions.HomePage and results to /home-page.jsp 
 
-		<global-results>
-			<result name="login" type="redirectAction">Login</result>
-			<result name="error">/WEB-INF/jsp/error.jsp</result>
-		</global-results>
 -->
 		<!-- Pages -->
 <!-- 

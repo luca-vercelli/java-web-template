@@ -7,7 +7,10 @@ package com.example.myapp.login.interceptors;
 
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.example.myapp.login.actions.Login;
+import com.example.myapp.login.db.User;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.ActionSupport;
@@ -25,6 +28,8 @@ public class LoginInterceptor implements Interceptor {
 
 	private static final long serialVersionUID = 294058339606947197L;
 
+	private static final Logger LOG = Logger.getLogger(LoginInterceptor.class);
+
 	@Override
 	public void init() {
 		// NO OP
@@ -38,8 +43,13 @@ public class LoginInterceptor implements Interceptor {
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
 
+		String actionClassName = invocation.getAction().getClass().getName();
 		Map<String, Object> session = ActionContext.getContext().getSession();
-		if (session.get(Login.SESSION_ATTRIBUTE) == null)
+		User user = (User) session.get(Login.SESSION_ATTRIBUTE);
+		
+		LOG.debug("LoginInterceptor - User " + user + " accessing action " + actionClassName);
+		
+		if (user == null)
 			return ActionSupport.LOGIN;
 
 		String result = invocation.invoke();

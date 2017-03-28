@@ -21,7 +21,7 @@ public class User {
 
 	private Long id;
 	private String email;
-	private String userId; //you may decide to use email and / or userId
+	private String userId; // you may decide to use email and / or userId
 	private String encryptedPassword;
 	private String name;
 	private String surname;
@@ -39,7 +39,7 @@ public class User {
 		this.id = id;
 	}
 
-	@Column(name="EMAIL")
+	@Column(name = "EMAIL")
 	public String getEmail() {
 		return email;
 	}
@@ -48,7 +48,7 @@ public class User {
 		this.email = email;
 	}
 
-	@Column(name="NAME")
+	@Column(name = "NAME")
 	public String getName() {
 		return name;
 	}
@@ -57,7 +57,7 @@ public class User {
 		this.name = name;
 	}
 
-	@Column(name="SURNAME")
+	@Column(name = "SURNAME")
 	public String getSurname() {
 		return surname;
 	}
@@ -66,7 +66,7 @@ public class User {
 		this.surname = surname;
 	}
 
-	@Column(name="BIRTHDATE")
+	@Column(name = "BIRTHDATE")
 	@Temporal(value = TemporalType.DATE)
 	public Date getBirthdate() {
 		return birthdate;
@@ -76,7 +76,7 @@ public class User {
 		this.birthdate = birthdate;
 	}
 
-	@Column(name="ACTIVE")
+	@Column(name = "ACTIVE")
 	public Boolean getActive() {
 		return active;
 	}
@@ -85,7 +85,7 @@ public class User {
 		this.active = active;
 	}
 
-	@Column(name="PASSWD")
+	@Column(name = "PASSWD")
 	public String getEncryptedPassword() {
 		return encryptedPassword;
 	}
@@ -94,7 +94,7 @@ public class User {
 		this.encryptedPassword = encryptedPassword;
 	}
 
-	@Column(name="USER_ID")
+	@Column(name = "USER_ID")
 	public String getUserId() {
 		return userId;
 	}
@@ -102,5 +102,16 @@ public class User {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	
+
+	@Override
+	public String toString() {
+		String ret = "user #" + id;
+		if (userId != null) {
+			ret += " " + userId;
+		} else if (email != null) {
+			ret += " " + email;
+		}
+		return ret;
+	}
+
 }

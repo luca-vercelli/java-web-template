@@ -6,7 +6,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 
-import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.InterceptorRef;
+import org.apache.struts2.convention.annotation.InterceptorRefs;
+import org.apache.struts2.convention.annotation.Namespace;
 
 import com.example.myapp.authorization.db.AuthUser;
 import com.example.myapp.authorization.db.Role;
@@ -20,11 +22,13 @@ import com.opensymphony.xwork2.ActionSupport;
  *
  */
 // FIXME is it possible to switch to hibernate.hbm2ddl.auto=CREATE on the fly?
+@InterceptorRefs({ @InterceptorRef("defaultStack") })
+@Namespace("/firstrun")
 public class FirstRun extends ActionSupport {
 
 	private static final long serialVersionUID = 2334736997192749615L;
 
-	@Action("/firstrun/first-run")
+	@Override
 	public String execute() {
 
 		EntityManager em = EntityManagerFactory.createEntityManager(); // FIXME
