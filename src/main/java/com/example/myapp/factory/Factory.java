@@ -1,18 +1,13 @@
 package com.example.myapp.factory;
 
-import org.hibernate.Transaction;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
-import org.hibernate.Session;
-
-import com.example.myapp.crud.HibernateUtil;
-import com.example.myapp.factory.db.Implementations;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
+import com.example.myapp.crud.EntityManagerFactory;
 
 /**
  * You can use Factory.getInstance().creteObject(), instead of "new", throughout
@@ -58,7 +53,7 @@ public class Factory {
 		Class<? extends T> newClazz = replaceClass(clazz);
 
 		T object = null;
-		// FIXME why this warning? it looks ok to me
+		// FIXME this warning is ok, IMHO, how to avoid it?
 		Constructor<? extends T>[] constructors = (Constructor<? extends T>[]) newClazz.getConstructors();
 		for (Constructor<? extends T> constructor : constructors) {
 			try {
@@ -95,18 +90,19 @@ public class Factory {
 	 * Recursively search for replaced classes on DB.
 	 */
 	public String replaceClass(String clazzName) {
-		Transaction tx = null;
+		EntityTransaction tx = null;
 		try {
 
-			Session session = HibernateUtil.getSession();
-			tx = session.beginTransaction();
+			EntityManager em = EntityManagerFactory.createEntityManager();
+			tx = em.getTransaction();
 			boolean searching = true;
 
 			while (searching) {
-				DetachedCriteria criteria = DetachedCriteria.forClass(Implementations.class);
-				criteria.add(Restrictions.eq("origClassName", clazzName));
-				criteria.setProjection(Projections.property("replaceClassName"));
-				String newClazzName = (String) criteria.getExecutableCriteria(session).uniqueResult();
+				TypedQuery<String> q = em.createQuery("from Implementations where origClassName = :clazzName",
+						String.class);
+				q.setParameter("clazzName", clazzName);
+				String newClazzName = (String) q.getSingleResult();
+
 				if (newClazzName != null) {
 					clazzName = newClazzName;
 				} else {

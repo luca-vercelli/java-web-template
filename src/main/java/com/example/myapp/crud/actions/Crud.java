@@ -7,11 +7,14 @@ package com.example.myapp.crud.actions;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import com.example.myapp.crud.HibernateUtil;
+import com.example.myapp.crud.EntityManagerFactory;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
@@ -23,7 +26,7 @@ public class Crud<T> extends ActionSupport implements ModelDriven<T> {
 
 	private Long objectId;
 	private Class<T> objectClass;
-	private T object; //FIXME need some kind of interceptor
+	private T object; // FIXME need some kind of interceptor
 	private List<T> objects;
 
 	/**
@@ -32,12 +35,12 @@ public class Crud<T> extends ActionSupport implements ModelDriven<T> {
 	 * @return
 	 */
 	public String list() {
-		Session session = HibernateUtil.getSession();
-		Transaction tx = null;
+		EntityManager em = null;
+		EntityTransaction tx = null;
 		try {
-
-			tx = session.beginTransaction();
-			setModels(session.createQuery(objectClass.getName(), objectClass).getResultList());
+			em = EntityManagerFactory.createEntityManager();
+			tx = em.getTransaction();
+			setModels(em.createQuery(objectClass.getName(), objectClass).getResultList());
 			tx.commit();
 
 		} catch (HibernateException exc) {
@@ -55,12 +58,13 @@ public class Crud<T> extends ActionSupport implements ModelDriven<T> {
 	public String edit() {
 		if (objectId != null) {
 
-			Session session = HibernateUtil.getSession();
-			Transaction tx = null;
+			EntityManager em = null;
+			EntityTransaction tx = null;
 			try {
-				tx = session.beginTransaction();
+				em = EntityManagerFactory.createEntityManager();
+				tx = em.getTransaction();
 				if (object == null)
-					object = (T) session.get(objectClass, objectId);
+					object = (T) em.find(objectClass, objectId);
 				tx.commit();
 			} catch (HibernateException exc) {
 				LOG.error("Error loading object", exc);
@@ -82,11 +86,12 @@ public class Crud<T> extends ActionSupport implements ModelDriven<T> {
 			addActionError("crud.errNoObject");
 			return ERROR;
 		}
-		Session session = HibernateUtil.getSession();
-		Transaction tx = null;
+		EntityManager em = null;
+		EntityTransaction tx = null;
 		try {
-			tx = session.beginTransaction();
-			session.saveOrUpdate(object);
+			em = EntityManagerFactory.createEntityManager();
+			tx = em.getTransaction();
+			em.persist(object);
 			tx.commit();
 		} catch (HibernateException exc) {
 			LOG.error("Error saving object", exc);
@@ -105,13 +110,14 @@ public class Crud<T> extends ActionSupport implements ModelDriven<T> {
 			addActionError("crud.errNoObject");
 			return ERROR;
 		}
-		Session session = HibernateUtil.getSession();
-		Transaction tx = null;
+		EntityManager em = null;
+		EntityTransaction tx = null;
 		try {
-			tx = session.beginTransaction();
+			em = EntityManagerFactory.createEntityManager();
+			tx = em.getTransaction();
 			if (object == null)
-				object = (T) session.get(objectClass, objectId);
-			session.delete(object);
+				object = (T) em.find(objectClass, objectId);
+			em.remove(object);
 			tx.commit();
 		} catch (HibernateException exc) {
 			LOG.error("Error deleting object", exc);
