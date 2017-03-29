@@ -12,11 +12,21 @@
 		<div class="row">
 			<div class="col-md-4"></div>
 			<div class="col-md-4">
-				<s:textfield key="userId" />
-				<br />
-				<s:password key="pwd" />
-				<br />
-				<s:submit value="login.submit" />
+				<s:label key="login.username" />
+				<s:textfield name="userId" cssClass="form-control" />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4"></div>
+			<div class="col-md-4">
+				<s:label key="login.pwd" />
+				<s:password name="pwd" cssClass="form-control" />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4"></div>
+			<div class="col-md-4">
+				<s:submit key="login.submit" cssClass="form-control" />
 			</div>
 		</div>
 

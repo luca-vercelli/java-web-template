@@ -25,7 +25,7 @@ public class Foo {
 	private Date birthday;
 	// TODO add some ENUM
 	private List<Foo> foos = new ArrayList<Foo>();
-	
+
 	@Id
 	@GeneratedValue
 	@Column(name = "ID")
@@ -82,10 +82,15 @@ public class Foo {
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
-	
+
 	@OneToMany
-	public List<Foo> getFoos(){
+	public List<Foo> getFoos() {
 		return foos;
-		
+
+	}
+
+	public void setFoos(List<Foo> foos) {
+		this.foos = foos;
+
 	}
 }

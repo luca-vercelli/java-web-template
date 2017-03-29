@@ -9,7 +9,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.example.myapp.crud.EntityManagerUtil;
-import com.example.myapp.crud.db.Foo;
 import com.example.myapp.factory.db.Implementations;
 
 public class FactoryTest {
@@ -30,13 +29,12 @@ public class FactoryTest {
 		Foo obj1 = f.createObject(Foo.class);
 		assertTrue(obj1.getClass().equals(Foo.class));
 
-		EntityTransaction tx = null;
+		EntityManager em = EntityManagerUtil.getEntityManager();
+		EntityTransaction tx = em.getTransaction();
 		try {
 
-			EntityManager em = EntityManagerUtil.getEntityManager();
-
-			tx = em.getTransaction();
-
+			tx.begin();
+			
 			Implementations i = new Implementations();
 			i.setOrigClassName(Foo.class.getName());
 			i.setReplaceClassName(Bar.class.getName());
@@ -47,7 +45,7 @@ public class FactoryTest {
 			Foo obj2 = f.createObject(Foo.class);
 
 			// restore original db
-			tx = em.getTransaction();
+			tx.begin();
 			i = em.find(Implementations.class, i.getId());
 			em.remove(i);
 			tx.commit();
@@ -58,6 +56,10 @@ public class FactoryTest {
 			if (tx != null && tx.isActive())
 				tx.rollback();
 		}
+	}
+
+	public static class Foo {
+
 	}
 
 	public static class Bar extends Foo {

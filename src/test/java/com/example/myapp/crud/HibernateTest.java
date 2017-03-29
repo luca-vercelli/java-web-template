@@ -32,34 +32,26 @@ public class HibernateTest {
 
 	@Test
 	public void testPersist() {
-		EntityManager em = null;
-		EntityTransaction tx = null;
+		EntityManager em = EntityManagerUtil.getEntityManager();
+		EntityTransaction tx = em.getTransaction();
 		try {
-			em = EntityManagerUtil.getEntityManager();
-			tx = em.getTransaction();
 			tx.begin();
-			
+
 			User u = new User();
 			u.setName("Goofy's");
 			u.setSurname("Goofy");
 			u.setEmail("goofy@example.com");
 			em.persist(u);
-			
+
 			tx.commit();
 		} finally {
 			if (tx != null && tx.isActive())
 				tx.rollback();
-			if (em != null)
-				em.close();
 		}
 
-		em = null;
-		tx = null;
 		try {
-			em = EntityManagerUtil.getEntityManager();
-			tx = em.getTransaction();
 			tx.begin();
-			
+
 			TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE email= :email", User.class)
 					.setParameter("email", "goofy@example.com");
 			List<User> users = query.getResultList();

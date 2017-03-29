@@ -10,7 +10,7 @@
 
 		<!-- Entity classes -->
 		<class>com.example.myapp.firstrun.db.Setup</class>
-		<class>com.example.myapp.factory.db.ClassReplacement</class>
+		<class>com.example.myapp.factory.db.Implementations</class>
 		<class>com.example.myapp.authorization.db.AuthUser</class>
 		<class>com.example.myapp.authorization.db.Role</class>
 		<class>com.example.myapp.authorization.db.Page</class>

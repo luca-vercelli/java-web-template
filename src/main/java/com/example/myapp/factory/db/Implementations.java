@@ -12,7 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "APP_IMPLEMENTATIONS")
+@Table(name = "APP_IMPL")
 public class Implementations {
 	private Long id;
 	private String origClassName;

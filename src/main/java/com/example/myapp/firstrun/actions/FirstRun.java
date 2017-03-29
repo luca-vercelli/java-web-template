@@ -31,8 +31,7 @@ public class FirstRun extends ActionSupport {
 	@Override
 	public String execute() {
 
-		EntityManager em = EntityManagerUtil.getEntityManager(); // FIXME
-																		// ...
+		EntityManager em = EntityManagerUtil.getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
