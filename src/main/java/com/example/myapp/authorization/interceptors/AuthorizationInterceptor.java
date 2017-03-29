@@ -6,18 +6,16 @@
 package com.example.myapp.authorization.interceptors;
 
 import com.example.myapp.login.actions.Login;
+import com.example.myapp.util.interceptors.AbstractInterceptor;
 import com.example.myapp.authorization.db.AuthUser;
 import com.example.myapp.crud.EntityManagerFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
-import org.apache.log4j.Logger;
-
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.interceptor.Interceptor;
 
 /**
  * This interceptor should handle authorization. If user is not authorized to
@@ -26,21 +24,9 @@ import com.opensymphony.xwork2.interceptor.Interceptor;
  * @author LV
  *
  */
-public class AuthorizationInterceptor implements Interceptor {
+public class AuthorizationInterceptor extends AbstractInterceptor {
 
 	private static final long serialVersionUID = 294058339606947197L;
-
-	private static final Logger LOG = Logger.getLogger(AuthorizationInterceptor.class);
-
-	@Override
-	public void init() {
-		// NO OP
-	}
-
-	@Override
-	public void destroy() {
-		// NO OP
-	}
 
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {

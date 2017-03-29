@@ -7,14 +7,12 @@ package com.example.myapp.login.interceptors;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import com.example.myapp.login.actions.Login;
 import com.example.myapp.login.db.User;
+import com.example.myapp.util.interceptors.AbstractInterceptor;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.interceptor.Interceptor;
 
 /**
  * This interceptor checks that user is logged in looking at
@@ -24,21 +22,9 @@ import com.opensymphony.xwork2.interceptor.Interceptor;
  * @author LV
  *
  */
-public class LoginInterceptor implements Interceptor {
+public class LoginInterceptor extends AbstractInterceptor {
 
 	private static final long serialVersionUID = 294058339606947197L;
-
-	private static final Logger LOG = Logger.getLogger(LoginInterceptor.class);
-
-	@Override
-	public void init() {
-		// NO OP
-	}
-
-	@Override
-	public void destroy() {
-		// NO OP
-	}
 
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
