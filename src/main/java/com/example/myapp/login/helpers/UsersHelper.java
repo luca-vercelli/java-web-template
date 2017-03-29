@@ -8,7 +8,7 @@ import javax.persistence.TypedQuery;
 
 import org.apache.log4j.Logger;
 
-import com.example.myapp.crud.EntityManagerFactory;
+import com.example.myapp.crud.EntityManagerUtil;
 import com.example.myapp.factory.Factory;
 import com.example.myapp.login.db.User;
 import com.example.myapp.login.util.PasswordAuthentication;
@@ -71,7 +71,7 @@ public class UsersHelper {
 
 	public User getUserByUsernameAndPassword(String username, String password) {
 
-		EntityManager em = EntityManagerFactory.createEntityManager(); // FIXME
+		EntityManager em = EntityManagerUtil.getEntityManager(); // FIXME
 																		// ...
 		EntityTransaction tx = em.getTransaction();
 		try {
@@ -106,7 +106,7 @@ public class UsersHelper {
 
 	public User getUserByEmailAndPassword(String email, String password) {
 
-		EntityManager em = EntityManagerFactory.createEntityManager(); // FIXME
+		EntityManager em = EntityManagerUtil.getEntityManager(); // FIXME
 																		// ...
 		EntityTransaction tx = em.getTransaction();
 		try {

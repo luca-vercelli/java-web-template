@@ -7,7 +7,7 @@ import java.util.Arrays;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
-import com.example.myapp.crud.EntityManagerFactory;
+import com.example.myapp.crud.EntityManagerUtil;
 
 /**
  * You can use Factory.getInstance().creteObject(), instead of "new", throughout
@@ -93,12 +93,12 @@ public class Factory {
 		EntityTransaction tx = null;
 		try {
 
-			EntityManager em = EntityManagerFactory.createEntityManager();
+			EntityManager em = EntityManagerUtil.getEntityManager();
 			tx = em.getTransaction();
 			boolean searching = true;
 
 			while (searching) {
-				TypedQuery<String> q = em.createQuery("from Implementations where origClassName = :clazzName",
+				TypedQuery<String> q = em.createQuery("select i.replaceClassName from Implementations i where i.origClassName = :clazzName",
 						String.class);
 				q.setParameter("clazzName", clazzName);
 				String newClazzName = (String) q.getSingleResult();

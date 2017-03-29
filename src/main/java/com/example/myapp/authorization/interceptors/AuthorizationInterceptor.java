@@ -8,7 +8,7 @@ package com.example.myapp.authorization.interceptors;
 import com.example.myapp.login.actions.Login;
 import com.example.myapp.util.interceptors.AbstractInterceptor;
 import com.example.myapp.authorization.db.AuthUser;
-import com.example.myapp.crud.EntityManagerFactory;
+import com.example.myapp.crud.EntityManagerUtil;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -39,7 +39,7 @@ public class AuthorizationInterceptor extends AbstractInterceptor {
 
 		boolean auth = false;
 
-		EntityManager em = EntityManagerFactory.createEntityManager(); // FIXME
+		EntityManager em = EntityManagerUtil.getEntityManager(); // FIXME
 																		// ...
 		EntityTransaction tx = em.getTransaction();
 		try {

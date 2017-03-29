@@ -26,7 +26,7 @@ public class HibernateTest {
 
 	@Test
 	public void testEntityManager() {
-		EntityManager em = EntityManagerFactory.createEntityManager();
+		EntityManager em = EntityManagerUtil.getEntityManager();
 		em.close();
 	}
 
@@ -35,7 +35,7 @@ public class HibernateTest {
 		EntityManager em = null;
 		EntityTransaction tx = null;
 		try {
-			em = EntityManagerFactory.createEntityManager();
+			em = EntityManagerUtil.getEntityManager();
 			tx = em.getTransaction();
 			tx.begin();
 			
@@ -56,7 +56,7 @@ public class HibernateTest {
 		em = null;
 		tx = null;
 		try {
-			em = EntityManagerFactory.createEntityManager();
+			em = EntityManagerUtil.getEntityManager();
 			tx = em.getTransaction();
 			tx.begin();
 			

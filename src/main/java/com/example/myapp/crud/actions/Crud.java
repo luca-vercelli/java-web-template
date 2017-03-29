@@ -11,10 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
-import com.example.myapp.crud.EntityManagerFactory;
+import com.example.myapp.crud.EntityManagerUtil;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
@@ -38,7 +35,7 @@ public class Crud<T> extends ActionSupport implements ModelDriven<T> {
 		EntityManager em = null;
 		EntityTransaction tx = null;
 		try {
-			em = EntityManagerFactory.createEntityManager();
+			em = EntityManagerUtil.getEntityManager();
 			tx = em.getTransaction();
 			setModels(em.createQuery(objectClass.getName(), objectClass).getResultList());
 			tx.commit();
@@ -61,7 +58,7 @@ public class Crud<T> extends ActionSupport implements ModelDriven<T> {
 			EntityManager em = null;
 			EntityTransaction tx = null;
 			try {
-				em = EntityManagerFactory.createEntityManager();
+				em = EntityManagerUtil.getEntityManager();
 				tx = em.getTransaction();
 				if (object == null)
 					object = (T) em.find(objectClass, objectId);
@@ -89,7 +86,7 @@ public class Crud<T> extends ActionSupport implements ModelDriven<T> {
 		EntityManager em = null;
 		EntityTransaction tx = null;
 		try {
-			em = EntityManagerFactory.createEntityManager();
+			em = EntityManagerUtil.getEntityManager();
 			tx = em.getTransaction();
 			em.persist(object);
 			tx.commit();
@@ -113,7 +110,7 @@ public class Crud<T> extends ActionSupport implements ModelDriven<T> {
 		EntityManager em = null;
 		EntityTransaction tx = null;
 		try {
-			em = EntityManagerFactory.createEntityManager();
+			em = EntityManagerUtil.getEntityManager();
 			tx = em.getTransaction();
 			if (object == null)
 				object = (T) em.find(objectClass, objectId);
