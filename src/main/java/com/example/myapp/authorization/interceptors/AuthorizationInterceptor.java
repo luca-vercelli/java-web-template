@@ -59,7 +59,7 @@ public class AuthorizationInterceptor extends AbstractInterceptor {
 		}
 
 		if (!auth) {
-			LOG.info("Unauthorized access: " + actionClassName + " by user " + user.getId());
+			LOG.info("Unauthorized access: " + actionClassName + " by user " + user.getName());
 			return ActionSupport.LOGIN; // FIXME should be another one?
 		}
 

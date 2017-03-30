@@ -38,8 +38,9 @@ public class HibernateTest {
 			tx.begin();
 
 			User u = new User();
-			u.setName("Goofy's");
-			u.setSurname("Goofy");
+			u.setName("goofy");
+			u.setPersonName("Goofy's");
+			u.setPersonSurname("Goofy");
 			u.setEmail("goofy@example.com");
 			em.persist(u);
 

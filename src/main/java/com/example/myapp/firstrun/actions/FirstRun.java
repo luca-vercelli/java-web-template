@@ -49,8 +49,9 @@ public class FirstRun extends ActionSupport {
 
 				AuthUser u = new AuthUser();
 				u.setActive(true);
-				u.setName("Admin");
-				u.setUserId("admin");
+				u.setName("admin");
+				u.setPersonName("Admin");
+				u.setPersonSurname(".");
 				u.setEmail("admin@example.com");
 				
 				UsersHelper.getInstance().setPassword(u, "admin");

@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  * A login user. This class implements Principal, so it can be integrated with
@@ -25,74 +26,52 @@ import javax.persistence.TemporalType;
 @Table(name = "APP_USERS")
 public class User implements Principal {
 
-	private Long id;
+	private final static boolean LOGIN_USING_EMAIL = false; // this will keep
+															// email and
+															// username fields
+															// equal
+
+	private String username;
 	private String email;
-	private String userId; // you may decide to use email and / or userId
 	private String encryptedPassword;
-	private String name;
-	private String surname;
+	private String personName;
+	private String personSurname;
 	private Date birthdate;
-	private Boolean active;
+	private Boolean active = true;
+
+	/**
+	 * This is JAAS username, and also user's primary key.
+	 */
+	@Override
+	@Id
+	@Column(name="USERNAME")
+	public String getName() {
+		return username;
+	}
+
+	public void setName(String username) {
+		this.username = username;
+	}
 
 	@Override
 	public String toString() {
-		String ret = "user #" + id;
-		if (userId != null) {
-			ret += " " + userId;
-		} else if (email != null) {
-			ret += " " + email;
-		}
+		String ret = "user #" + username;
 		return ret;
-	}
-
-	@Id
-	@Column(name = "ID")
-	@GeneratedValue
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	@Column(name = "EMAIL")
 	public String getEmail() {
-		return email;
+		return LOGIN_USING_EMAIL ? this.username : this.email;
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
+		if (LOGIN_USING_EMAIL)
+			this.username = email;
 	}
 
-	@Column(name = "NAME")
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	@Column(name = "SURNAME")
-	public String getSurname() {
-		return surname;
-	}
-
-	public void setSurname(String surname) {
-		this.surname = surname;
-	}
-
-	@Column(name = "BIRTHDATE")
-	@Temporal(value = TemporalType.DATE)
-	public Date getBirthdate() {
-		return birthdate;
-	}
-
-	public void setBirthdate(Date birthdate) {
-		this.birthdate = birthdate;
-	}
-
+	// === OTHER IMPORTANT NON-KEY FIELDS ===============================
+	
 	@Column(name = "ACTIVE")
 	public Boolean getActive() {
 		return active;
@@ -111,13 +90,33 @@ public class User implements Principal {
 		this.encryptedPassword = encryptedPassword;
 	}
 
-	@Column(name = "USER_ID")
-	public String getUserId() {
-		return userId;
+	// === OTHER FIELDS ===============================
+	@Column(name = "NAME")
+	public String getPersonName() {
+		return personName;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setPersonName(String personName) {
+		this.personName = personName;
+	}
+
+	@Column(name = "SURNAME")
+	public String getPersonSurname() {
+		return personSurname;
+	}
+
+	public void setPersonSurname(String personSurname) {
+		this.personSurname = personSurname;
+	}
+
+	@Column(name = "BIRTHDATE")
+	@Temporal(value = TemporalType.DATE)
+	public Date getBirthdate() {
+		return birthdate;
+	}
+
+	public void setBirthdate(Date birthdate) {
+		this.birthdate = birthdate;
 	}
 
 }
