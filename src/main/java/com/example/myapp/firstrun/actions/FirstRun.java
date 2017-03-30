@@ -8,8 +8,6 @@ import javax.persistence.TypedQuery;
 
 import org.apache.struts2.convention.annotation.InterceptorRef;
 import org.apache.struts2.convention.annotation.InterceptorRefs;
-import org.apache.struts2.convention.annotation.Namespace;
-
 import com.example.myapp.authorization.db.AuthUser;
 import com.example.myapp.authorization.db.Role;
 import com.example.myapp.crud.EntityManagerUtil;
@@ -23,7 +21,6 @@ import com.opensymphony.xwork2.ActionSupport;
  */
 // FIXME is it possible to switch to hibernate.hbm2ddl.auto=CREATE on the fly?
 @InterceptorRefs({ @InterceptorRef("defaultStack") })
-@Namespace("/firstrun")
 public class FirstRun extends ActionSupport {
 
 	private static final long serialVersionUID = 2334736997192749615L;

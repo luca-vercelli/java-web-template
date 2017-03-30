@@ -28,7 +28,7 @@ public class FactoryTest {
 		Factory f = Factory.getInstance();
 		Foo obj1 = f.createObject(Foo.class);
 		assertTrue(obj1.getClass().equals(Foo.class));
-
+		
 		EntityManager em = EntityManagerUtil.getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {

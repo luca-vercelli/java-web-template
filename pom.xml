@@ -1,9 +1,5 @@
-<!-- 
- WebTemplate 1.0
- Luca Vercelli 2017
- Released under GPLv3 
- -->
- <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<!-- WebTemplate 1.0 Luca Vercelli 2017 Released under GPLv3 -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.example.templates</groupId>
@@ -38,12 +34,12 @@
 			<artifactId>transaction-api</artifactId> <!-- was jta -->
 			<version>1.1</version>
 		</dependency>
-		
+
 		<!-- Entity manager which is required for JPA -->
 		<dependency>
-    		<groupId>org.hibernate</groupId>
-    		<artifactId>hibernate-entitymanager</artifactId>
-   			 <version>5.2.3.Final</version>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>5.2.3.Final</version>
 		</dependency>
 
 		<!-- Struts 2 -->
@@ -57,13 +53,9 @@
 			<artifactId>struts2-convention-plugin</artifactId>
 			<version>2.2.1</version>
 		</dependency>
-		<!-- TODO
-			dependency>
-			<groupId>org.apache.struts</groupId>
-			<artifactId>struts2-rest-plugin</artifactId>
-			<version>2.2.1</version>
-		</dependency-->
-		
+		<!-- TODO dependency> <groupId>org.apache.struts</groupId> <artifactId>struts2-rest-plugin</artifactId> 
+			<version>2.2.1</version> </dependency -->
+
 		<!-- logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>

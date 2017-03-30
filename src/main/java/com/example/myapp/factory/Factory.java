@@ -6,7 +6,11 @@ import java.util.Arrays;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+
+import org.apache.log4j.Logger;
+
 import com.example.myapp.crud.EntityManagerUtil;
 
 /**
@@ -18,6 +22,7 @@ import com.example.myapp.crud.EntityManagerUtil;
 public class Factory {
 
 	private static Factory instance = new Factory();
+	protected final static Logger LOG = Logger.getLogger(Factory.class);
 
 	private Factory() {
 	}
@@ -90,18 +95,24 @@ public class Factory {
 	 * Recursively search for replaced classes on DB.
 	 */
 	public String replaceClass(String clazzName) {
-		EntityTransaction tx = null;
+		EntityManager em = EntityManagerUtil.getEntityManager();
+		EntityTransaction tx = em.getTransaction();
 		try {
 
-			EntityManager em = EntityManagerUtil.getEntityManager();
-			tx = em.getTransaction();
+			tx.begin();
+
 			boolean searching = true;
 
 			while (searching) {
-				TypedQuery<String> q = em.createQuery("select i.replaceClassName from Implementations i where i.origClassName = :clazzName",
-						String.class);
-				q.setParameter("clazzName", clazzName);
-				String newClazzName = (String) q.getSingleResult();
+				TypedQuery<String> q = em.createQuery(
+						"select i.replaceClassName from Implementations i where i.origClassName = :clazzName",
+						String.class).setParameter("clazzName", clazzName);
+				String newClazzName;
+				try {
+					newClazzName = (String) q.getSingleResult();
+				} catch (NoResultException e) {
+					newClazzName = null;
+				}
 
 				if (newClazzName != null) {
 					clazzName = newClazzName;
@@ -114,6 +125,9 @@ public class Factory {
 
 			return clazzName;
 
+		} catch (Exception exc) {
+			LOG.error("Factory exception", exc);
+			throw exc;
 		} finally {
 			if (tx != null && tx.isActive())
 				tx.rollback();
