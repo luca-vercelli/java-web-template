@@ -16,6 +16,7 @@ Tools:
 * Apache Tomcat v8
 * datasource? (webserver-dependent)
 * emails? (webserver-dependent)
+* JAAS
 
 Warning: Tomcat does not support JTA, nor sending emails. You need some libraries.
 

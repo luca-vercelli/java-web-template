@@ -5,6 +5,7 @@
 */
 package com.example.myapp.login.db;
 
+import java.security.Principal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -15,9 +16,14 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+/**
+ * A login user. This class implements Principal, so it can be integrated with
+ * JAAS.
+ *
+ */
 @Entity
 @Table(name = "APP_USERS")
-public class User {
+public class User implements Principal {
 
 	private Long id;
 	private String email;
@@ -27,6 +33,17 @@ public class User {
 	private String surname;
 	private Date birthdate;
 	private Boolean active;
+
+	@Override
+	public String toString() {
+		String ret = "user #" + id;
+		if (userId != null) {
+			ret += " " + userId;
+		} else if (email != null) {
+			ret += " " + email;
+		}
+		return ret;
+	}
 
 	@Id
 	@Column(name = "ID")
@@ -101,17 +118,6 @@ public class User {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
-	}
-
-	@Override
-	public String toString() {
-		String ret = "user #" + id;
-		if (userId != null) {
-			ret += " " + userId;
-		} else if (email != null) {
-			ret += " " + email;
-		}
-		return ret;
 	}
 
 }
