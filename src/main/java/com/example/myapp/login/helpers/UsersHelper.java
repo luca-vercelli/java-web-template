@@ -38,9 +38,10 @@ public class UsersHelper {
 	 * @param pwd
 	 * @return
 	 */
-	public String getEncryptedPassword(String pwd) {
-		return PAinstance.hash(pwd); // FIXME how to get char[] from Struts2
-										// action?
+	public String encryptPassword(String cleartextPassword) {
+		return PAinstance.hash(cleartextPassword); // FIXME how to get char[]
+													// from Struts2
+		// action?
 	}
 
 	/**
@@ -49,15 +50,15 @@ public class UsersHelper {
 	 * @param u
 	 * @param unencryptedPassword
 	 */
-	public void setPassword(User u, String unencryptedPassword) {
-		u.setEncryptedPassword(getEncryptedPassword(unencryptedPassword));
+	public void setPassword(User u, String cleartextPassword) {
+		u.setEncryptedPassword(encryptPassword(cleartextPassword));
 	}
 
 	/**
 	 * Test user password
 	 */
-	public boolean testPassword(User u, String unencryptedPassword) {
-		boolean ret = u.getEncryptedPassword().equals(getEncryptedPassword(unencryptedPassword));
+	public boolean testPassword(User u, String cleartextPassword) {
+		boolean ret = u.getEncryptedPassword().equals(encryptPassword(cleartextPassword));
 		return ret;
 	}
 
@@ -71,10 +72,12 @@ public class UsersHelper {
 			array[i] = 0;
 	}
 
-	public User getUserByUsernameAndPassword(String username, String password) {
+	public User getUserByNameAndPassword(String name, String password) {
 
-		EntityManager em = EntityManagerUtil.getEntityManager(); // FIXME
-																		// ...
+		String encryptedPassword = encryptPassword(password);
+		password = null;
+
+		EntityManager em = EntityManagerUtil.getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
@@ -82,10 +85,11 @@ public class UsersHelper {
 			TypedQuery<User> query;
 
 			query = em
-					.createQuery("from User where userId = :userId and encryptedPassword = :pwd and active = :true",
+					.createQuery(
+							"from User where name = :name and encryptedPassword = :encryptedPassword and active = :true",
 							User.class)
-					.setParameter("userId", username).setParameter("true", true)
-					.setParameter("encryptedPassword", getEncryptedPassword(password));
+					.setParameter("name", name).setParameter("true", true)
+					.setParameter("encryptedPassword", encryptedPassword);
 
 			List<User> users = query.getResultList();
 
@@ -94,7 +98,8 @@ public class UsersHelper {
 			if (users.isEmpty()) {
 				return null;
 			} else if (users.size() > 1) {
-				LOG.error("Found more user with same password and username: " + username);
+				LOG.error("Found more user with same password and name: " + name);
+				return null;
 			}
 
 			return users.get(0);
@@ -108,8 +113,10 @@ public class UsersHelper {
 
 	public User getUserByEmailAndPassword(String email, String password) {
 
-		EntityManager em = EntityManagerUtil.getEntityManager(); // FIXME
-																		// ...
+		String encryptedPassword = encryptPassword(password);
+		password = null;
+
+		EntityManager em = EntityManagerUtil.getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
@@ -117,10 +124,11 @@ public class UsersHelper {
 			TypedQuery<User> query;
 
 			query = em
-					.createQuery("from User where email = :email and encryptedPassword = :pwd and active = :true",
+					.createQuery(
+							"from User where email = :email and encryptedPassword = :encryptedPassword and active = :true",
 							User.class)
 					.setParameter("email", email).setParameter("true", true)
-					.setParameter("encryptedPassword", getEncryptedPassword(password));
+					.setParameter("encryptedPassword", encryptedPassword);
 
 			List<User> users = query.getResultList();
 
@@ -130,6 +138,7 @@ public class UsersHelper {
 				return null;
 			} else if (users.size() > 1) {
 				LOG.error("Found more user with same password and email: " + email);
+				return null;
 			}
 
 			return users.get(0);
@@ -140,19 +149,21 @@ public class UsersHelper {
 			throw exc;
 		}
 	}
-	
-	public void authenticate(String user, String password) throws LoginException{
-		
-		//TODO
-		
-		//could be put outside app
+
+	public void authenticate(String user, String password) throws LoginException {
+
+		// TODO
+
+		// could be put outside app
 		System.setProperty("java.security.auth.login.config", "jaas.conf");
 		PassiveCallbackHandler cbh = new PassiveCallbackHandler(user, password);
-		
-		LoginContext lc = new LoginContext("MainApp", cbh); //referenced in jaas.conf
-		//see Krb5LoginModule, LdapLoginModule, NTLoginModule, JndiLoginModule ...sun...
-		
-		//call callback to retrieve credentials, and checks that
+
+		LoginContext lc = new LoginContext("MainApp", cbh); // referenced in
+															// jaas.conf
+		// see Krb5LoginModule, LdapLoginModule, NTLoginModule, JndiLoginModule
+		// ...sun...
+
+		// call callback to retrieve credentials, and checks that
 		lc.login();
 	}
 }

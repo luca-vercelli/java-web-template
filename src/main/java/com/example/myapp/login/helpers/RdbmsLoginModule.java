@@ -172,7 +172,7 @@ public class RdbmsLoginModule implements LoginModule {
 
 			// This is the only point that can really change when you change
 			// login module
-			User principal = UsersHelper.getInstance().getUserByUsernameAndPassword(username, password);
+			User principal = UsersHelper.getInstance().getUserByNameAndPassword(username, password);
 
 			if (principal != null) {
 				success = true;

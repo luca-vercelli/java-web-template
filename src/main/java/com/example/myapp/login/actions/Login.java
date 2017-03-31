@@ -43,7 +43,7 @@ public class Login extends ActionSupport implements SessionAware {
 			if (email != null && !email.equals(""))
 				user = UsersHelper.getInstance().getUserByEmailAndPassword(email, pwd);
 			else if (userId != null && !userId.equals(""))
-				user = UsersHelper.getInstance().getUserByUsernameAndPassword(userId, pwd);
+				user = UsersHelper.getInstance().getUserByNameAndPassword(userId, pwd);
 			else {
 				// This can also happen when user go to "Login" address for the
 				// first time

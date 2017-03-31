@@ -37,7 +37,7 @@ public class FirstRun extends ActionSupport {
 			//FIXME should use Criteria
 			query = em.createQuery("SELECT COUNT(*) FROM Settings", Long.class);
 			Long n = query.getSingleResult();
-			System.out.println("" + n + " rows found in APP_SETTINGS, and " + (n == 0L));
+			System.out.println("" + n + " rows found in APP_SETTINGS");
 			tx.commit();
 
 			if (n == 0L) {

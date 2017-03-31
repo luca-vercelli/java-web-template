@@ -45,7 +45,7 @@
 
 			<!-- If your dba allows that, use CREATE the first time in order to create 
 				all tables. This won't populate tables. In SQLLite, an exception will be 
-				raised about creating relations. -->
+				raised about creating relations, but it is not a problem. -->
 			<property name="hibernate.hbm2ddl.auto" value="create" />
 
 		</properties>
