@@ -7,15 +7,20 @@ package com.example.myapp.login.db;
 
 import java.security.Principal;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
+
+import com.example.myapp.authorization.db.Role;
 
 /**
  * A login user. This class implements Principal, so it can be integrated with
@@ -26,10 +31,10 @@ import javax.persistence.Transient;
 @Table(name = "APP_USERS")
 public class User implements Principal {
 
-	private final static boolean LOGIN_USING_EMAIL = false; // this will keep
-															// email and
-															// username fields
-															// equal
+	/**
+	 * if true, this will keep email and username fields equal
+	 */
+	private final static boolean LOGIN_USING_EMAIL = false;
 
 	private String username;
 	private String email;
@@ -39,24 +44,29 @@ public class User implements Principal {
 	private Date birthdate;
 	private Boolean active = true;
 
+	private Set<Role> roles = new HashSet<Role>();
+
 	/**
 	 * This is JAAS username, and also user's primary key.
 	 */
 	@Override
 	@Id
-	@Column(name="USERNAME")
+	@Column(name = "USERNAME")
 	public String getName() {
 		return username;
 	}
 
+	/**
+	 * This method has effect only if LOGIN_USING_EMAIL is false.
+	 */
 	public void setName(String username) {
-		this.username = username;
+		if (!LOGIN_USING_EMAIL)
+			this.username = username;
 	}
 
 	@Override
 	public String toString() {
-		String ret = "user #" + username;
-		return ret;
+		return "user #" + username;
 	}
 
 	@Column(name = "EMAIL")
@@ -71,7 +81,7 @@ public class User implements Principal {
 	}
 
 	// === OTHER IMPORTANT NON-KEY FIELDS ===============================
-	
+
 	@Column(name = "ACTIVE")
 	public Boolean getActive() {
 		return active;
@@ -119,4 +129,15 @@ public class User implements Principal {
 		this.birthdate = birthdate;
 	}
 
+	// == RELATIONS ==============================
+
+	@OneToMany
+	@JoinTable(name = "APP_USER_ROLES", joinColumns = @JoinColumn(name = "USER_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
 }

@@ -8,10 +8,10 @@ import javax.persistence.TypedQuery;
 
 import org.apache.struts2.convention.annotation.InterceptorRef;
 import org.apache.struts2.convention.annotation.InterceptorRefs;
-import com.example.myapp.authorization.db.AuthUser;
 import com.example.myapp.authorization.db.Role;
 import com.example.myapp.crud.EntityManagerUtil;
 import com.example.myapp.firstrun.db.Setup;
+import com.example.myapp.login.db.User;
 import com.example.myapp.login.helpers.UsersHelper;
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -47,7 +47,7 @@ public class FirstRun extends ActionSupport {
 				r.setDescription("admin");
 				em.persist(r);
 
-				AuthUser u = new AuthUser();
+				User u = new User();
 				u.setActive(true);
 				u.setName("admin");
 				u.setPersonName("Admin");

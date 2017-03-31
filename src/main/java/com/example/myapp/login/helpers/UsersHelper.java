@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
+import javax.security.auth.login.LoginContext;
+import javax.security.auth.login.LoginException;
 
 import org.apache.log4j.Logger;
 
@@ -137,5 +139,20 @@ public class UsersHelper {
 				tx.rollback();
 			throw exc;
 		}
+	}
+	
+	public void authenticate(String user, String password) throws LoginException{
+		
+		//TODO
+		
+		//could be put outside app
+		System.setProperty("java.security.auth.login.config", "jaas.conf");
+		PassiveCallbackHandler cbh = new PassiveCallbackHandler(user, password);
+		
+		LoginContext lc = new LoginContext("MainApp", cbh); //referenced in jaas.conf
+		//see Krb5LoginModule, LdapLoginModule, NTLoginModule, JndiLoginModule ...sun...
+		
+		//call callback to retrieve credentials, and checks that
+		lc.login();
 	}
 }

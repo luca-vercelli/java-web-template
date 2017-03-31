@@ -22,16 +22,13 @@ Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
 			<interceptor name="LoginInterceptor"
 				class="com.example.myapp.login.interceptors.LoginInterceptor" />
 				
-			<interceptor name="AuthInterceptor"
-				class="com.example.myapp.authorization.interceptors.AuthorizationInterceptor" />
-				
 			<interceptor name="FirstRunInterceptor"
 				class="com.example.myapp.firstrun.interceptors.FirstRunInterceptor" />
 				
 			<interceptor-stack name="loginStack">
 				<interceptor-ref name="FirstRunInterceptor" />
 				<interceptor-ref name="LoginInterceptor" />
-				<!-- interceptor-ref name="AuthInterceptor" /-->
+				<!-- You can use "roles" interceptor on restricted pages /-->
 				<interceptor-ref name="defaultStack" />
 			</interceptor-stack>
 		</interceptors>
