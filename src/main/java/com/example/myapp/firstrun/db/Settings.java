@@ -9,8 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "APP_SETUP")
-public class Setup {
+@Table(name = "APP_SETTINGS")
+public class Settings {
 	private Long id;
 	private Date setupDate = new Date();
 

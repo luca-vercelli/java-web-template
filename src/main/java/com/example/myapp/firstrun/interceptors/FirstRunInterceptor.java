@@ -31,9 +31,10 @@ public class FirstRunInterceptor extends AbstractInterceptor {
 			tx = em.getTransaction();
 
 			tx.begin();
-			TypedQuery<Long> query = em.createQuery("SELECT COUNT(*) FROM Setup", Long.class);
+			//FIXME should use Criteria
+			TypedQuery<Long> query = em.createQuery("SELECT COUNT(*) FROM Settings", Long.class);
 			n = query.getSingleResult();
-			LOG.debug("" + n + " rows found in APP_SETUP");
+			LOG.debug("" + n + " rows found in APP_SETTINGS");
 			tx.commit();
 
 		} catch (Exception exc) {

@@ -19,22 +19,18 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.security.auth.Subject;
 
 import com.example.myapp.authorization.db.Role;
 
 /**
  * A login user. This class implements Principal, so it can be integrated with
- * JAAS.
+ * JAAS. The key is *not* the email, instead it is a username.
  *
  */
 @Entity
 @Table(name = "APP_USERS")
 public class User implements Principal {
-
-	/**
-	 * if true, this will keep email and username fields equal
-	 */
-	private final static boolean LOGIN_USING_EMAIL = false;
 
 	private String username;
 	private String email;
@@ -57,11 +53,19 @@ public class User implements Principal {
 	}
 
 	/**
-	 * This method has effect only if LOGIN_USING_EMAIL is false.
+	 * I need to override this method, due to Javassist's current limitations.
+	 * 
+	 * @see java.security.Principal#implies(javax.security.auth.Subject)
 	 */
+	@Override
+	public boolean implies(Subject subject) {
+		if (subject == null)
+			return false;
+		return subject.getPrincipals().contains(this);
+	}
+
 	public void setName(String username) {
-		if (!LOGIN_USING_EMAIL)
-			this.username = username;
+		this.username = username;
 	}
 
 	@Override
@@ -71,13 +75,11 @@ public class User implements Principal {
 
 	@Column(name = "EMAIL")
 	public String getEmail() {
-		return LOGIN_USING_EMAIL ? this.username : this.email;
+		return this.email;
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
-		if (LOGIN_USING_EMAIL)
-			this.username = email;
 	}
 
 	// === OTHER IMPORTANT NON-KEY FIELDS ===============================

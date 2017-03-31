@@ -10,7 +10,7 @@ import org.apache.struts2.convention.annotation.InterceptorRef;
 import org.apache.struts2.convention.annotation.InterceptorRefs;
 import com.example.myapp.authorization.db.Role;
 import com.example.myapp.crud.EntityManagerUtil;
-import com.example.myapp.firstrun.db.Setup;
+import com.example.myapp.firstrun.db.Settings;
 import com.example.myapp.login.db.User;
 import com.example.myapp.login.helpers.UsersHelper;
 import com.opensymphony.xwork2.ActionSupport;
@@ -34,15 +34,18 @@ public class FirstRun extends ActionSupport {
 			tx.begin();
 
 			TypedQuery<Long> query;
-			query = em.createQuery("SELECT COUNT(*) FROM Setup", Long.class);
+			//FIXME should use Criteria
+			query = em.createQuery("SELECT COUNT(*) FROM Settings", Long.class);
 			Long n = query.getSingleResult();
-			System.out.println("" + n + " rows found in APP_SETUP, and " + (n == 0L));
+			System.out.println("" + n + " rows found in APP_SETTINGS, and " + (n == 0L));
 			tx.commit();
-			
+
 			if (n == 0L) {
 				// first access to database. We have to create a default user:
 				// admin, with password admin, and role admin
 				tx.begin();
+
+				// "ADMIN" ROLE AND USER
 				Role r = new Role();
 				r.setDescription("admin");
 				em.persist(r);
@@ -53,7 +56,7 @@ public class FirstRun extends ActionSupport {
 				u.setPersonName("Admin");
 				u.setPersonSurname(".");
 				u.setEmail("admin@example.com");
-				
+
 				UsersHelper.getInstance().setPassword(u, "admin");
 				em.persist(u);
 
@@ -61,15 +64,36 @@ public class FirstRun extends ActionSupport {
 
 				em.persist(u);
 
-				Setup s = new Setup();
+				// "USER" ROLE AND USER
+				r = new Role();
+				r.setDescription("user");
+				em.persist(r);
+
+				u = new User();
+				u.setActive(true);
+				u.setName("user");
+				u.setPersonName("User");
+				u.setPersonSurname(".");
+				u.setEmail("user@example.com");
+
+				UsersHelper.getInstance().setPassword(u, "user");
+				em.persist(u);
+
+				u.getRoles().add(r);
+
+				em.persist(u);
+
+				// SETTINGS record
+				Settings s = new Settings();
 				s.setSetupDate(new Date());
 				em.persist(s);
 				tx.commit();
-				
+
 				addActionMessage(getText("firstrun.done"));
 				return SUCCESS;
 
 			} else {
+				LOG.error(getText("firstrun.err.already.run"));
 				addActionError(getText("firstrun.err.already.run"));
 				return SUCCESS; // could also be ERROR
 			}
