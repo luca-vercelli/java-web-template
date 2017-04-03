@@ -150,20 +150,42 @@ public class UsersHelper {
 		}
 	}
 
-	public void authenticate(String user, String password) throws LoginException {
+	/**
+	 * Authenticate given username and password through JAAS.
+	 * 
+	 * @param user,
+	 *            or null
+	 * @param password
+	 * @return
+	 */
+	public LoginContext authenticate(String user, String password) {
 
-		// TODO
-
-		// could be put outside app
+		// FIXME could be put outside app?
 		System.setProperty("java.security.auth.login.config", "jaas.conf");
+
 		PassiveCallbackHandler cbh = new PassiveCallbackHandler(user, password);
 
-		LoginContext lc = new LoginContext("MainApp", cbh); // referenced in
-															// jaas.conf
+		LoginContext lc;
+		try {
+			lc = new LoginContext("MainApp", cbh); // referenced in jaas.conf
+		} catch (LoginException e) {
+			LOG.error("Exception during new LoginContext()", e);
+			return null;
+		}
+
 		// see Krb5LoginModule, LdapLoginModule, NTLoginModule, JndiLoginModule
 		// ...sun...
 
-		// call callback to retrieve credentials, and checks that
-		lc.login();
+		try {
+			// call callback to retrieve credentials, and checks that
+			// Authentication fails
+			lc.login();
+		} catch (LoginException e) {
+
+			return null;
+		}
+
+		//This should be not null...
+		return lc;
 	}
 }

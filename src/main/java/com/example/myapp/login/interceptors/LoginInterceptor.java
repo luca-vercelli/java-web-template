@@ -31,7 +31,7 @@ public class LoginInterceptor extends AbstractInterceptor {
 
 		String actionClassName = invocation.getAction().getClass().getName();
 		Map<String, Object> session = ActionContext.getContext().getSession();
-		User user = (User) session.get(Login.SESSION_ATTRIBUTE);
+		User user = (User) session.get(Login.SESSION_USER);
 		
 		LOG.debug("LoginInterceptor - User " + user + " accessing action " + actionClassName);
 		
