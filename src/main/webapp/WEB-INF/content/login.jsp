@@ -26,7 +26,7 @@
 		<div class="row">
 			<div class="col-md-4"></div>
 			<div class="col-md-4">
-				<s:submit name="login.submit" cssClass="form-control" />
+				<input type="submit" value="<s:text name="login.submit" />" class="form-control" />
 			</div>
 		</div>
 

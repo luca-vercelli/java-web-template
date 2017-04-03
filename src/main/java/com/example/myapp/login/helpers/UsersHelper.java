@@ -1,5 +1,6 @@
 package com.example.myapp.login.helpers;
 
+import java.io.File;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -7,6 +8,8 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
+import javax.servlet.Servlet;
+import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
 
@@ -14,6 +17,7 @@ import com.example.myapp.crud.EntityManagerUtil;
 import com.example.myapp.factory.Factory;
 import com.example.myapp.login.db.User;
 import com.example.myapp.login.util.PasswordAuthentication;
+import com.example.myapp.main.util.ApplicationProperties;
 
 public class UsersHelper {
 
@@ -161,7 +165,8 @@ public class UsersHelper {
 	public LoginContext authenticate(String user, String password) {
 
 		// FIXME could be put outside app?
-		System.setProperty("java.security.auth.login.config", "jaas.conf");
+		System.setProperty("java.security.auth.login.config",
+				ApplicationProperties.getInstance().getRoot().getAbsolutePath() + File.separator + "jaas.conf");
 
 		PassiveCallbackHandler cbh = new PassiveCallbackHandler(user, password);
 
@@ -181,11 +186,11 @@ public class UsersHelper {
 			// Authentication fails
 			lc.login();
 		} catch (LoginException e) {
-
+			
 			return null;
 		}
 
-		//This should be not null...
+		// This should be not null...
 		return lc;
 	}
 }
