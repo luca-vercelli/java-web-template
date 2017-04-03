@@ -62,8 +62,7 @@ public class UsersHelper {
 	 * Test user password
 	 */
 	public boolean testPassword(User u, String cleartextPassword) {
-		boolean ret = u.getEncryptedPassword().equals(encryptPassword(cleartextPassword));
-		return ret;
+		return PAinstance.authenticate(cleartextPassword, u.getEncryptedPassword());
 	}
 
 	/**
@@ -76,10 +75,7 @@ public class UsersHelper {
 			array[i] = 0;
 	}
 
-	public User getUserByNameAndPassword(String name, String password) {
-
-		String encryptedPassword = encryptPassword(password);
-		password = null;
+	public User getUserByNameAndPassword(String name, String cleartextPassword) {
 
 		EntityManager em = EntityManagerUtil.getEntityManager();
 		EntityTransaction tx = em.getTransaction();
@@ -88,25 +84,20 @@ public class UsersHelper {
 
 			TypedQuery<User> query;
 
-			query = em
-					.createQuery(
-							"from User where name = :name and encryptedPassword = :encryptedPassword and active = :true",
-							User.class)
-					.setParameter("name", name).setParameter("true", true)
-					.setParameter("encryptedPassword", encryptedPassword);
+			query = em.createQuery("from User where name = :name and active = :true", User.class)
+					.setParameter("name", name).setParameter("true", true);
 
 			List<User> users = query.getResultList();
 
 			tx.commit();
 
-			if (users.isEmpty()) {
-				return null;
-			} else if (users.size() > 1) {
-				LOG.error("Found more user with same password and name: " + name);
-				return null;
+			for (User u : users) {
+				if (testPassword(u, cleartextPassword))
+					return u;
+				// FIXME what if more than 1?
 			}
 
-			return users.get(0);
+			return null;
 
 		} catch (Exception exc) {
 			if (tx != null && tx.isActive())
@@ -115,10 +106,7 @@ public class UsersHelper {
 		}
 	}
 
-	public User getUserByEmailAndPassword(String email, String password) {
-
-		String encryptedPassword = encryptPassword(password);
-		password = null;
+	public User getUserByEmailAndPassword(String email, String cleartextPassword) {
 
 		EntityManager em = EntityManagerUtil.getEntityManager();
 		EntityTransaction tx = em.getTransaction();
@@ -127,25 +115,20 @@ public class UsersHelper {
 
 			TypedQuery<User> query;
 
-			query = em
-					.createQuery(
-							"from User where email = :email and encryptedPassword = :encryptedPassword and active = :true",
-							User.class)
-					.setParameter("email", email).setParameter("true", true)
-					.setParameter("encryptedPassword", encryptedPassword);
+			query = em.createQuery("from User where email = :email and active = :true", User.class)
+					.setParameter("email", email).setParameter("true", true);
 
 			List<User> users = query.getResultList();
 
 			tx.commit();
 
-			if (users.isEmpty()) {
-				return null;
-			} else if (users.size() > 1) {
-				LOG.error("Found more user with same password and email: " + email);
-				return null;
+			for (User u : users) {
+				if (testPassword(u, cleartextPassword))
+					return u;
+				// FIXME what if more than 1?
 			}
 
-			return users.get(0);
+			return null;
 
 		} catch (Exception exc) {
 			if (tx != null && tx.isActive())
@@ -186,7 +169,7 @@ public class UsersHelper {
 			// Authentication fails
 			lc.login();
 		} catch (LoginException e) {
-			
+
 			return null;
 		}
 
