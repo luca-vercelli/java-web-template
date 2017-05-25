@@ -1,6 +1,14 @@
 # java-web-template
 Template for real-world Java Web project
 
+CHANGELOG
+We consider Struts and Spring frameworks obsolete.
+Jstl is almost-obsolete, too.
+
+We consider Jetty and Derby two good development-mode tools, because they can be embedded and (almost) no configuration is needed.
+
+We like EE tools like JTA, EJB, JAX-RS, however we are not sure we can use them in Jetty.
+
 Tools:
 * eclipse
 * java 8
@@ -8,12 +16,12 @@ Tools:
 * MVC: struts 2 + conventions plugin (+annotations plugin?)
 * persistence: JPA + hibernate 5 + annotations
 * transactions: JTA? +annotations?
-* connection pool: commons DBCP
+* connection pool: commons DBCP? C3PO?
 * logging: commons logging + log4j
 * UI: jquery 3 + bootstrap 3
 * testing: junit 4
-* SQLite as database (just for test)
-* Apache Tomcat v8
+* Derby as database
+* Jetty
 * datasource? (webserver-dependent)
 * emails? (webserver-dependent)
 * JAAS
