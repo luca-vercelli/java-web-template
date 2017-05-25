@@ -68,12 +68,18 @@
 			<version>1.0.4</version>
 		</dependency>
 
-		<!-- JDBC. We use SQLite as an example. -->
-		<!-- Currently, I cannot find any maven artifact containing its SQLDialect -->
+		<!-- Jetty embedded web server -->
 		<dependency>
-			<groupId>org.xerial</groupId>
-			<artifactId>sqlite-jdbc</artifactId>
-			<version>3.7.2</version>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>9.4.5.v20170502</version>
+		</dependency>
+
+		<!-- Derby embedded DB -->
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+			<version>10.13.1.1</version>
 		</dependency>
 
 		<!-- JUnit -->

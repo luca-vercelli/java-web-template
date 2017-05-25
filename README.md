@@ -1,5 +1,6 @@
 # java-web-template
 Template for real-world Java Web project
+Goal of this project: set up a new real-world Jave Web project in minutes, without waste of time.
 
 CHANGELOG
 We consider Struts and Spring frameworks obsolete.
@@ -13,7 +14,8 @@ Tools:
 * eclipse
 * java 8
 * maven 3
-* MVC: struts 2 + conventions plugin (+annotations plugin?)
+* MVC: jstl (needed?)
+* REST: JAX-RS?
 * persistence: JPA + hibernate 5 + annotations
 * transactions: JTA? +annotations?
 * connection pool: commons DBCP? C3PO?
