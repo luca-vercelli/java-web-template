@@ -24,7 +24,7 @@ public class Foo {
 	private Double age;
 	private Date birthday;
 	// TODO add some ENUM
-	private List<Foo> foos = new ArrayList<Foo>();
+	private List<Bar> bars = new ArrayList<>();
 
 	@Id
 	@GeneratedValue
@@ -84,13 +84,13 @@ public class Foo {
 	}
 
 	@OneToMany
-	public List<Foo> getFoos() {
-		return foos;
+	public List<Bar> getFoos() {
+		return bars;
 
 	}
 
-	public void setFoos(List<Foo> foos) {
-		this.foos = foos;
+	public void setFoos(List<Bar> bars) {
+		this.bars = bars;
 
 	}
 }
