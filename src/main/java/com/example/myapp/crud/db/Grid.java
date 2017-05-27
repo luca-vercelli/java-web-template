@@ -1,3 +1,8 @@
+/*
+* WebTemplate 1.0
+* Luca Vercelli 2017
+* Released under GPLv3 
+*/
 package com.example.myapp.crud.db;
 
 import java.util.ArrayList;
@@ -9,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * In order to display an Entity on a grid, or to export it to an Excel sheet,
@@ -21,6 +27,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "APP_GRID")
+@XmlRootElement
 public class Grid {
 
 	private Long id;
