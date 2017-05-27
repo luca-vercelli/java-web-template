@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -25,6 +26,7 @@ public class Menu {
 	private Long id;
 	private String description; // FIXME what about i18n?
 	private Menu parentMenu;
+	private List<Menu> submenus = new ArrayList<>();
 	private List<Page> pages = new ArrayList<>();
 
 	@Id
@@ -65,6 +67,15 @@ public class Menu {
 
 	public void setParentMenu(Menu parentMenu) {
 		this.parentMenu = parentMenu;
+	}
+
+	@OneToMany(mappedBy = "parentMenu")
+	public List<Menu> getSubmenus() {
+		return submenus;
+	}
+
+	public void setSubmenus(List<Menu> submenus) {
+		this.submenus = submenus;
 	}
 
 }
