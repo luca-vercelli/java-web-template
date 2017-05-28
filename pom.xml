@@ -68,6 +68,13 @@
 			<version>1.0.4</version>
 		</dependency>
 
+<!-- currently used by domain login -->
+<dependency>
+    <groupId>org.acegisecurity</groupId>
+    <artifactId>acegi-security</artifactId>
+    <version>1.0.7</version>
+</dependency>
+
 		<!-- Jetty embedded web server -->
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
