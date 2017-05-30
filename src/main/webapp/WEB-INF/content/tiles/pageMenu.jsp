@@ -1,6 +1,6 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <ul>
-<li>Some menu item here</li>
-<li>Some menu item here</li>
-<li>Some menu item here</li>
-<li>Some menu item here</li>
+<c:forEach items="${requestScope.menuItems}" var="item">
+<li><a href="${item.href}">${item.description}</a></li>
+</c:forEach>
 </ul>
