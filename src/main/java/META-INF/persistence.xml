@@ -1,0 +1,47 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0">
+
+	<persistence-unit name="MyPersistenceUnit"
+		transaction-type="JTA">
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<jta-data-source>jdbc/mainDataSource</jta-data-source>
+
+		<!-- Entity classes -->
+		<class>com.example.myapp.firstrun.db.Settings</class>
+		<class>com.example.myapp.factory.db.Implementations</class>
+		<class>com.example.myapp.login.db.User</class>
+		<class>com.example.myapp.authorization.db.Role</class>
+		<class>com.example.myapp.authorization.db.Page</class>
+		<class>com.example.myapp.authorization.db.Menu</class>
+		<class>com.example.myapp.crud.db.Bar</class>
+		<class>com.example.myapp.crud.db.Foo</class>
+		<class>com.example.myapp.crud.db.Grid</class>
+		<class>com.example.myapp.crud.db.GridColumn</class>
+
+		<properties>
+			<!-- Non abbiamo user e pwd per accedere al db <property name="javax.persistence.jdbc.user" 
+				value="user" /> <property name="javax.persistence.jdbc.password" value="user" 
+				/> <property name="hibernate.hbm2ddl.auto" value="create-drop" /> -->
+
+			<!-- aggiunta per prevenire l'errore: Unable to build Hibernate SessionFactory 
+				at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl. persistenceException(EntityManagerFactoryBuilderImpl.java:967) -->
+
+			<property name="hibernate.transaction.jta.platform"
+				value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform" />
+
+			<!-- If your DBA allows that, use CREATE the first time in order to create 
+				all tables. This won't populate tables. In SQLLite, an exception will be 
+				raised about creating relations, but it is not a problem. -->
+			<property name="javax.persistence.schema-generation.database.action"
+				value="create" />
+			<property name="javax.persistence.sql-load-script-source"
+				value="insert.sql" />
+
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.DerbyTenSevenDialect" />
+		</properties>
+
+	</persistence-unit>
+</persistence>
