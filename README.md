@@ -1,14 +1,16 @@
 # java-web-template
-Template for real-world Java Web project
+Template for real-world Java Web project.
+
 Goal of this project: set up a new real-world Jave Web project in minutes, without waste of time.
 Moreover we want to use "best practice"'s wherever possible.
 
 ## DISCLAIMER
 Modern applications should be plain HTML, with data loaded asincronously via Ajax. RESt, OData, JSON technologies should be used.
-We consider Struts, Spring, Jstl frameworks obsolete (tell me if and why not).
-For development, a good webserver and a good database should not require any configuration. Embedded technologies can be used:
-we have choose embedded GlassFish and embedded Derby as a good starting point.
-We like EE technologies such as JTA, EJB, Injection, JAX-RS, so we cannot support Tomcat and Jetty. Their EE versione (TomEE and JetSet) are not stable jet. 
+So we consider Struts, Spring, JSTL frameworks obsolete (tell me if and why not).
+
+For development, a good webserver and a good database should not require any configuration. Embedded technologies can be used. We have chosen embedded GlassFish and embedded Derby.
+
+We like EE technologies such as JTA, EJB, Injection, JAX-RS, so we cannot support Tomcat and Jetty. You can consider using TomEE. JetSet is not ready jet. 
 
 Tools:
 * eclipse
