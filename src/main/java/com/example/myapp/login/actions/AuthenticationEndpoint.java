@@ -17,11 +17,15 @@ import javax.ws.rs.core.Response;
  * REST authentication endpoint. This is not EE security, you may @see also
  * RolesAllowedDynamicFeature.
  * 
+ * <b>It doesn't matter which type of authentication you decide to use. Always
+ * do it on the top of a HTTPS connection to prevent the man-in-the-middle
+ * attack.</b>
+ * 
  * @author Cássio Mazzochi Molin, Luca Vercelli
  * @see https://stackoverflow.com/questions/26777083
  *
  */
-@Path("/authentication")
+@Path("authentication")
 public class AuthenticationEndpoint {
 
 	@POST
