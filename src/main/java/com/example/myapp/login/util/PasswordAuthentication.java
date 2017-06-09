@@ -142,4 +142,9 @@ public final class PasswordAuthentication {
 		return authenticate(password.toCharArray(), token);
 	}
 
+	public static void main(String[] args) {
+		// Hash "admin"
+		PasswordAuthentication pa = new PasswordAuthentication();
+		System.out.println(pa.hash("user"));
+	}
 }
