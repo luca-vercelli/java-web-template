@@ -32,21 +32,25 @@ public class CommonManager {
 	 */
 	public Class<?> getEntityClass(String entity) {
 
-		Class<?> clazz = null;
+		if (entity == null)
+			return null;
+		entity = entity.trim();
+		if (entity.equals(""))
+			return null;
 
-		if (!entityCache.containsKey(entity)) {
-
-			for (EntityType<?> tp : em.getMetamodel().getEntities()) {
-				if (tp.getName().equals(entity)) {
-					clazz = tp.getJavaType();
-					entityCache.put(entity, clazz);
-					break;
-				}
-			}
-
+		if (entityCache.containsKey(entity)) {
+			return entityCache.get(entity);
 		}
 
-		return clazz;
+		for (EntityType<?> entityType : em.getMetamodel().getEntities()) {
+			if (entityType.getName().equals(entity)) {
+				Class<?> clazz = entityType.getJavaType();
+				entityCache.put(entity, clazz);
+				return clazz;
+			}
+		}
+
+		return null;
 	}
 
 	/**
@@ -127,19 +131,38 @@ public class CommonManager {
 	}
 
 	/**
-	 * Load at most maxResults objects of given entity.
-	 */
-	public <T> List<T> findAll(Class<T> entity, int maxResults) {
-		return em.createQuery("from " + entity.getName(), entity).setMaxResults(maxResults).getResultList();
-	}
-
-	/**
 	 * Load at most maxResults objects of given entity, starting from
-	 * firstResult. Useful for pagination.
+	 * firstResult, and with given ordering. Useful for pagination.
+	 * 
+	 * Notice that "maxResult" is in fact the size of a page, while
+	 * "firstResult" = (pageNumber-1)*pageSize + 1
+	 * 
+	 * @param maxResult
+	 *            max number of elements to retrieve
+	 * @param firstResult
+	 *            positional order of first element to retrieve (1-based).
+	 * @param sort
+	 *            attribute for ordering (optional)
+	 * @param order
+	 *            ASC or DESC. Default ASC.
 	 */
-	public <T> List<T> findAll(Class<T> entity, int maxResults, int firstResult) {
-		return em.createQuery("from " + entity.getName(), entity).setFirstResult(firstResult).setMaxResults(maxResults)
-				.getResultList();
+	public <T> List<T> find(Class<T> entity, int maxResults, int firstResult, String sort, String order) {
+
+		String sortCondition = "";
+
+		if (sort != null) {
+			if (order == null)
+				order = "asc";
+			else {
+				order = order.toLowerCase();
+				if (!order.equals("asc") && !order.equals("desc"))
+					throw new IllegalArgumentException("order must be either 'asc' or 'desc'");
+			}
+			sortCondition = " order by " + sort + " " + order;
+		}
+
+		return em.createQuery("from " + entity.getName() + sortCondition, entity).setFirstResult(firstResult)
+				.setMaxResults(maxResults).getResultList();
 	}
 
 	/**
