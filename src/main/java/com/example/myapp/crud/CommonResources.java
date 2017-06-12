@@ -27,7 +27,7 @@ import com.sun.messaging.jmq.io.Status;
 
 /**
  * This REST WS handles not just one entity, but all possible entities. Entites
- * can lie in different packages, however their nemaes must be different (I
+ * can lie in different packages, however their names must be different (I
  * argue this is assumed by JPA too). This service assumes all entities have a
  * primary key of type Long, called Id.
  * 
