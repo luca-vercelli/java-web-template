@@ -24,7 +24,7 @@ Tools:
 * transactions: JTA + EJB
 * connection pool: commons DBCP? C3PO?
 * logging: commons logging + log4j
-* UI: jquery 3 + bootstrap 3 (moustache.js? angular?)
+* Gentelella 1.4 frontend (jquery 3 + bootstrap 3)
 * testing: junit 4
 * javax.emails
 * JAAS ?
