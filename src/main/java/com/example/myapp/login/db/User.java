@@ -12,6 +12,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -22,6 +24,7 @@ import javax.persistence.TemporalType;
 import javax.security.auth.Subject;
 
 import com.example.myapp.authorization.db.Role;
+import com.example.myapp.main.util.Boolean;
 
 /**
  * A login user. This class implements Principal, so it can be integrated with
@@ -38,7 +41,7 @@ public class User implements Principal {
 	private String personName;
 	private String personSurname;
 	private Date birthdate;
-	private Boolean active = true;
+	private Boolean active = Boolean.Y;
 
 	private Set<Role> roles = new HashSet<Role>();
 
@@ -85,6 +88,7 @@ public class User implements Principal {
 	// === OTHER IMPORTANT NON-KEY FIELDS ===============================
 
 	@Column(name = "ACTIVE")
+	@Enumerated(EnumType.ORDINAL)
 	public Boolean getActive() {
 		return active;
 	}
