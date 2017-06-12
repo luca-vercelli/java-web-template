@@ -52,6 +52,10 @@ public class User implements Principal {
 		return username;
 	}
 
+	public void setName(String username) {
+		this.username = username;
+	}
+
 	/**
 	 * I need to override this method, due to Javassist's current limitations.
 	 * 
@@ -62,10 +66,6 @@ public class User implements Principal {
 		if (subject == null)
 			return false;
 		return subject.getPrincipals().contains(this);
-	}
-
-	public void setName(String username) {
-		this.username = username;
 	}
 
 	@Override

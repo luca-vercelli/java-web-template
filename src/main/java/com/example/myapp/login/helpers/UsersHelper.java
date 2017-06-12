@@ -8,9 +8,6 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
-import javax.servlet.Servlet;
-import javax.servlet.ServletContext;
-
 import org.apache.log4j.Logger;
 
 import com.example.myapp.crud.EntityManagerUtil;
