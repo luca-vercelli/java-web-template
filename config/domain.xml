@@ -94,7 +94,7 @@
 	<servers>
 		<server config-ref="server-config" name="server">
 			<application-ref ref="__admingui" virtual-servers="__asadmin"></application-ref>
-			<application-ref ref="myapp" virtual-servers="server"></application-ref>
+			<!-- <application-ref ref="myapp" virtual-servers="server"></application-ref> -->
 			<resource-ref ref="jdbc/__TimerPool"></resource-ref>
 			<resource-ref ref="jdbc/__default"></resource-ref>
 			<resource-ref ref="jms/__defaultConnectionFactory"></resource-ref>

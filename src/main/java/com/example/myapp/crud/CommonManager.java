@@ -22,7 +22,7 @@ import org.apache.commons.beanutils.BeanUtils;
 @Stateless
 public class CommonManager {
 
-	@PersistenceContext(unitName = "persistenceUnit")
+	@PersistenceContext(unitName = "MyPersistenceUnit")
 	private EntityManager em;
 
 	private Map<String, Class<?>> entityCache = new HashMap<String, Class<?>>();

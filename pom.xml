@@ -33,10 +33,10 @@
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
 		</dependency>
-		<dependency> 
-			<groupId>com.airhacks</groupId> 
-			<artifactId>jaxrs-cors</artifactId> 
-			<version>0.0.2</version> 
+		<dependency>
+			<groupId>com.airhacks</groupId>
+			<artifactId>jaxrs-cors</artifactId>
+			<version>0.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.ejb</groupId>
@@ -88,13 +88,13 @@
 		<!-- TODO dependency> <groupId>org.apache.struts</groupId> <artifactId>struts2-rest-plugin</artifactId> 
 			<version>2.2.1</version> </dependency -->
 
-		<!--  jstl -->
+		<!-- jstl -->
 		<dependency>
 			<groupId>javax.servlet.jsp.jstl</groupId>
 			<artifactId>jstl-api</artifactId>
 			<version>1.2</version>
 		</dependency>
-		
+
 		<!-- logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -113,7 +113,7 @@
 			<artifactId>acegi-security</artifactId>
 			<version>1.0.7</version>
 		</dependency>
-		
+
 		<!-- currently used by commonmanager -->
 		<dependency>
 			<groupId>commons-beanutils</groupId>
@@ -122,18 +122,18 @@
 		</dependency>
 
 		<!-- JAX-RS -->
-		<dependency> 
-			<groupId>javax.ws.rs</groupId> 
-			<artifactId>javax.ws.rs-api</artifactId> 
-			<version>2.1-m07</version> 
+		<dependency>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>javax.ws.rs-api</artifactId>
+			<version>2.1-m07</version>
 		</dependency>
-		
+
 		<!-- GlassFish embedded web server -->
 		<dependency>
-		    <groupId>org.glassfish.extras</groupId>
-		    <artifactId>glassfish-embedded-all</artifactId>
-		    <version>3.1.1</version>
-		    <scope>provided</scope>
+			<groupId>org.glassfish.main.extras</groupId>
+			<artifactId>glassfish-embedded-all</artifactId>
+			<version>4.1.2</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- JUnit -->
