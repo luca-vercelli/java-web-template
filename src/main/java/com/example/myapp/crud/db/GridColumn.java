@@ -43,7 +43,7 @@ public class GridColumn {
 		this.grid = grid;
 	}
 
-	@Column(name = "ORDER")
+	@Column(name = "N_ORDER") // "ORDER" not always allowed
 	public Integer getOrder() {
 		return order;
 	}

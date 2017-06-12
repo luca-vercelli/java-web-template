@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -49,8 +50,10 @@ public class Menu {
 		this.description = description;
 	}
 
-	@JoinTable(name = "APP_MENU_PAGES", joinColumns = { @JoinColumn(name = "MENU_ID") }, inverseJoinColumns = {
-			@JoinColumn(name = "PARENT_MENU_ID") })
+	@JoinTable(name = "APP_MENU_PAGES", joinColumns = {
+			@JoinColumn(name = "MENU_ID", referencedColumnName = "ID") }, inverseJoinColumns = {
+					@JoinColumn(name = "PAGE_ID", referencedColumnName = "ID") })
+	@ManyToMany
 	public List<Page> getPages() {
 		return pages;
 	}
