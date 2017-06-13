@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <%@page contentType="text/html"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 

@@ -1,4 +1,4 @@
-<%@tag description="WebApp Template - Gentelella"%><!DOCTYPE html>
+<%@tag description="WebApp Template - Gentelella"%>
 <html>
 
 <head>
