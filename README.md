@@ -12,9 +12,9 @@ For development, a good webserver and a good database should not require any con
 
 We like EE technologies such as JTA, EJB, Injection, JAX-RS, so we cannot support Tomcat and Jetty. You can consider using TomEE. JetSet is not ready jet. 
 
-Tools:
-* eclipse
+Technologies:
 * java 8
+* java EE 6 (Servlet 3.0)
 * maven 3
 * Embedded Glassfish as WAS
 * Embedded Derby as database, configured as JTA datasource
@@ -27,7 +27,13 @@ Tools:
 * Gentelella 1.4 frontend (jquery 3 + bootstrap 3)
 * testing: junit 4
 * javax.emails
-* JAAS ?
+* JAAS ? Java EE security?
+* session-based instead of token-based security, as we have both REST services and web pages
+
+Suggested tools:
+* Eclipse EE
+* m2e plugin
+* FileSync plugin
 
 Features:
 * JSP templating (and not struts tiles plugin)

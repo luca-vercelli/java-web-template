@@ -114,8 +114,6 @@ $MENU_TOGGLE.on('click', function() {
 	$BODY.toggleClass('nav-md nav-sm');
 
 	setContentHeight();
-
-	$('.dataTable').each ( function () { $(this).dataTable().fnDraw(); });
 });
 
 	// check active menu

@@ -762,9 +762,6 @@ a:focus {
     position: absolute;
     top: 0
 }
-.nav-md ul.nav.child_menu li:last-child::after {
-  bottom: 50%;
-}
 .nav.side-menu>li>a,
 .nav.child_menu>li>a {
     color: #E7E7E7;
@@ -1003,7 +1000,7 @@ article.media {
     float: left
 }
 h2 {
-    font-size: 30px;
+    font-size: 18px;
     font-weight: 400
 }
 #left,
@@ -1867,18 +1864,18 @@ h4.graph_title {
     transition: all 300ms ease-in-out
 }
 .tile-stats:hover .icon i {
-    animation-name: transformAnimation;
+    animation-name: tansformAnimation;
     animation-duration: .5s;
     animation-iteration-count: 1;
     color: rgba(58, 58, 58, 0.41);
     animation-timing-function: ease;
     animation-fill-mode: forwards;
-    -webkit-animation-name: transformAnimation;
+    -webkit-animation-name: tansformAnimation;
     -webkit-animation-duration: .5s;
     -webkit-animation-iteration-count: 1;
     -webkit-animation-timing-function: ease;
     -webkit-animation-fill-mode: forwards;
-    -moz-animation-name: transformAnimation;
+    -moz-animation-name: tansformAnimation;
     -moz-animation-duration: .5s;
     -moz-animation-iteration-count: 1;
     -moz-animation-timing-function: ease;
