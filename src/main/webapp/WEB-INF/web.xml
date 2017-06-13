@@ -12,7 +12,17 @@
     
 	<filter-mapping>
 		<filter-name>loginFilter</filter-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>*.html</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>loginFilter</filter-name>
+		<url-pattern>*.htm</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>loginFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
 	</filter-mapping>
 
 	<welcome-file-list>

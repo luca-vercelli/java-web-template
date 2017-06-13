@@ -24,11 +24,14 @@ import com.example.myapp.login.db.User;
 import com.example.myapp.main.util.ApplicationProperties;
 
 /**
- * Login filter. Check if a User is already in session or not. This filter must
- * <b>not</b> apply to login page and login action.
+ * Login filter. Check if a User is already in session or not.
+ * 
+ * This filter must <b>not</b> apply to login-related pages. Unluckily,
+ * WebFilter's do not allow to exclude paths. So we must implement an ad-hoc
+ * (quite ugly) solution.
  *
  */
-@WebFilter(value = "loginFilter", urlPatterns = "/*")
+//@WebFilter(value = "loginFilter")
 public class LoginFilter implements Filter {
 
 	private final static Logger LOG = Logger.getLogger(LoginFilter.class); // FIXME
@@ -54,9 +57,10 @@ public class LoginFilter implements Filter {
 			String contextPath = request.getContextPath();
 			String uri = request.getRequestURI();
 
-			LOG.info("Allowed paths:" + props.getProperty("login.not.required.uris"));
+			uri = uri.replaceAll("/+", "/"); // convert /myapp///ui -> /myapp/ui
 
-			for (String allowedPath : props.getProperty("login.not.required.uris").split("/")) {
+			for (String allowedPath : props.getProperty("login.not.required.uris").split(",")) {
+
 				if (!allowedPath.equals("") && uri.startsWith(contextPath + allowedPath)) {
 					loginRequired = false;
 					break;
@@ -73,7 +77,7 @@ public class LoginFilter implements Filter {
 				chain.doFilter(req, resp); // Just continue chain
 			} else {
 				LOG.info("Redirecting to login page");
-				response.sendRedirect(contextPath + "/" + props.getProperty("login.uri"));
+				response.sendRedirect(contextPath + props.getProperty("login.uri"));
 			}
 
 		} else {
