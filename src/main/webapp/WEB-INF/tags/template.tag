@@ -1,33 +1,37 @@
-<%@tag description="WebApp Template"%>
-<!DOCTYPE html>
+<%@tag description="WebApp Template - Gentelella"%><!DOCTYPE html>
 <html>
 
 <head>
 <jsp:include page="/WEB-INF/content/tiles/head.jsp" />
 </head>
 
-<body>
+<body class="nav-md">
 
-	<jsp:include page="/WEB-INF/content/tiles/scripts.jsp" />
-	
-	<!--  START HEADER -->
-	<jsp:include page="/WEB-INF/content/tiles/pageHeader.jsp" />
-	<!-- END HEADER -->
+<!-- La forza sia con te -->
+	<div class="container body">
+		<div class="main_container">
 
-	<!--  START MENU -->
-	<jsp:include page="/WEB-INF/content/tiles/pageMenu.jsp" />
-	<!--  END MENU -->
+			<!--  left side menu -->
+			<jsp:include page="/WEB-INF/content/tiles/pageMenu.jsp" />
+			<!--  /left side menu -->
 
-	<!-- START BODY -->
-	<div id="pageWrapper">
+			<!-- top navigation -->
+			<jsp:include page="/WEB-INF/content/tiles/pageHeader.jsp" />
+			<!-- /top navigation -->
 
-		<jsp:doBody />
+			<!-- page content -->
+			<div class="right_col" role="main">
 
+				<jsp:doBody />
+
+			</div>
+			<!-- /page content -->
+
+			<!--  footer content -->
+			<jsp:include page="/WEB-INF/content/tiles/pageFooter.jsp" />
+			<!--  /footer content  -->
+
+		</div>
 	</div>
-
-	<!--  START FOOTER -->
-	<jsp:include page="/WEB-INF/content/tiles/pageFooter.jsp" />
-	<!--  END FOOTER  -->
-
 </body>
 </html>
