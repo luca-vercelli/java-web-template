@@ -31,7 +31,7 @@ import com.example.myapp.main.util.ApplicationProperties;
  * (quite ugly) solution.
  *
  */
-//@WebFilter(value = "loginFilter")
+@WebFilter(value = "loginFilter", urlPatterns = { "*.html", "*.htm", "*.xhtml", "*.jsp" })
 public class LoginFilter implements Filter {
 
 	private final static Logger LOG = Logger.getLogger(LoginFilter.class); // FIXME
