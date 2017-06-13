@@ -14,7 +14,15 @@ We like EE technologies such as JTA, EJB, Injection, JAX-RS, so we cannot suppor
 
 Technologies:
 * java 8
-* java EE 6 (Servlet 3.0)
+* java EE 7, so in particular:
+  * Servlet 3.1
+  * JSTL 1.2 (needed?)
+  * JAX-RS 2.0
+  * JPA 2.1
+  * JTA 1.2
+  * CDI 1.0
+  * JMS 2.0
+  * JavaMail 1.5
 * maven 3
 * Embedded Glassfish as WAS
 * Embedded Derby as database, configured as JTA datasource
