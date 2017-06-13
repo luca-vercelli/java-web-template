@@ -30,7 +30,7 @@
       <div class="login_wrapper">
         <div class="animate form login_form">
           <section class="login_content">
-            <form>
+            <form id="loginForm">
               <h1>Login Form</h1>
               <div>
                 <input type="text" class="form-control" placeholder="Username" required="" />
@@ -100,4 +100,17 @@
       </div>
     </div>
   </body>
+  <script>
+  $('#loginForm').submit(function() {
+	    $ajax(
+	    		url: "rest/authentication",
+	    		method: "GET",
+	    		data: {
+	    			username: $('#Username'),
+	    			password: $('#Password') //cleartext :(
+	    		}
+	    		);
+	    return false;
+	});
+  </script>
 </html>
