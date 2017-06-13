@@ -18,10 +18,10 @@ import com.example.myapp.main.util.ApplicationProperties;
 
 public class UsersHelper {
 
+	private static Logger LOG = Logger.getLogger(UsersHelper.class);
+
 	@Inject
 	private static UsersHelper instance; // Singleton
-
-	private static Logger LOG = Logger.getLogger(UsersHelper.class);
 
 	@Inject
 	private static PasswordAuthentication PAinstance; // Singleton
