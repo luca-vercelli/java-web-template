@@ -1,3 +1,8 @@
+/*
+* WebTemplate 1.0
+* Luca Vercelli 2017
+* Released under GPLv3 
+*/
 package com.example.myapp.authorization;
 
 //taken from https://stackoverflow.com/questions/390150/authenticating-against-active-directory-with-java-on-linux
