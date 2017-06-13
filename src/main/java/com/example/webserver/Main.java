@@ -56,6 +56,11 @@ public class Main {
 				// are
 				// optional.
 
+				System.out.println("Deploy path: " + System.getProperty("com.sun.aas.instanceRoot"));
+				// If you prefer a static path, you can replace
+				// ${com.sun.aas.instanceRoot} everywhere in domanin.xml
+				// That way you can use e.g. FileSync plugin to update html's
+
 			} catch (GlassFishException e) {
 				e.printStackTrace();
 			}

@@ -9,8 +9,7 @@
 		<jta-data-source>jdbc/mainDataSource</jta-data-source>
 
 		<!-- Entity classes -->
-		<class>com.example.myapp.firstrun.db.Settings</class>
-		<class>com.example.myapp.factory.db.Implementations</class>
+		<class>com.example.myapp.main.Settings</class>
 		<class>com.example.myapp.login.db.User</class>
 		<class>com.example.myapp.authorization.db.Role</class>
 		<class>com.example.myapp.authorization.db.Page</class>

@@ -3,6 +3,7 @@ package com.example.myapp.login.helpers;
 import java.io.File;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
@@ -11,22 +12,21 @@ import javax.security.auth.login.LoginException;
 import org.apache.log4j.Logger;
 
 import com.example.myapp.crud.EntityManagerUtil;
-import com.example.myapp.factory.Factory;
 import com.example.myapp.login.db.User;
 import com.example.myapp.login.util.PasswordAuthentication;
 import com.example.myapp.main.util.ApplicationProperties;
 
 public class UsersHelper {
 
-	private static UsersHelper instance;
+	@Inject
+	private static UsersHelper instance; // Singleton
+
 	private static Logger LOG = Logger.getLogger(UsersHelper.class);
 
-	private PasswordAuthentication PAinstance = Factory.getInstance().createObject(PasswordAuthentication.class);
+	@Inject
+	private static PasswordAuthentication PAinstance; // Singleton
 
 	public static UsersHelper getInstance() {
-		if (instance == null) {
-			instance = Factory.getInstance().createObject(UsersHelper.class);
-		}
 		return instance;
 	}
 
