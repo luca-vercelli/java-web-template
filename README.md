@@ -35,7 +35,7 @@ Technologies:
 * Gentelella 1.4 frontend (jquery 3 + bootstrap 3)
 * testing: junit 4
 * javax.emails
-* JAAS ? Java EE security?
+* JAAS ? Java EE security? (up to Java EE 8 that's bad)
 * session-based instead of token-based security, as we have both REST services and web pages
 
 Suggested tools:

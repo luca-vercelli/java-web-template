@@ -1,7 +1,13 @@
+/*
+* WebTemplate 1.0
+* Luca Vercelli 2017
+* Released under GPLv3 
+*/
 package com.example.myapp.login.actions;
 
 import java.io.IOException;
 
+import javax.servlet.annotation.WebFilter;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -22,7 +28,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         // Get the HTTP Authorization header from the request
         String authorizationHeader = 
             requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-
+        
         // Check if the HTTP Authorization header is present and formatted correctly 
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             throw new NotAuthorizedException("Authorization header must be provided");
