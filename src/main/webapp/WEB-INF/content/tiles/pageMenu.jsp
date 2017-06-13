@@ -1,3 +1,4 @@
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
@@ -26,11 +27,25 @@
               <div class="menu_section">
                 <h3>General</h3>
                 <ul class="nav side-menu">
+                
+                <c:forEach items="${sessionScope.menus}" var="m">
+                <!-- PROVA -->
+                  <li><a><i class="fa fa-${m.description}"></i> <c:out value="${m.description}"/> <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+		              <c:forEach items="${m.pages}" var="p">
+                      <li><a href="${m.url}">
+                      		<c:out value = "${p.description}"/>
+							</a></li>
+                      </c:forEach>
+                    </ul>
+                  </li>
+                </c:forEach>
+                
                   <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="index.html">Dashboard</a></li>
-                      <li><a href="index2.html">Dashboard2</a></li>
-                      <li><a href="index3.html">Dashboard3</a></li>
+                      <li><a href="index.jsp">Dashboard</a></li>
+                      <li><a href="index2.jsp">Dashboard2</a></li>
+                      <li><a href="index3.jsp">Dashboard3</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>

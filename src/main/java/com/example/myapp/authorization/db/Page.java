@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -22,13 +23,13 @@ import javax.persistence.Table;
 public class Page {
 
 	private Long id;
-	private String action;
+	private String url;
 	private String description;
 
 	private Set<Role> authorizedRoles = new HashSet<Role>();
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "ID")
 	public Long getId() {
 		return id;
@@ -47,13 +48,13 @@ public class Page {
 		this.description = description;
 	}
 
-	@Column(name = "ACTION")
-	public String getAction() {
-		return action;
+	@Column(name = "URL")
+	public String getUrl() {
+		return url;
 	}
 
-	public void setAction(String action) {
-		this.action = action;
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	@OneToMany
