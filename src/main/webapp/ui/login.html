@@ -44,7 +44,6 @@
               </div>
 
               <div class="clearfix"></div>
-
               <div class="separator">
                 <p class="change_link">New to site?
                   <a href="#signup" class="to_register"> Create Account </a>
@@ -100,17 +99,5 @@
       </div>
     </div>
   </body>
-  <script>
-  $('#loginForm').submit(function() {
-	    $ajax(
-	    		url: "rest/authentication",
-	    		method: "GET",
-	    		data: {
-	    			username: $('#Username'),
-	    			password: $('#Password') //cleartext :(
-	    		}
-	    		);
-	    return false;
-	});
-  </script>
+  <script src="../vendors/java-web-template/login.js" ></script>
 </html>
