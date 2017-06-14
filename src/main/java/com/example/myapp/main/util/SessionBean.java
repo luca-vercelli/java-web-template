@@ -7,9 +7,9 @@ package com.example.myapp.main.util;
 
 import java.util.List;
 
-import com.example.myapp.authorization.db.Menu;
 import com.example.myapp.authorization.db.Role;
 import com.example.myapp.login.db.User;
+import com.example.myapp.main.db.Menu;
 
 public class SessionBean {
 

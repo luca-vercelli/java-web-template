@@ -11,22 +11,26 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 import org.apache.log4j.Logger;
 
-import com.example.myapp.crud.EntityManagerUtil;
 import com.example.myapp.login.db.User;
 import com.example.myapp.login.util.PasswordAuthentication;
 import com.example.myapp.main.util.ApplicationProperties;
 
+//TODO convert in Stateless EJB
 public class UsersHelper {
 
 	private static Logger LOG = Logger.getLogger(UsersHelper.class);
 
 	@Inject
 	private static UsersHelper instance; // Singleton
+
+	@PersistenceContext
+	private EntityManager em; 
 
 	@Inject
 	private static PasswordAuthentication PAinstance; // Singleton
@@ -79,7 +83,6 @@ public class UsersHelper {
 
 	public User getUserByNameAndPassword(String name, String cleartextPassword) {
 
-		EntityManager em = EntityManagerUtil.getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
@@ -110,7 +113,6 @@ public class UsersHelper {
 
 	public User getUserByEmailAndPassword(String email, String cleartextPassword) {
 
-		EntityManager em = EntityManagerUtil.getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();

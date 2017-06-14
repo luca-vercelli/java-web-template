@@ -3,7 +3,7 @@
 * Luca Vercelli 2017
 * Released under GPLv3 
 */
-package com.example.myapp.authorization;
+package com.example.myapp.authorization.filters;
 
 import java.io.IOException;
 import java.lang.reflect.AnnotatedElement;

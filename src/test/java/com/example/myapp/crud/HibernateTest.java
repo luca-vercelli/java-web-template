@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -14,6 +15,10 @@ import org.junit.Test;
 import com.example.myapp.login.db.User;
 
 public class HibernateTest {
+
+	@PersistenceContext
+	EntityManager em;
+	// TODO how to handle @PersistenceContext in test unit
 
 	@BeforeClass
 	public static void setUp() {
@@ -26,13 +31,11 @@ public class HibernateTest {
 
 	@Test
 	public void testEntityManager() {
-		EntityManager em = EntityManagerUtil.getEntityManager();
 		em.close();
 	}
 
 	@Test
 	public void testPersist() {
-		EntityManager em = EntityManagerUtil.getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();

@@ -9,11 +9,11 @@
 		<jta-data-source>jdbc/mainDataSource</jta-data-source>
 
 		<!-- Entity classes -->
-		<class>com.example.myapp.main.Settings</class>
+		<class>com.example.myapp.main.db.Settings</class>
 		<class>com.example.myapp.login.db.User</class>
 		<class>com.example.myapp.authorization.db.Role</class>
-		<class>com.example.myapp.authorization.db.Page</class>
-		<class>com.example.myapp.authorization.db.Menu</class>
+		<class>com.example.myapp.main.db.Page</class>
+		<class>com.example.myapp.main.db.Menu</class>
 		<class>com.example.myapp.crud.db.Bar</class>
 		<class>com.example.myapp.crud.db.Foo</class>
 		<class>com.example.myapp.crud.db.Grid</class>
