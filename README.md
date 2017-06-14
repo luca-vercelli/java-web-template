@@ -6,7 +6,8 @@ Moreover we want to use "best practice"'s wherever possible.
 
 ## DISCLAIMER
 Modern applications should be plain HTML, with data loaded asincronously via Ajax. RESt, OData, JSON technologies should be used.
-So we consider Struts, Spring, JSTL frameworks obsolete (tell me if and why not).
+So we consider Struts, Spring, frameworks obsolete (tell me if and why not).
+JSF/JSTL may still be worth for some purposes.
 
 For development, a good webserver and a good database should not require any configuration. Embedded technologies can be used. We have chosen embedded GlassFish and embedded Derby.
 
