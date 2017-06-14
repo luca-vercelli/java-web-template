@@ -40,7 +40,10 @@
       <div class="login_wrapper">
         <div class="animate form login_form">
           <section class="login_content">
-            <form id="loginForm">
+            <form action="doLogin" method="post">
+            
+            <input type="hidden" name="language" value="${language}"/>
+            
               <h1>Login Form</h1>
         
               <div>
@@ -50,11 +53,12 @@
                 <input type="password" class="form-control" placeholder="Password" required name="pwd" />
               </div>
               <div>
-                <a class="btn btn-default submit" href="doLogin">Log in</a>
+                <input type="submit" class="btn btn-default submit" value="Log in"/> 
                 <a class="reset_pass" href="#">${login_password_lost}</a>
               </div>
 
               <div class="clearfix"></div>
+
               <div class="separator">
                 <p class="change_link">New to site?
                   <a href="#signup" class="to_register"> Create Account </a>
@@ -72,9 +76,9 @@
             
               <!-- i18n -->
               <form>
-	            <select id="language" name="language" onchange="submit()">
+	            <select id="language" name="language" onchange="submit()" >
                 	<option value="en" ${language == 'en' ? 'selected' : ''}>English</option>
-                	<option value="it" ${language == 'it' ? 'selected' : ''}>Italiano</option>
+                	<option value="it_IT" ${language == 'it_IT' ? 'selected' : ''}>Italiano</option>
             	</select>
         	  </form>
           </section>
@@ -118,6 +122,4 @@
       </div>
     </div>
   </body>
-  <script src="../vendors/jquery/dist/jquery.min.js"></script>
-  <script src="../vendors/java-web-template/js/login.js" ></script>
 </html>
