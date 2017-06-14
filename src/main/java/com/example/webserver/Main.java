@@ -18,7 +18,7 @@ public class Main {
 	public static final String CONTEXT_ROOT = "myapp";
 
 	/**
-	 * Avvia l'applicazione con l'embedded server. Vuol dire che non c'è bisogno
+	 * Avvia l'applicazione con l'embedded server. Vuol dire che non c'ï¿½ bisogno
 	 * di installare Glassfish, basta fare "run as application" da Eclipse.
 	 * 
 	 * @throws IOException
@@ -61,6 +61,11 @@ public class Main {
 				// ${com.sun.aas.instanceRoot} everywhere in domanin.xml
 				// That way you can use e.g. FileSync plugin to update html's
 
+				System.out.println("Listen url: http://localhost:8080/myapp");
+				//FIXME this should not be static....
+				
+				//FIXME let work config/branding/glassfish-version.properties
+				
 			} catch (GlassFishException e) {
 				e.printStackTrace();
 			}

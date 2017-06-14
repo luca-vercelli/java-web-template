@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.enterprise.context.ApplicationScoped;
 
 /**
  * Hash passwords for storage, and test passwords against password tokens.
@@ -25,6 +26,7 @@ import javax.crypto.spec.PBEKeySpec;
  * @author erickson
  * @see <a href="http://stackoverflow.com/a/2861125/3474">StackOverflow</a>
  */
+@ApplicationScoped
 public final class PasswordAuthentication {
 
 	/**

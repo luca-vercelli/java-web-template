@@ -9,7 +9,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+
 import com.example.myapp.login.db.User;
+import com.example.myapp.login.filters.LoginFilter;
 import com.example.myapp.login.helpers.UsersHelper;
 import com.example.myapp.main.util.ApplicationProperties;
 import com.example.myapp.main.util.SessionBean;
@@ -20,16 +24,19 @@ import com.example.myapp.main.util.SessionBean;
  * @author Luca Vercelli
  *
  */
-@WebServlet(name = "loginServlet", urlPatterns = { "/doLogin" })
+@WebServlet(name = "loginServlet", urlPatterns = { "/ui/doLogin" })
 public class doLogin extends HttpServlet {
 
 	private static final long serialVersionUID = 651051473002232658L;
 
 	@Inject
 	ApplicationProperties appProps;
-
 	@Inject
 	SessionBean sessionBean;
+	@Inject
+	UsersHelper usersHelper;
+
+	private final static Logger LOG = Logger.getLogger(LoginFilter.class);
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -51,7 +58,7 @@ public class doLogin extends HttpServlet {
 				response.sendRedirect(request.getContextPath() + appProps.getProperty("login.uri"));
 			}
 
-			LoginContext lc = UsersHelper.getInstance().authenticate(userId, pwd);
+			LoginContext lc = usersHelper.authenticate(userId, pwd);
 
 			sessionBean.setLoginContext(lc);
 			if (lc != null && !lc.getSubject().getPrincipals().isEmpty()) {
@@ -68,6 +75,8 @@ public class doLogin extends HttpServlet {
 			response.sendRedirect(request.getContextPath());
 
 		} catch (Exception e) {
+			LOG.error("Exception while performing login", e);
+
 			// FIXME Should send back some message? internal error
 			response.sendRedirect(request.getContextPath() + appProps.getProperty("login.uri"));
 		}

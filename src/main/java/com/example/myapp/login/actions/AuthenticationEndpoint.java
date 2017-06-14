@@ -29,7 +29,9 @@ public class AuthenticationEndpoint {
 
 	@Inject
 	SessionBean sessionBean;
-
+	@Inject
+	UsersHelper usersHelper;
+	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -49,7 +51,7 @@ public class AuthenticationEndpoint {
 				return Response.ok(Status.BAD_REQUEST).build();
 			}
 
-			LoginContext lc = UsersHelper.getInstance().authenticate(userId, pwd);
+			LoginContext lc = usersHelper.authenticate(userId, pwd);
 
 			sessionBean.setLoginContext(lc);
 			if (lc != null && !lc.getSubject().getPrincipals().isEmpty()) {

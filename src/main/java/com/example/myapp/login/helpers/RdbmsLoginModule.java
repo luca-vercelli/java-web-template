@@ -4,6 +4,8 @@ import java.security.Principal;
 import java.util.Collections;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import com.example.myapp.login.db.User;
 
 /**
@@ -14,9 +16,12 @@ import com.example.myapp.login.db.User;
  */
 public class RdbmsLoginModule extends AbstractLoginModule {
 
+	@Inject
+	UsersHelper usersHelper;
+
 	@Override
 	public Principal getPrincipalByNameAndPassword(String username, String password) {
-		User user = UsersHelper.getInstance().getUserByNameAndPassword(username, password);
+		User user = usersHelper.getUserByNameAndPassword(username, password);
 		return user;
 	}
 

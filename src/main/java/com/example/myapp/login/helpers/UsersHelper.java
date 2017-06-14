@@ -8,6 +8,7 @@ package com.example.myapp.login.helpers;
 import java.io.File;
 import java.util.List;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -21,27 +22,20 @@ import com.example.myapp.login.db.User;
 import com.example.myapp.login.util.PasswordAuthentication;
 import com.example.myapp.main.util.ApplicationProperties;
 
-//TODO convert in Stateless EJB
+@Stateless
 public class UsersHelper {
 
 	private static Logger LOG = Logger.getLogger(UsersHelper.class);
 
-	@Inject
-	private static UsersHelper instance; // Singleton
-
 	@PersistenceContext
-	private EntityManager em; 
-
+	EntityManager em; 
+	
 	@Inject
-	private static PasswordAuthentication PAinstance; // Singleton
-
+	PasswordAuthentication PAinstance;
+	
 	@Inject
 	ApplicationProperties appProps;
 	
-	public static UsersHelper getInstance() {
-		return instance;
-	}
-
 	public UsersHelper() {
 	}
 
