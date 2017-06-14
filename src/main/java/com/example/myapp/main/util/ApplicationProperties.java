@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -17,31 +19,27 @@ import org.apache.log4j.Logger;
  * at first call to getInstance().
  *
  */
-public class ApplicationProperties extends Properties {
-
-	private static final long serialVersionUID = -3536285866839291581L;
-
-	private static ApplicationProperties instance;
+@ApplicationScoped
+public class ApplicationProperties {
 
 	protected static final Logger LOG = Logger.getLogger(ApplicationProperties.class);
 
 	private File root;
 
-	public static ApplicationProperties getInstance() {
-		if (instance == null)
-			instance = load();
-		return instance;
-	}
+	private Properties internal= new Properties();
 
-	private static ApplicationProperties load() {
+	public ApplicationProperties() {
+
+		System.out.println("DEBUG - ApplicationProperties constructor"); // FIXME
+																			// remove
+																			// this,
+																			// later
 
 		InputStream input = null;
-		ApplicationProperties props = new ApplicationProperties();
 
 		try {
 			input = ApplicationProperties.class.getResourceAsStream("/application.properties");
-
-			props.load(input);
+			internal.load(input);
 
 		} catch (IOException ex) {
 			LOG.error("Exception while loading application.properties", ex);
@@ -55,8 +53,14 @@ public class ApplicationProperties extends Properties {
 				}
 			}
 		}
+	}
 
-		return props;
+	public String getProperty(String name) {
+		return internal.getProperty(name);
+	}
+
+	public String put(String name, String value) {
+		return (String) internal.put(name, value);
 	}
 
 	/**
@@ -66,7 +70,7 @@ public class ApplicationProperties extends Properties {
 	 * 
 	 * @return
 	 */
-	public File getRoot() {
+	public File getAppRoot() {
 		if (root == null) {
 			root = new File(ApplicationProperties.class.getResource("/application.properties").getFile())
 					.getParentFile();

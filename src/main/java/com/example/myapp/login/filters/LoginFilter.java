@@ -7,6 +7,7 @@ package com.example.myapp.login.filters;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -38,6 +39,9 @@ public class LoginFilter implements Filter {
 																			// can
 																			// Inject?
 
+	@Inject
+	ApplicationProperties appProps;
+	
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
 			throws IOException, ServletException {
@@ -47,10 +51,6 @@ public class LoginFilter implements Filter {
 			boolean loginRequired = true;
 			boolean loginSuccess = false;
 
-			ApplicationProperties props = ApplicationProperties.getInstance(); // FIXME
-																				// can
-																				// Inject?
-
 			HttpServletRequest request = (HttpServletRequest) req;
 			HttpServletResponse response = (HttpServletResponse) resp;
 			HttpSession session = request.getSession(false);
@@ -59,7 +59,7 @@ public class LoginFilter implements Filter {
 
 			uri = uri.replaceAll("/+", "/"); // convert /myapp///ui -> /myapp/ui
 
-			for (String allowedPath : props.getProperty("login.not.required.uris").split(",")) {
+			for (String allowedPath : appProps.getProperty("login.not.required.uris").split(",")) {
 
 				if (!allowedPath.equals("") && uri.startsWith(contextPath + allowedPath)) {
 					loginRequired = false;
@@ -77,7 +77,7 @@ public class LoginFilter implements Filter {
 				chain.doFilter(req, resp); // Just continue chain
 			} else {
 				LOG.info("Redirecting to login page");
-				response.sendRedirect(contextPath + props.getProperty("login.uri"));
+				response.sendRedirect(contextPath + appProps.getProperty("login.uri"));
 			}
 
 		} else {

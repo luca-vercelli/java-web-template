@@ -35,6 +35,9 @@ public class UsersHelper {
 	@Inject
 	private static PasswordAuthentication PAinstance; // Singleton
 
+	@Inject
+	ApplicationProperties appProps;
+	
 	public static UsersHelper getInstance() {
 		return instance;
 	}
@@ -153,7 +156,7 @@ public class UsersHelper {
 
 		// FIXME could be put outside app?
 		System.setProperty("java.security.auth.login.config",
-				ApplicationProperties.getInstance().getRoot().getAbsolutePath() + File.separator + "jaas.conf");
+				appProps.getAppRoot().getAbsolutePath() + File.separator + "jaas.conf");
 
 		PassiveCallbackHandler cbh = new PassiveCallbackHandler(user, password);
 
