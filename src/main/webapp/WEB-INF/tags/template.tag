@@ -7,7 +7,6 @@
 
 <body class="nav-md">
 
-<!-- La forza sia con te -->
 	<div class="container body">
 		<div class="main_container">
 
@@ -21,9 +20,7 @@
 
 			<!-- page content -->
 			<div class="right_col" role="main">
-
 				<jsp:doBody />
-
 			</div>
 			<!-- /page content -->
 

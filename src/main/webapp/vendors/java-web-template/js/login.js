@@ -3,13 +3,14 @@
 // Luca Vercelli 2017
 // Released under GPLv3 
 //
- $('#loginForm').submit(function() {
+ $('.submit').click(function() {
+	 alert("clicking");
 	    $ajax({
 	    		url: "rest/authentication",
 	    		method: "GET",
 	    		data: {
-	    			username: $('#Username'),
-	    			password: $('#Password') //cleartext :(
+	    			userId: $('#Username'),
+	    			pwd: $('#Password') //cleartext :( You should really use HTTPS.
 	    		},
 	    		success: function(data) {
 	    			alert("DEBUG: " + data);

@@ -4,8 +4,8 @@
 
 <c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
 <fmt:setLocale value="${language}" />
-<fmt:setBundle basename="com.example.i18n.text" />
-<fmt:message key="login.password.lost" var="login.password.lost" />
+<fmt:setBundle basename="global" />
+<fmt:message key="login.password.lost" var="login_password_lost" />
 
 
 <html lang="${language}">
@@ -17,7 +17,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Gentelella Alela! | <fmt:message key="application.title" /></title>
+    <title><fmt:message key="application.title" /></title>
 
     <!-- Bootstrap -->
     <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -44,14 +44,14 @@
               <h1>Login Form</h1>
         
               <div>
-                <input type="text" class="form-control" placeholder="Username" required="" />
+                <input type="text" class="form-control" placeholder="Username" required name="userId" />
               </div>
               <div>
-                <input type="password" class="form-control" placeholder="Password" required="" />
+                <input type="password" class="form-control" placeholder="Password" required name="pwd" />
               </div>
               <div>
-                <a class="btn btn-default submit" href="index.html">Log in</a>
-                <a class="reset_pass" href="#">${login.password.lost}</a>
+                <a class="btn btn-default submit" href="doLogin">Log in</a>
+                <a class="reset_pass" href="#">${login_password_lost}</a>
               </div>
 
               <div class="clearfix"></div>
@@ -85,16 +85,16 @@
             <form>
               <h1>Create Account</h1>
               <div>
-                <input type="text" class="form-control" placeholder="Username" required="" />
+                <input type="text" class="form-control" placeholder="Username" required name="userId" />
               </div>
               <div>
-                <input type="email" class="form-control" placeholder="Email" required="" />
+                <input type="email" class="form-control" placeholder="Email" required name="email" />
               </div>
               <div>
-                <input type="password" class="form-control" placeholder="Password" required="" />
+                <input type="password" class="form-control" placeholder="Password" required name="pwd" />
               </div>
               <div>
-                <a class="btn btn-default submit" href="index.html">Submit</a>
+                <a class="btn btn-default submit" href="doLogin">Submit</a>
               </div>
 
               <div class="clearfix"></div>
