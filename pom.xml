@@ -11,7 +11,14 @@
 
 	<dependencies>
 		<!-- Java EE servlet stuff (only needed at compile time) -->
-		<dependency>
+<dependency>
+    <groupId>javax</groupId>
+    <artifactId>javaee-api</artifactId>
+    <version>7.0</version>
+    <scope>provided</scope>
+</dependency>
+		
+<!-- 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>4.0.0-b05</version>
@@ -49,7 +56,17 @@
 			<version>2.3.1</version>
 			<scope>compile</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>javax.transaction</groupId>
+			<artifactId>transaction-api</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>javax.ws.rs-api</artifactId>
+			<version>2.1-m07</version>
+		</dependency>
+ -->
 		<!-- Hibernate framework -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -61,11 +78,6 @@
 			<artifactId>javassist</artifactId>
 			<version>3.11.0.GA</version>
 		</dependency>
-		<dependency>
-			<groupId>javax.transaction</groupId>
-			<artifactId>transaction-api</artifactId> <!-- was jta -->
-			<version>1.1</version>
-		</dependency>
 
 		<!-- Entity manager which is required for JPA -->
 		<dependency>
@@ -73,21 +85,6 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>5.2.3.Final</version>
 		</dependency>
-
-		<!-- Struts 2 !?! -->
-		<dependency>
-			<groupId>org.apache.struts</groupId>
-			<artifactId>struts2-core</artifactId>
-			<version>2.2.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.struts</groupId>
-			<artifactId>struts2-convention-plugin</artifactId>
-			<version>2.2.1</version>
-		</dependency>
-		<!-- TODO dependency> <groupId>org.apache.struts</groupId> <artifactId>struts2-rest-plugin</artifactId> 
-			<version>2.2.1</version> </dependency -->
-
 		<!-- jstl -->
 		<dependency>
 			<groupId>javax.servlet.jsp.jstl</groupId>
@@ -119,13 +116,6 @@
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>1.9.3</version>
-		</dependency>
-
-		<!-- JAX-RS -->
-		<dependency>
-			<groupId>javax.ws.rs</groupId>
-			<artifactId>javax.ws.rs-api</artifactId>
-			<version>2.1-m07</version>
 		</dependency>
 
 		<!-- GlassFish embedded web server -->

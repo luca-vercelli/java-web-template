@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -20,9 +21,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import com.example.myapp.login.actions.Login;
 import com.example.myapp.login.db.User;
 import com.example.myapp.main.util.ApplicationProperties;
+import com.example.myapp.main.util.SessionBean;
 
 /**
  * Login filter. Check if a User is already in session or not.
@@ -41,6 +42,9 @@ public class LoginFilter implements Filter {
 
 	@Inject
 	ApplicationProperties appProps;
+
+	@Inject
+	SessionBean sessionBean;
 	
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
@@ -53,7 +57,6 @@ public class LoginFilter implements Filter {
 
 			HttpServletRequest request = (HttpServletRequest) req;
 			HttpServletResponse response = (HttpServletResponse) resp;
-			HttpSession session = request.getSession(false);
 			String contextPath = request.getContextPath();
 			String uri = request.getRequestURI();
 
@@ -67,10 +70,9 @@ public class LoginFilter implements Filter {
 				}
 			}
 
-			if (session != null && loginRequired) {
-				User user = (User) session.getAttribute(Login.SESSION_USER);
-				LOG.info("User: " + user);
-				loginSuccess = (user != null);
+			if (sessionBean != null && loginRequired) {
+				LOG.info("User: " + sessionBean.getUser());
+				loginSuccess = (sessionBean.getUser() != null);
 			}
 
 			if (!loginRequired || loginSuccess) {
@@ -85,6 +87,14 @@ public class LoginFilter implements Filter {
 			LOG.error("Not HTTP ? Why here?");
 			chain.doFilter(req, resp); // Just continue chain
 		}
+	}
+
+	@Override
+	public void init(FilterConfig fc) throws ServletException {
+	}
+
+	@Override
+	public void destroy() {
 	}
 
 }
