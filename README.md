@@ -6,12 +6,14 @@ Moreover we want to use "best practice"'s wherever possible.
 
 ## DISCLAIMER
 Modern applications should be plain HTML, with data loaded asincronously via Ajax. RESt, OData, JSON technologies should be used.
-So we consider Struts, Spring, frameworks obsolete (tell me if and why not).
-JSF/JSTL may still be worth for some purposes.
+So we consider Struts, Spring, JSF frameworks obsolete (tell me if and why not).
+JSTL may still be worth for some purposes (e.g. i18n).
+
+Annotations should always be preferred to configuration files.
 
 For development, a good webserver and a good database should not require any configuration. Embedded technologies can be used. We have chosen embedded GlassFish and embedded Derby.
 
-We like EE technologies such as JTA, EJB, Injection, JAX-RS, so we cannot support Tomcat and Jetty. You can consider using TomEE. JetSet is not ready jet. 
+We like EE technologies such as JTA, EJB, Injection, JAX-RS, so we cannot support Tomcat and Jetty. You can consider using TomEE. JetSet is not ready jet. We avoid Managed Beans, in favor of more general frameworks CDI and EJB. 
 
 Technologies:
 * java 8
