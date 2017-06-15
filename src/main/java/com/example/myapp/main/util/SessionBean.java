@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Named;
 import javax.security.auth.login.LoginContext;
 
 import com.example.myapp.authorization.db.Role;
@@ -22,6 +23,7 @@ import com.example.myapp.main.db.Menu;
  * @author Luca Vercelli
  *
  */
+@Named("sessionBean")
 @SessionScoped
 public class SessionBean implements Serializable {
 
@@ -31,6 +33,7 @@ public class SessionBean implements Serializable {
 	private List<Role> roles;
 	private List<Menu> menus;
 	private LoginContext loginContext;
+	private String language;
 
 	public User getUser() {
 		return user;
@@ -62,5 +65,13 @@ public class SessionBean implements Serializable {
 
 	public void setLoginContext(LoginContext loginContext) {
 		this.loginContext = loginContext;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 }
