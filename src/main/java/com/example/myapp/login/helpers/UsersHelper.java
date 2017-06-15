@@ -141,9 +141,10 @@ public class UsersHelper {
 	 * @param user,
 	 *            or null
 	 * @param password
+	 *            cleartext password. After authentication will be cleared.
 	 * @return
 	 */
-	public LoginContext authenticate(String user, String password) {
+	public LoginContext authenticate(String user, char[] password) {
 
 		// FIXME could be put outside app?
 		System.setProperty("java.security.auth.login.config",
@@ -169,6 +170,8 @@ public class UsersHelper {
 		} catch (LoginException e) {
 			LOG.error("Exception while loggin-in", e);
 			return null;
+		} finally {
+			PAinstance.clearPassword(password);
 		}
 
 		// This should be not null...

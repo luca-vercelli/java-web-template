@@ -31,9 +31,9 @@ public class PassiveCallbackHandler implements CallbackHandler {
 	 * <p>
 	 * Creates a callback handler with the give username and password.
 	 */
-	public PassiveCallbackHandler(String user, String pass) {
+	public PassiveCallbackHandler(String user, char[] pass) {
 		this.username = user;
-		this.password = pass.toCharArray();
+		this.password = pass;
 	}
 
 	/**

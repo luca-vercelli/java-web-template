@@ -149,6 +149,16 @@ public class PasswordAuthentication {
 		return authenticate(password.toCharArray(), token);
 	}
 
+	/**
+	 * Fill array with spaces.
+	 * 
+	 * @param password
+	 */
+	public void clearPassword(char[] password ){
+		for (int i = 0; i < password.length; ++i)
+			password[i] = ' ';
+	}
+	
 	public static void main(String[] args) {
 		// Hash "admin"
 		PasswordAuthentication pa = new PasswordAuthentication();

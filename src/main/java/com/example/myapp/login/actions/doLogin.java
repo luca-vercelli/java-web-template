@@ -46,7 +46,7 @@ public class doLogin extends HttpServlet {
 			sessionBean.setUser(null);
 
 			String userId = request.getParameter("userId");
-			String pwd = request.getParameter("pwd");
+			char[] pwd = request.getParameter("pwd").toCharArray();
 
 			User user = null;
 
@@ -56,6 +56,7 @@ public class doLogin extends HttpServlet {
 
 				// addActionError(getText("login.missing.parameters"));
 				response.sendRedirect(request.getContextPath() + appProps.getProperty("login.uri"));
+				return;
 			}
 
 			LoginContext lc = usersHelper.authenticate(userId, pwd);
@@ -69,9 +70,11 @@ public class doLogin extends HttpServlet {
 			if (user == null) {
 				// FIXME Should send back some message? login failed
 				response.sendRedirect(request.getContextPath() + appProps.getProperty("login.uri"));
+				return;
 			}
 
 			// At last, user is authenticated
+			LOG.info("User authenticated:" + user);
 			response.sendRedirect(request.getContextPath());
 
 		} catch (Exception e) {
