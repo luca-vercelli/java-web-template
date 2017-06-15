@@ -90,6 +90,12 @@
 			<property name="connectionAttributes" value=";create=true"></property>
 		</jdbc-connection-pool>
 		<jdbc-resource pool-name="mainDataSource" jndi-name="jdbc/mainDataSource"></jdbc-resource>
+		<mail-resource host="smtp.gmail.com" from="java.web.template@gmail.com" user="java.web.template@gmail.com" jndi-name="mainMailSession">
+      		<property name="mail-smtp-auth" value="true"></property>
+      		<property name="mail-smtp-starttls-enable" value="true"></property>
+      		<property name="mail-smtp-port" value="465"></property>
+      		<property name="mail-smtp-password" value="mysecretpassword"></property>
+    	</mail-resource>
 	</resources>
 	<servers>
 		<server config-ref="server-config" name="server">
