@@ -5,6 +5,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import static java.nio.file.Files.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.glassfish.embeddable.Deployer;
 import org.glassfish.embeddable.GlassFish;
 import org.glassfish.embeddable.GlassFishException;
@@ -18,8 +22,9 @@ public class Main {
 	public static final String CONTEXT_ROOT = "myapp";
 
 	/**
-	 * Avvia l'applicazione con l'embedded server. Vuol dire che non c'� bisogno
-	 * di installare Glassfish, basta fare "run as application" da Eclipse.
+	 * Avvia l'applicazione con l'embedded server. Vuol dire che non c'�
+	 * bisogno di installare Glassfish, basta fare "run as application" da
+	 * Eclipse.
 	 * 
 	 * @throws IOException
 	 */
@@ -38,6 +43,7 @@ public class Main {
 				properties.setConfigFileURI(CONFIG_FILE.toURI().toString());
 				glassfish = GlassFishRuntime.bootstrap().newGlassFish(properties);
 				glassfish.start();
+
 			} catch (GlassFishException e) {
 				e.printStackTrace();
 				return;
@@ -56,16 +62,22 @@ public class Main {
 				// are
 				// optional.
 
-				System.out.println("Deploy path: " + System.getProperty("com.sun.aas.instanceRoot"));
+				System.out.println("Install root: " + System.getProperty("com.sun.aas.installRoot"));
+
+				System.out.println("Instance root: " + System.getProperty("com.sun.aas.instanceRoot"));
 				// If you prefer a static path, you can replace
 				// ${com.sun.aas.instanceRoot} everywhere in domanin.xml
 				// That way you can use e.g. FileSync plugin to update html's
 
 				System.out.println("Listen url: http://localhost:8080/myapp");
-				//FIXME this should not be static....
-				
-				//FIXME let work config/branding/glassfish-version.properties
-				
+				// FIXME this should not be static....
+
+				// FIXME let branding stuff work!
+				// see also fixBrandingStuff()
+				// com.sun.appserv.server.util.Version reads the file when it
+				// does not exist yet
+				// see https://github.com/javaee/glassfish/issues/21101
+
 			} catch (GlassFishException e) {
 				e.printStackTrace();
 			}
@@ -106,6 +118,20 @@ public class Main {
 				} catch (GlassFishException e) {
 					e.printStackTrace();
 				}
+			}
+		}
+	}
+
+	// FIXME currently useless.
+	protected static void fixBrandingStuff() throws IOException {
+		String installRoot = System.getProperty("com.sun.aas.installRoot");
+		if (installRoot != null && !installRoot.trim().equals("")) {
+			Path p1 = Paths.get("config", "branding", "glassfish-version.properties");
+			Path p2 = Paths.get(installRoot, "config", "branding", "glassfish-version.properties");
+
+			if (p1.toFile().exists()) {
+				p2.getParent().toFile().mkdirs();
+				copy(p1, p2);
 			}
 		}
 
