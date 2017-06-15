@@ -11,7 +11,6 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.security.auth.login.LoginContext;
@@ -77,62 +76,36 @@ public class UsersHelper {
 
 	public User getUserByNameAndPassword(String name, char[] password) {
 
-		EntityTransaction tx = em.getTransaction();
-		try {
-			tx.begin();
+		TypedQuery<User> query = em.createQuery("from User where name = :name and active = :true", User.class)
+				.setParameter("name", name).setParameter("true", Boolean.Y);
 
-			TypedQuery<User> query;
+		List<User> users = query.getResultList();
 
-			query = em.createQuery("from User where name = :name and active = :true", User.class)
-					.setParameter("name", name).setParameter("true", Boolean.Y);
-
-			List<User> users = query.getResultList();
-
-			tx.commit();
-
-			for (User u : users) {
-				if (testPassword(u, password))
-					return u;
-				// FIXME what if more than 1?
-			}
-
-			return null;
-
-		} catch (Exception exc) {
-			if (tx != null && tx.isActive())
-				tx.rollback();
-			throw exc;
+		for (User u : users) {
+			if (testPassword(u, password))
+				return u;
+			// FIXME what if more than 1?
 		}
+
+		return null;
+
 	}
 
 	public User getUserByEmailAndPassword(String email, char[] cleartextPassword) {
 
-		EntityTransaction tx = em.getTransaction();
-		try {
-			tx.begin();
+		TypedQuery<User> query = em.createQuery("from User where email = :email and active = :true", User.class)
+				.setParameter("email", email).setParameter("true", true);
 
-			TypedQuery<User> query;
+		List<User> users = query.getResultList();
 
-			query = em.createQuery("from User where email = :email and active = :true", User.class)
-					.setParameter("email", email).setParameter("true", true);
-
-			List<User> users = query.getResultList();
-
-			tx.commit();
-
-			for (User u : users) {
-				if (testPassword(u, cleartextPassword))
-					return u;
-				// FIXME what if more than 1?
-			}
-
-			return null;
-
-		} catch (Exception exc) {
-			if (tx != null && tx.isActive())
-				tx.rollback();
-			throw exc;
+		for (User u : users) {
+			if (testPassword(u, cleartextPassword))
+				return u;
+			// FIXME what if more than 1?
 		}
+
+		return null;
+
 	}
 
 	/**
@@ -168,6 +141,9 @@ public class UsersHelper {
 			// Authentication fails
 			lc.login();
 		} catch (LoginException e) {
+			// FIXME. LoginException may happen either because authentication
+			// failed, or for many other reasons.
+			// We should ignore the first, and LOG the latter.
 			LOG.error("Exception while loggin-in", e);
 			return null;
 		} finally {
