@@ -51,7 +51,7 @@ public class AuthenticationEndpoint {
 				return Response.ok(Status.BAD_REQUEST).build();
 			}
 
-			LoginContext lc = usersHelper.authenticate(userId, pwd);
+			LoginContext lc = usersHelper.authenticate(userId, pwd.toCharArray());
 
 			sessionBean.setLoginContext(lc);
 			if (lc != null && !lc.getSubject().getPrincipals().isEmpty()) {
