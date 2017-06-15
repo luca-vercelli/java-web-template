@@ -72,7 +72,7 @@ public abstract class AbstractLoginModule implements LoginModule {
 	 * 
 	 * @return the Principal with given credentials, or null.
 	 */
-	public abstract Principal getPrincipalByNameAndPassword(String username, String password);
+	public abstract Principal getPrincipalByNameAndPassword(String username, char[] password);
 
 	/**
 	 * Retrieve credentials for given principal, if any.
@@ -151,7 +151,7 @@ public abstract class AbstractLoginModule implements LoginModule {
 			callbackHandler.handle(callbacks);
 
 			String username = nameCallback.getName();
-			String password = new String(passwordCallback.getPassword());
+			char[] password = passwordCallback.getPassword();
 
 			passwordCallback.clearPassword();
 

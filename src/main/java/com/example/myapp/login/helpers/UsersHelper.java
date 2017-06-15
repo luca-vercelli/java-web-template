@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 import com.example.myapp.login.db.User;
 import com.example.myapp.login.util.PasswordAuthentication;
 import com.example.myapp.main.util.ApplicationProperties;
+import com.example.myapp.main.util.Boolean;
 
 @Stateless
 public class UsersHelper {
@@ -28,14 +29,12 @@ public class UsersHelper {
 	private static Logger LOG = Logger.getLogger(UsersHelper.class);
 
 	@PersistenceContext
-	EntityManager em; 
-	
+	EntityManager em;
 	@Inject
 	PasswordAuthentication PAinstance;
-	
 	@Inject
 	ApplicationProperties appProps;
-	
+
 	public UsersHelper() {
 	}
 
@@ -45,10 +44,8 @@ public class UsersHelper {
 	 * @param pwd
 	 * @return
 	 */
-	public String encryptPassword(String cleartextPassword) {
-		return PAinstance.hash(cleartextPassword); // FIXME how to get char[]
-													// from Struts2
-		// action?
+	public String encryptPassword(char[] cleartextPassword) {
+		return PAinstance.hash(cleartextPassword); // FIXME how to get char[] ?
 	}
 
 	/**
@@ -57,14 +54,14 @@ public class UsersHelper {
 	 * @param u
 	 * @param unencryptedPassword
 	 */
-	public void setPassword(User u, String cleartextPassword) {
+	public void setPassword(User u, char[] cleartextPassword) {
 		u.setEncryptedPassword(encryptPassword(cleartextPassword));
 	}
 
 	/**
 	 * Test user password
 	 */
-	public boolean testPassword(User u, String cleartextPassword) {
+	public boolean testPassword(User u, char[] cleartextPassword) {
 		return PAinstance.authenticate(cleartextPassword, u.getEncryptedPassword());
 	}
 
@@ -78,7 +75,7 @@ public class UsersHelper {
 			array[i] = 0;
 	}
 
-	public User getUserByNameAndPassword(String name, String cleartextPassword) {
+	public User getUserByNameAndPassword(String name, char[] password) {
 
 		EntityTransaction tx = em.getTransaction();
 		try {
@@ -87,14 +84,14 @@ public class UsersHelper {
 			TypedQuery<User> query;
 
 			query = em.createQuery("from User where name = :name and active = :true", User.class)
-					.setParameter("name", name).setParameter("true", true);
+					.setParameter("name", name).setParameter("true", Boolean.Y);
 
 			List<User> users = query.getResultList();
 
 			tx.commit();
 
 			for (User u : users) {
-				if (testPassword(u, cleartextPassword))
+				if (testPassword(u, password))
 					return u;
 				// FIXME what if more than 1?
 			}
@@ -108,7 +105,7 @@ public class UsersHelper {
 		}
 	}
 
-	public User getUserByEmailAndPassword(String email, String cleartextPassword) {
+	public User getUserByEmailAndPassword(String email, char[] cleartextPassword) {
 
 		EntityTransaction tx = em.getTransaction();
 		try {
@@ -170,7 +167,7 @@ public class UsersHelper {
 			// Authentication fails
 			lc.login();
 		} catch (LoginException e) {
-
+			LOG.error("Exception while loggin-in", e);
 			return null;
 		}
 

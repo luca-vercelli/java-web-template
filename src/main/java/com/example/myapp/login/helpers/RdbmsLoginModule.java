@@ -20,7 +20,7 @@ public class RdbmsLoginModule extends AbstractLoginModule {
 	UsersHelper usersHelper;
 
 	@Override
-	public Principal getPrincipalByNameAndPassword(String username, String password) {
+	public Principal getPrincipalByNameAndPassword(String username, char[] password) {
 		User user = usersHelper.getUserByNameAndPassword(username, password);
 		return user;
 	}

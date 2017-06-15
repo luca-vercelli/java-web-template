@@ -50,7 +50,7 @@ public class User implements Principal {
 	 */
 	@Override
 	@Id
-	@Column(name = "USERNAME")
+	@Column(name = "USERNAME", unique = true)
 	public String getName() {
 		return username;
 	}
