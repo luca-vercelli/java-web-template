@@ -27,7 +27,7 @@ import javax.enterprise.context.ApplicationScoped;
  * @see <a href="http://stackoverflow.com/a/2861125/3474">StackOverflow</a>
  */
 @ApplicationScoped
-public final class PasswordAuthentication {
+public class PasswordAuthentication {
 
 	/**
 	 * Each token produced by this class uses this identifier as a prefix.
