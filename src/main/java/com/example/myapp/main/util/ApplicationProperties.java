@@ -30,11 +30,6 @@ public class ApplicationProperties {
 
 	public ApplicationProperties() {
 
-		System.out.println("DEBUG - ApplicationProperties constructor"); // FIXME
-																			// remove
-																			// this,
-																			// later
-
 		InputStream input = null;
 
 		try {
