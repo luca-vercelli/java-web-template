@@ -1,5 +1,7 @@
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${sessionBean.language}" />
+<fmt:setBundle basename="global" />
 
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
@@ -15,7 +17,7 @@
                 <img src="images/img.jpg" alt="..." class="img-circle profile_img">
               </div>
               <div class="profile_info">
-                <span>Welcome,</span>
+                <span><fmt:message key="menu.welcome" />,</span>
                 <h2>${sessionBean.user.personName} ${sessionBean.user.personSurname}</h2>
               </div>
             </div>
@@ -26,16 +28,16 @@
             <!-- sidebar menu -->
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
-                <h3>General</h3>
+                <h3><fmt:message key="menu.general" /></h3>
                 <ul class="nav side-menu">
                 
                 <c:forEach items="${sessionBean.menus}" var="m">
                 <!-- PROVA -->
-                  <li><a><i class="fa fa-${m.description}"></i> <c:out value="${m.description}"/> <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-${m.icon}"></i> <fmt:message key="${m.description}"/> <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
 		              <c:forEach items="${m.pages}" var="p">
-                      <li><a href="${m.url}">
-                      		<c:out value = "${p.description}"/>
+                      <li><a href="${p.url}">
+                      		<fmt:message key="${p.description}"/>
 							</a></li>
                       </c:forEach>
                     </ul>
@@ -47,6 +49,12 @@
                       <li><a href="index.jsp">Dashboard</a></li>
                       <li><a href="index2.jsp">Dashboard2</a></li>
                       <li><a href="index3.jsp">Dashboard3</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-table"></i> Tables <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="tables.jsp">Tables</a></li>
+                      <li><a href="tables_dynamic.jsp">Table Dynamic</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
@@ -70,12 +78,6 @@
                       <li><a href="invoice.html">Invoice</a></li>
                       <li><a href="inbox.html">Inbox</a></li>
                       <li><a href="calendar.html">Calendar</a></li>
-                    </ul>
-                  </li>
-                  <li><a><i class="fa fa-table"></i> Tables <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="tables.jsp">Tables</a></li>
-                      <li><a href="tables_dynamic.jsp">Table Dynamic</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-bar-chart-o"></i> Data Presentation <span class="fa fa-chevron-down"></span></a>

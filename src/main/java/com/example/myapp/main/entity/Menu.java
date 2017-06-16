@@ -35,7 +35,8 @@ public class Menu {
 	private String description; // FIXME what about i18n?
 	private Integer ordering;
 	private Menu parentMenu;
-	
+	private String icon;
+
 	private List<Menu> submenus = new ArrayList<>();
 	private List<Page> pages = new ArrayList<>();
 	private Set<Role> authorizedRoles = new HashSet<Role>();
@@ -67,6 +68,14 @@ public class Menu {
 
 	public void setOrdering(Integer ordering) {
 		this.ordering = ordering;
+	}
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 
 	@ManyToOne
@@ -104,6 +113,7 @@ public class Menu {
 
 	/**
 	 * No roles means that every user is authorized.
+	 * 
 	 * @return
 	 */
 	@OneToMany

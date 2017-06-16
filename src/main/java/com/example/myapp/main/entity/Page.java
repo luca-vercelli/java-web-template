@@ -28,6 +28,7 @@ public class Page {
 	private String url;
 	private String description;
 	private Integer ordering;
+	private String icon;
 
 	private Set<Role> authorizedRoles = new HashSet<Role>();
 
@@ -69,8 +70,17 @@ public class Page {
 		this.ordering = ordering;
 	}
 
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+
 	/**
 	 * No roles means that every user is authorized.
+	 * 
 	 * @return
 	 */
 	@OneToMany
