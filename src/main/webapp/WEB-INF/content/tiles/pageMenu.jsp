@@ -1,4 +1,5 @@
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
@@ -15,7 +16,7 @@
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
-                <h2>John Doe</h2>
+                <h2>${sessionBean.user.personName} ${sessionBean.user.personSurname}</h2>
               </div>
             </div>
             <!-- /menu profile quick info -->
@@ -28,7 +29,7 @@
                 <h3>General</h3>
                 <ul class="nav side-menu">
                 
-                <c:forEach items="${sessionScope.menus}" var="m">
+                <c:forEach items="${sessionBean.menus}" var="m">
                 <!-- PROVA -->
                   <li><a><i class="fa fa-${m.description}"></i> <c:out value="${m.description}"/> <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
@@ -73,8 +74,8 @@
                   </li>
                   <li><a><i class="fa fa-table"></i> Tables <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="tables.html">Tables</a></li>
-                      <li><a href="tables_dynamic.html">Table Dynamic</a></li>
+                      <li><a href="tables.jsp">Tables</a></li>
+                      <li><a href="tables_dynamic.jsp">Table Dynamic</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-bar-chart-o"></i> Data Presentation <span class="fa fa-chevron-down"></span></a>
@@ -112,7 +113,7 @@
                       <li><a href="page_404.html">404 Error</a></li>
                       <li><a href="page_500.html">500 Error</a></li>
                       <li><a href="plain_page.html">Plain Page</a></li>
-                      <li><a href="login.html">Login Page</a></li>
+                      <li><a href="login.jsp">Login Page</a></li>
                       <li><a href="pricing_tables.html">Pricing Tables</a></li>
                     </ul>
                   </li>
