@@ -70,6 +70,7 @@ public class Menu {
 		this.ordering = ordering;
 	}
 
+	@Column(name = "ICON")
 	public String getIcon() {
 		return icon;
 	}

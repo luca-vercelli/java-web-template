@@ -7,7 +7,7 @@ Moreover we want to use "best practice"'s wherever possible.
 ## DISCLAIMER
 Modern applications should be plain HTML, with data loaded asincronously via Ajax. RESt, OData, JSON technologies should be used.
 So we consider Struts, Spring, JSF frameworks obsolete (tell me if and why not).
-JSTL may still be worth for some purposes (e.g. i18n).
+JSP/JSTL may still be worth for some purposes (e.g. templating and translations).
 
 Annotations should always be preferred to configuration files.
 
@@ -47,13 +47,14 @@ Suggested tools:
 * FileSync plugin
 
 Features:
-* JSP templating (and not struts tiles plugin)
+* JSP templating
 * CRUD (via RESTful services)
 * login page
 * accounts management
 * domain login
 * authorizations
 * all features as /modules/ so that they can be freely used or not
+* translations: text-file-based JSTL translations. We think this is very ugly, anyway, it's quite standard.
 
 Modules and interface should be independent: standalone Swing, or AngularJS frontends should work as well.
 

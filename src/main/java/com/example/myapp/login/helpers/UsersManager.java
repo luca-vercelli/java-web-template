@@ -181,6 +181,7 @@ public class UsersManager {
 		Menu menu2 = new Menu();
 		menu2.setOrdering(menu.getOrdering());
 		menu2.setDescription(menu.getDescription());
+		menu2.setIcon(menu.getIcon());
 		// parentMenu null here
 
 		for (Page p : menu.getPages()) {
