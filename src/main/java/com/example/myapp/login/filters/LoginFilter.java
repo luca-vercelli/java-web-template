@@ -66,7 +66,6 @@ public class LoginFilter implements Filter {
 			}
 
 			if (sessionBean != null && loginRequired) {
-				LOG.info("User: " + sessionBean.getUser());
 				loginSuccess = (sessionBean.getUser() != null);
 			}
 
