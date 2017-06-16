@@ -34,7 +34,7 @@ Technologies:
 * persistence: JPA + hibernate 5 + annotations
 * transactions: JTA + EJB
 * connection pool: commons DBCP? C3PO?
-* logging: commons logging + log4j
+* logging: sl4j + log4j
 * Gentelella 1.4 frontend (jquery 3 + bootstrap 3)
 * testing: junit 4
 * javax.emails

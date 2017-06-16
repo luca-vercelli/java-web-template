@@ -14,7 +14,8 @@ package com.example.myapp.login.helpers;
 
 import javax.security.auth.spi.LoginModule;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
 
@@ -41,7 +42,8 @@ import javax.security.auth.callback.PasswordCallback;
 
 public abstract class AbstractLoginModule implements LoginModule {
 
-	public final static Logger LOG = Logger.getLogger(AbstractLoginModule.class);
+	// Cannot @Inject
+	public final static Logger LOG = LoggerFactory.getLogger(AbstractLoginModule.class);
 
 	// initial state
 	CallbackHandler callbackHandler;

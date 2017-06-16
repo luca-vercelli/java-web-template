@@ -15,7 +15,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
 
 import com.example.myapp.login.entity.User;
 import com.example.myapp.login.util.PasswordAuthentication;
@@ -25,10 +26,10 @@ import com.example.myapp.main.util.ApplicationProperties;
 @Stateless
 public class UsersHelper {
 
-	private static Logger LOG = Logger.getLogger(UsersHelper.class);
-
 	@PersistenceContext
 	EntityManager em;
+	@Inject
+	Logger LOG;
 	@Inject
 	PasswordAuthentication PAinstance;
 	@Inject

@@ -11,8 +11,9 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 
 /**
  * Load properties (if any) from file application.properties. The file is read
@@ -22,11 +23,11 @@ import org.apache.log4j.Logger;
 @ApplicationScoped
 public class ApplicationProperties {
 
-	protected static final Logger LOG = Logger.getLogger(ApplicationProperties.class);
+	@Inject
+	Logger LOG;
 
 	private File root;
-
-	private Properties internal= new Properties();
+	private Properties internal = new Properties();
 
 	public ApplicationProperties() {
 

@@ -17,10 +17,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.log4j.Logger;
-
 import com.example.myapp.main.util.ApplicationProperties;
 import com.example.myapp.main.util.SessionBean;
+import org.slf4j.Logger;
 
 /**
  * Login filter. Check if a User is already in session or not.
@@ -33,10 +32,9 @@ import com.example.myapp.main.util.SessionBean;
 @WebFilter(value = "loginFilter", urlPatterns = { "*.html", "*.htm", "*.xhtml", "*.jsp" })
 public class LoginFilter implements Filter {
 
-	private final static Logger LOG = Logger.getLogger(LoginFilter.class); // FIXME
-																			// can
-																			// Inject?
-
+	@Inject
+	Logger LOG;
+	
 	@Inject
 	ApplicationProperties appProps;
 

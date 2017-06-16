@@ -10,10 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 
 import com.example.myapp.login.entity.User;
-import com.example.myapp.login.filters.LoginFilter;
 import com.example.myapp.login.helpers.UsersHelper;
 import com.example.myapp.main.util.ApplicationProperties;
 import com.example.myapp.main.util.SessionBean;
@@ -35,8 +34,8 @@ public class doLogin extends HttpServlet {
 	SessionBean sessionBean;
 	@Inject
 	UsersHelper usersHelper;
-
-	private final static Logger LOG = Logger.getLogger(LoginFilter.class);
+	@Inject
+	Logger LOG;
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
