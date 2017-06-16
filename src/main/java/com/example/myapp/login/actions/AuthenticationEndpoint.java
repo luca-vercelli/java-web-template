@@ -16,7 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.example.myapp.login.entity.User;
-import com.example.myapp.login.helpers.UsersHelper;
+import com.example.myapp.login.helpers.UsersManager;
 import com.example.myapp.main.util.SessionBean;
 import com.sun.messaging.jmq.io.Status;
 
@@ -30,7 +30,7 @@ public class AuthenticationEndpoint {
 	@Inject
 	SessionBean sessionBean;
 	@Inject
-	UsersHelper usersHelper;
+	UsersManager usersHelper;
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)

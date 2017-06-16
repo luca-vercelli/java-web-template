@@ -20,11 +20,11 @@ import com.example.myapp.login.entity.User;
 public class RdbmsLoginModule extends AbstractLoginModule {
 
 	// Cannot @Inject in JAAS LoginModules :(
-	UsersHelper usersHelper;
+	UsersManager usersHelper;
 
 	public RdbmsLoginModule() throws NamingException {
 
-		usersHelper = handMadeInject(UsersHelper.class);
+		usersHelper = handMadeInject(UsersManager.class);
 	}
 
 	/**

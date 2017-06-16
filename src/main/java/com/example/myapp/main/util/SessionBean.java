@@ -7,6 +7,7 @@ package com.example.myapp.main.util;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
@@ -30,7 +31,7 @@ public class SessionBean implements Serializable {
 	private static final long serialVersionUID = -2545698895043737577L;
 	
 	private User user;
-	private List<Role> roles;
+	private Set<Role> roles;
 	private List<Menu> menus;
 	private LoginContext loginContext;
 	private String language;
@@ -43,11 +44,11 @@ public class SessionBean implements Serializable {
 		this.user = user;
 	}
 
-	public List<Role> getRoles() {
+	public Set<Role> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<Role> roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
 

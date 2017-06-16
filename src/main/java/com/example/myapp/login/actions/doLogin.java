@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 
 import com.example.myapp.login.entity.User;
-import com.example.myapp.login.helpers.UsersHelper;
+import com.example.myapp.login.helpers.UsersManager;
 import com.example.myapp.main.util.ApplicationProperties;
 import com.example.myapp.main.util.SessionBean;
 
@@ -33,7 +33,7 @@ public class doLogin extends HttpServlet {
 	@Inject
 	SessionBean sessionBean;
 	@Inject
-	UsersHelper usersHelper;
+	UsersManager usersManager;
 	@Inject
 	Logger LOG;
 
@@ -58,12 +58,13 @@ public class doLogin extends HttpServlet {
 				return;
 			}
 
-			LoginContext lc = usersHelper.authenticate(userId, pwd);
+			LoginContext lc = usersManager.authenticate(userId, pwd);
 
 			sessionBean.setLoginContext(lc);
 			if (lc != null && !lc.getSubject().getPrincipals().isEmpty()) {
 				user = (User) lc.getSubject().getPrincipals().iterator().next();
-				sessionBean.setUser(user);
+
+				fillDataInSessionBean(user, request.getParameter("language"));
 			}
 
 			if (user == null) {
@@ -83,6 +84,19 @@ public class doLogin extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + appProps.getProperty("login.uri"));
 		}
 
+	}
+
+	protected void fillDataInSessionBean(User user, String language) {
+
+		sessionBean.setUser(user);
+
+		if (language != null)
+			sessionBean.setLanguage(language);
+		// else set language=default locale ...
+
+		sessionBean.setMenus(usersManager.getMenusForUser(user));
+
+		sessionBean.setRoles(user.getRoles());
 	}
 
 	@Override
