@@ -43,8 +43,8 @@ public class doLogin extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		try {
-			sessionBean.setLoginContext(null);
-			sessionBean.setUser(null);
+			sessionManager.clearSession();
+			
 
 			String userId = request.getParameter("userId");
 			char[] pwd = request.getParameter("pwd").toCharArray();

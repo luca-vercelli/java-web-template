@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.persistence.metamodel.EntityType;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -171,11 +172,55 @@ public class GenericManager {
 	}
 
 	/**
-	 * Load all objects of given entity, such that property=value.
+	 * Load all objects of given entity, such that property=value (null
+	 * supported).
 	 */
-	public <T> List<T> findByProperty(Class<T> entity, String property, Object value) {
-		return em.createQuery("from " + entity.getName() + " where " + property + " = :param", entity)
-				.setParameter("param", value).getResultList();
+	public <T> List<T> findByProperty(Class<T> entity, String propertyName, Object value) {
+		if (value != null) {
+			return em.createQuery("from " + entity.getName() + " where " + propertyName + " = :param", entity)
+					.setParameter("param", value).getResultList();
+		} else {
+			return em.createQuery("from " + entity.getName() + " where " + propertyName + " is null", entity)
+					.getResultList();
+		}
+	}
+
+	/**
+	 * Load all objects of given entity, such that property=value (null
+	 * supported).
+	 */
+	public <T> List<T> findByProperties(Class<T> entity, Map<String, Object> properties) {
+
+		StringBuffer queryStr = new StringBuffer("from " + entity.getName());
+
+		if (!properties.keySet().isEmpty()) {
+			queryStr.append(" where ");
+			String and = "";
+			for (String propertyName : properties.keySet()) {
+				queryStr.append(and);
+				queryStr.append(propertyName);
+				if (properties.get(propertyName) == null) {
+					queryStr.append(" is null ");
+				} else {
+					queryStr.append(" = ");
+					queryStr.append(" :propertyName ");
+				}
+
+				and = " and ";
+			}
+		}
+
+		TypedQuery<T> q = em.createQuery(queryStr.toString(), entity);
+
+		for (String propertyName : properties.keySet()) {
+			Object value = properties.get(propertyName);
+			if (value != null) {
+				q.setParameter(propertyName, value);
+			}
+		}
+
+		return q.getResultList();
+
 	}
 
 }

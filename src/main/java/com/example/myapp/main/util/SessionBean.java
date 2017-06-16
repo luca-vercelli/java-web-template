@@ -6,6 +6,8 @@
 package com.example.myapp.main.util;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -29,10 +31,10 @@ import com.example.myapp.main.entity.Menu;
 public class SessionBean implements Serializable {
 
 	private static final long serialVersionUID = -2545698895043737577L;
-	
+
 	private User user;
-	private Set<Role> roles;
-	private List<Menu> menus;
+	private Set<Role> roles = new HashSet<Role>();
+	private List<Menu> menus = new ArrayList<Menu>();
 	private LoginContext loginContext;
 	private String language;
 

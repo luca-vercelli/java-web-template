@@ -21,7 +21,7 @@ import com.example.myapp.main.util.SessionBean;
  * @author Luca Vercelli
  *
  */
-@WebServlet(name = "loginServlet", urlPatterns = { "/ui/doLogout" })
+@WebServlet(name = "logoutServlet", urlPatterns = { "/ui/doLogout" })
 public class doLogout extends HttpServlet {
 
 	private static final long serialVersionUID = 651051473002562658L;

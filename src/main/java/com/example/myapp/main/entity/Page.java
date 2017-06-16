@@ -82,4 +82,9 @@ public class Page {
 	public void setAuthorizedRoles(Set<Role> authorizedRoles) {
 		this.authorizedRoles = authorizedRoles;
 	}
+
+	@Override
+	public String toString() {
+		return "Page #" + description;
+	}
 }

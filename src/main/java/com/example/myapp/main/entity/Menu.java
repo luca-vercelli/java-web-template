@@ -116,4 +116,8 @@ public class Menu {
 		this.authorizedRoles = authorizedRoles;
 	}
 
+	@Override
+	public String toString() {
+		return "Menu #" + description;
+	}
 }
