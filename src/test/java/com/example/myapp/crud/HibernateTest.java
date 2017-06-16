@@ -12,7 +12,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.example.myapp.login.db.User;
+import com.example.myapp.login.entity.User;
 
 public class HibernateTest {
 

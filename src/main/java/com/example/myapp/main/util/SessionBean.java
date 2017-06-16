@@ -12,9 +12,9 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.security.auth.login.LoginContext;
 
-import com.example.myapp.authorization.db.Role;
-import com.example.myapp.login.db.User;
-import com.example.myapp.main.db.Menu;
+import com.example.myapp.authorization.entity.Role;
+import com.example.myapp.login.entity.User;
+import com.example.myapp.main.entity.Menu;
 
 /**
  * This bean contains all data that need to be stored in session (user,

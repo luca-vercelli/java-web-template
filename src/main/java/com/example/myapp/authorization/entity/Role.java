@@ -3,7 +3,7 @@
 * Luca Vercelli 2017
 * Released under GPLv3 
 */
-package com.example.myapp.authorization.db;
+package com.example.myapp.authorization.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

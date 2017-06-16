@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import com.example.myapp.login.db.User;
+import com.example.myapp.login.entity.User;
 import com.example.myapp.login.filters.LoginFilter;
 import com.example.myapp.login.helpers.UsersHelper;
 import com.example.myapp.main.util.ApplicationProperties;

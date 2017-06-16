@@ -45,13 +45,13 @@ import com.sun.messaging.jmq.io.Status;
 @Stateless
 @Path("rsr")
 @Produces(MediaType.APPLICATION_JSON)
-public class CommonResources {
+public class GenericRestResources {
 
 	private static final Integer ZERO = 0;
 	private static final Integer DEFAULT_PAGESIZE = 20;
 
 	@Inject
-	CommonManager manager;
+	GenericManager manager;
 
 	/**
 	 * Return a list of objects (via JSON). We don't know the type of returned

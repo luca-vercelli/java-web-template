@@ -3,7 +3,7 @@
 * Luca Vercelli 2017
 * Released under GPLv3 
 */
-package com.example.myapp.main.util;
+package com.example.myapp.main.enums;
 
 /**
  * Not all databases support Boolean as a type. Use this instead.

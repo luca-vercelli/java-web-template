@@ -17,10 +17,10 @@ import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 import org.apache.log4j.Logger;
 
-import com.example.myapp.login.db.User;
+import com.example.myapp.login.entity.User;
 import com.example.myapp.login.util.PasswordAuthentication;
+import com.example.myapp.main.enums.Boolean;
 import com.example.myapp.main.util.ApplicationProperties;
-import com.example.myapp.main.util.Boolean;
 
 @Stateless
 public class UsersHelper {

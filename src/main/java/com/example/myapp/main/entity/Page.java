@@ -3,7 +3,7 @@
 * Luca Vercelli 2017
 * Released under GPLv3 
 */
-package com.example.myapp.main.db;
+package com.example.myapp.main.entity;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,7 +18,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.example.myapp.authorization.db.Role;
+import com.example.myapp.authorization.entity.Role;
 
 @Entity
 @Table(name = "APP_PAGE")

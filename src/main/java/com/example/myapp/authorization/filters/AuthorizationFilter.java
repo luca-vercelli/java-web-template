@@ -19,8 +19,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import com.example.myapp.authorization.db.Role;
-import com.example.myapp.login.actions.Secured;
+import com.example.myapp.authorization.entity.Role;
 
 /**
  * Most implementations assume that roles are hard-written in some
@@ -30,9 +29,7 @@ import com.example.myapp.login.actions.Secured;
  * @author luca vercelli
  *
  */
-@Secured
 @Provider
-// FIXME @Priority(Priorities.AUTHORIZATION)
 public class AuthorizationFilter implements ContainerRequestFilter {
 
 	@Context

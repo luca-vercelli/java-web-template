@@ -25,7 +25,7 @@ import org.apache.commons.beanutils.BeanUtils;
  *
  */
 @Stateless
-public class CommonManager {
+public class GenericManager {
 
 	@PersistenceContext(unitName = "MyPersistenceUnit")
 	private EntityManager em;

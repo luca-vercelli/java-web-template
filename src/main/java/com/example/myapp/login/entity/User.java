@@ -3,7 +3,7 @@
 * Luca Vercelli 2017
 * Released under GPLv3 
 */
-package com.example.myapp.login.db;
+package com.example.myapp.login.entity;
 
 import java.security.Principal;
 import java.util.Date;
@@ -23,8 +23,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.security.auth.Subject;
 
-import com.example.myapp.authorization.db.Role;
-import com.example.myapp.main.util.Boolean;
+import com.example.myapp.authorization.entity.Role;
+import com.example.myapp.main.enums.Boolean;
 
 /**
  * A login user. This class implements Principal, so it can be integrated with
