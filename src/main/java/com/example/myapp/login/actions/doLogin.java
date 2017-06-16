@@ -33,6 +33,8 @@ public class doLogin extends HttpServlet {
 	@Inject
 	SessionBean sessionBean;
 	@Inject
+	SessionManager sessionManager;
+	@Inject
 	UsersManager usersManager;
 	@Inject
 	Logger LOG;
@@ -64,7 +66,7 @@ public class doLogin extends HttpServlet {
 			if (lc != null && !lc.getSubject().getPrincipals().isEmpty()) {
 				user = (User) lc.getSubject().getPrincipals().iterator().next();
 
-				fillDataInSessionBean(user, request.getParameter("language"));
+				sessionManager.fillDataInSessionBean(user, request.getParameter("language"));
 			}
 
 			if (user == null) {
@@ -84,19 +86,6 @@ public class doLogin extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + appProps.getProperty("login.uri"));
 		}
 
-	}
-
-	protected void fillDataInSessionBean(User user, String language) {
-
-		sessionBean.setUser(user);
-
-		if (language != null)
-			sessionBean.setLanguage(language);
-		// else set language=default locale ...
-
-		sessionBean.setMenus(usersManager.getMenusForUser(user));
-
-		sessionBean.setRoles(user.getRoles());
 	}
 
 	@Override
