@@ -4,8 +4,6 @@
 
 <t:template>
 
-        <!-- page content -->
-        <div class="right_col" role="main">
           <div class="">
             <div class="row top_tiles" style="margin: 10px 0;">
               <div class="col-md-3 col-sm-3 col-xs-6 tile">
@@ -564,7 +562,5 @@
               </div>
             </div>
           </div>
-        </div>
-        <!-- /page content -->
 
 </t:template>
