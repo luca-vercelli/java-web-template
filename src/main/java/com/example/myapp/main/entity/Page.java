@@ -52,7 +52,7 @@ public class Page {
 		this.description = description;
 	}
 
-	@Column(name = "URL")
+	@Column(name = "URL", unique = true, nullable = false)
 	public String getUrl() {
 		return url;
 	}

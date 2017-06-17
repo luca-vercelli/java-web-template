@@ -31,9 +31,19 @@
                 <h3><fmt:message key="menu.general" /></h3>
                 <ul class="nav side-menu">
 
+				<!-- We assume at most two menu levels -->
                 <c:forEach items="${sessionBean.menus}" var="m">
                   <li><a><i class="fa fa-${m.icon}"></i> <fmt:message key="${m.description}"/> <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
+		              <c:forEach items="${m.submenus}" var="s">
+                        <li><a><fmt:message key="${m.description}"/><span class="fa fa-chevron-down"></span></a>
+                          <ul class="nav child_menu">
+	                      <c:forEach items="${s.pages}" var="p2">
+                            <li class="sub_menu"><a href="${p2.url}"><fmt:message key="${p2.description}"/></a>
+                            </li>
+	                      </c:forEach>
+	                      </ul>
+                      </c:forEach>
 		              <c:forEach items="${m.pages}" var="p">
                       <li><a href="${p.url}">
                       		<fmt:message key="${p.description}"/>

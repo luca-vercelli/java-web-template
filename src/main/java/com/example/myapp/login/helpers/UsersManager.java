@@ -235,7 +235,7 @@ public class UsersManager {
 
 	/**
 	 * Return a tree of menus, filtered according to filterMenuForUser(Menu
-	 * menu, User user).
+	 * menu, User user).  Please do not save such menus!!!
 	 * 
 	 * @param user
 	 * @return
