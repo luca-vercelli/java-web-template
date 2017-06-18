@@ -53,33 +53,6 @@
                   </li>
                 </c:forEach>
                 
-                  <li><a><i class="fa fa-sitemap"></i> Multilevel Menu <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                        <li><a href="#level1_1">Level One</a>
-                        <li><a>Level One<span class="fa fa-chevron-down"></span></a>
-                          <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="level2.html">Level Two</a>
-                            </li>
-                            <li><a href="#level2_1">Level Two</a>
-                            </li>
-                            <li><a href="#level2_2">Level Two</a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li><a href="#level1_2">Level One</a>
-                        </li>
-                    </ul>
-                  </li>                  
-                  <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="form.jsp">General Form</a></li>
-                      <li><a href="form_advanced.jsp">Advanced Components</a></li>
-                      <li><a href="form_validation.jsp">Form Validation</a></li>
-                      <li><a href="form_wizards.jsp">Form Wizard</a></li>
-                      <li><a href="form_upload.jsp">Form Upload</a></li>
-                      <li><a href="form_buttons.jsp">Form Buttons</a></li>
-                    </ul>
-                  </li>
                   <li><a><i class="fa fa-desktop"></i> UI Elements <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="general_elements.html">General Elements</a></li>
