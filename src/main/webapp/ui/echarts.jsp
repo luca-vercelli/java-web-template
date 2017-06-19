@@ -377,4 +377,8 @@
             </div>
           </div>
 
+    <!-- ECharts -->
+    <script src="../vendors/echarts/dist/echarts.min.js"></script>
+    <script src="../vendors/echarts/map/js/world.js"></script>
+    
 </t:template>

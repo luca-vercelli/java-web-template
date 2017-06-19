@@ -135,4 +135,7 @@
             </div>
           </div>
 
+    <!-- validator -->
+    <script src="../vendors/validator/validator.js"></script>
+    
 </t:template>

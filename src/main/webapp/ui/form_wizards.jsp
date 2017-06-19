@@ -310,4 +310,7 @@
             </div>
           </div>
 
+    <!-- jQuery Smart Wizard -->
+    <script src="../vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js"></script>
+    
 </t:template>

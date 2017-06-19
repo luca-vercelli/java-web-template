@@ -4,6 +4,9 @@
 
 <t:template>
 
+    <!-- iCheck -->
+    <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    
           <div class="">
             <div class="page-title">
               <div class="title_left">
@@ -188,4 +191,7 @@
             </div>
           </div>
 
+    <!-- ECharts -->
+    <script src="../vendors/echarts/dist/echarts.min.js"></script>
+    
 </t:template>

@@ -3,7 +3,10 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 
 <t:template>
-
+    
+    <!-- Dropzone.js -->
+    <link href="../vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
+    
           <div class="">
             <div class="page-title">
               <div class="title_left">
@@ -59,4 +62,7 @@
             </div>
           </div>
           
+    <!-- Dropzone.js -->
+    <script src="../vendors/dropzone/dist/min/dropzone.min.js"></script>
+    
 </t:template>

@@ -2,6 +2,9 @@ w.r.t. the original Gentelella 1.4, we did the following modifications:
 
 * pages have been spit in tiles
 * menus moved to database
-* login page: javascript for REST authentication (maybe: remove Registration stuff)
+* login page: remove Registration stuff
 * crud page
-* vendors/java-web-template
+
+Following features lack in gentelella:
+* favicon
+* password reset page

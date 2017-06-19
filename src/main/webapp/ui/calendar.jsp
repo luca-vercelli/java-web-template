@@ -4,6 +4,10 @@
 
 <t:template>
 
+    <!-- FullCalendar -->
+    <link href="../vendors/fullcalendar/dist/fullcalendar.min.css" rel="stylesheet">
+    <link href="../vendors/fullcalendar/dist/fullcalendar.print.css" rel="stylesheet" media="print">
+    
           <div class="">
             <div class="page-title">
               <div class="title_left">
@@ -55,5 +59,9 @@
               </div>
             </div>
           </div>
+
+    <!-- FullCalendar -->
+    <script src="../vendors/moment/min/moment.min.js"></script>
+    <script src="../vendors/fullcalendar/dist/fullcalendar.min.js"></script>
 
 </t:template>

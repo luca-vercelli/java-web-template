@@ -191,4 +191,7 @@
             <br />
           </div>
 
+    <!-- Chart.js -->
+    <script src="../vendors/Chart.js/dist/Chart.min.js"></script>
+    
 </t:template>

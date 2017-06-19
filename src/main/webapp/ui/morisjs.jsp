@@ -4,6 +4,9 @@
 
 <t:template>
 
+    <!-- iCheck -->
+    <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    
           <div class="">
             <div class="page-title">
               <div class="title_left">
@@ -202,4 +205,8 @@
             </div>
           </div>
 
+    <!-- morris.js -->
+    <script src="../vendors/raphael/raphael.min.js"></script>
+    <script src="../vendors/morris.js/morris.min.js"></script>
+    
 </t:template>

@@ -4,6 +4,8 @@
 
 <t:template>
 
+    <!-- iCheck -->
+    <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
     <!-- bootstrap-wysiwyg -->
     <link href="../vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
     <!-- Select2 -->
@@ -12,6 +14,8 @@
     <link href="../vendors/switchery/dist/switchery.min.css" rel="stylesheet">
     <!-- starrr -->
     <link href="../vendors/starrr/dist/starrr.css" rel="stylesheet">
+    <!-- bootstrap-daterangepicker -->
+    <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
 
 
           <div class="">
@@ -1050,6 +1054,13 @@
           </div>
 
 
+    <!-- bootstrap-progressbar -->
+    <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <!-- iCheck -->
+    <script src="../vendors/iCheck/icheck.min.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="../vendors/moment/min/moment.min.js"></script>
+    <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
     <!-- bootstrap-wysiwyg -->
     <script src="../vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
     <script src="../vendors/jquery.hotkeys/jquery.hotkeys.js"></script>

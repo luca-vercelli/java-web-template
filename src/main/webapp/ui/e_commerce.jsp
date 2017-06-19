@@ -4,6 +4,9 @@
 
 <t:template>
 
+    <!-- iCheck -->
+    <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    
           <div class="">
             <div class="page-title">
               <div class="title_left">
