@@ -41,7 +41,7 @@
                   <li><a><i class="fa fa-${m.icon}"></i> <fmt:message key="${m.description}"/> <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
 		              <c:forEach items="${m.submenus}" var="s">
-                        <li><a><fmt:message key="${m.description}"/><span class="fa fa-chevron-down"></span></a>
+                        <li><a><fmt:message key="${s.description}"/><span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
 	                      <c:forEach items="${s.pages}" var="p2">
                             <li class="sub_menu"><a href="${p2.url}"><fmt:message key="${p2.description}"/></a>
