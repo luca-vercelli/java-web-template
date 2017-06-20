@@ -5,7 +5,6 @@
 */
 package com.example.myapp.login.helpers;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -126,12 +125,9 @@ public class UsersManager {
 	 */
 	public LoginContext authenticate(String user, char[] password) {
 
-		// FIXME could be put outside app?
 		// consider modules: Krb5LoginModule, LdapLoginModule, NTLoginModule,
 		// JndiLoginModule
 		// ...sun...
-		System.setProperty("java.security.auth.login.config",
-				appProps.getAppRoot().getAbsolutePath() + File.separator + "jaas.conf");
 
 		PassiveCallbackHandler cbh = new PassiveCallbackHandler(user, password);
 
@@ -235,7 +231,7 @@ public class UsersManager {
 
 	/**
 	 * Return a tree of menus, filtered according to filterMenuForUser(Menu
-	 * menu, User user).  Please do not save such menus!!!
+	 * menu, User user). Please do not save such menus!!!
 	 * 
 	 * @param user
 	 * @return

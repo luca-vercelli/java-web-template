@@ -5,14 +5,12 @@
 */
 package com.example.myapp.main.util;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-
 import org.slf4j.Logger;
 
 /**
@@ -26,7 +24,6 @@ public class ApplicationProperties {
 	@Inject
 	Logger LOG;
 
-	private File root;
 	private Properties internal = new Properties();
 
 	public ApplicationProperties() {
@@ -57,21 +54,5 @@ public class ApplicationProperties {
 
 	public String put(String name, String value) {
 		return (String) internal.put(name, value);
-	}
-
-	/**
-	 * This File should point to WEB-INF/classes folder. Current implementation
-	 * relies of fact that "application.properties" exists and it is placed
-	 * non-compressed in WEB-INF/classes folder.
-	 * 
-	 * @return
-	 */
-	public File getAppRoot() {
-		if (root == null) {
-			root = new File(ApplicationProperties.class.getResource("/application.properties").getFile())
-					.getParentFile();
-		}
-		return root;
-
 	}
 }

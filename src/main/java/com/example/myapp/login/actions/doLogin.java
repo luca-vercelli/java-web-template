@@ -1,5 +1,6 @@
 package com.example.myapp.login.actions;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.inject.Inject;
@@ -44,7 +45,10 @@ public class doLogin extends HttpServlet {
 
 		try {
 			sessionManager.clearSession();
-			
+
+			//FIXME this could be performed just once, but where?
+			System.setProperty("java.security.auth.login.config",
+					request.getServletContext().getRealPath("/") + "/WEB-INF/classes/" + File.separator + "jaas.conf");
 
 			String userId = request.getParameter("userId");
 			char[] pwd = request.getParameter("pwd").toCharArray();
@@ -52,10 +56,8 @@ public class doLogin extends HttpServlet {
 			User user = null;
 
 			if (userId == null || userId.equals("")) {
-				// This can also happen when user go to "Login" address for the
-				// first time
 
-				// addActionError(getText("login.missing.parameters"));
+				// TODO addActionError(getText("login.missing.parameters"));
 				response.sendRedirect(request.getContextPath() + appProps.getProperty("login.uri"));
 				return;
 			}

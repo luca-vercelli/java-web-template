@@ -22,9 +22,11 @@ public class Main {
 	public static final String CONTEXT_ROOT = "myapp";
 
 	/**
-	 * Avvia l'applicazione con l'embedded server. Vuol dire che non c'�
-	 * bisogno di installare Glassfish, basta fare "run as application" da
-	 * Eclipse.
+	 * Run application with embedded Glassfish Server. You don't need to install
+	 * Glassfish, just run this class, i.e. if you use Eclipse just click "Run
+	 * as application..." or if you prefer command line run:
+	 * 
+	 * java com.example.webserver.Main
 	 * 
 	 * @throws IOException
 	 */
