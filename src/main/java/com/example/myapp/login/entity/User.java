@@ -23,7 +23,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.security.auth.Subject;
 
-import com.example.myapp.authorization.entity.Role;
+import com.example.myapp.main.entity.Role;
 import com.example.myapp.main.enums.Boolean;
 
 /**

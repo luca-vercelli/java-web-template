@@ -3,7 +3,7 @@
 * Luca Vercelli 2017
 * Released under GPLv3 
 */
-package com.example.myapp.authorization.filters;
+package com.example.myapp.login.filters;
 
 import java.io.IOException;
 import javax.inject.Inject;

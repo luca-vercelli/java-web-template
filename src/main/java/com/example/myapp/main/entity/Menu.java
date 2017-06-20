@@ -24,8 +24,6 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.example.myapp.authorization.entity.Role;
-
 @Entity
 @Table(name = "APP_MENU")
 @XmlRootElement

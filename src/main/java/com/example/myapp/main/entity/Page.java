@@ -18,8 +18,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import com.example.myapp.authorization.entity.Role;
-
 @Entity
 @Table(name = "APP_PAGE")
 public class Page {

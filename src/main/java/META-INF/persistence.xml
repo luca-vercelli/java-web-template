@@ -11,7 +11,7 @@
 		<!-- Entity classes -->
 		<class>com.example.myapp.main.entity.Settings</class>
 		<class>com.example.myapp.login.entity.User</class>
-		<class>com.example.myapp.authorization.entity.Role</class>
+		<class>com.example.myapp.main.entity.Role</class>
 		<class>com.example.myapp.main.entity.Page</class>
 		<class>com.example.myapp.main.entity.Menu</class>
 		<class>com.example.myapp.crud.entity.Bar</class>
