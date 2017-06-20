@@ -46,12 +46,13 @@ public class doLogin extends HttpServlet {
 		try {
 			sessionManager.clearSession();
 
-			//FIXME this could be performed just once, but where?
+			// FIXME this could be performed just once, but where?
 			System.setProperty("java.security.auth.login.config",
 					request.getServletContext().getRealPath("/") + "/WEB-INF/classes/" + File.separator + "jaas.conf");
 
 			String userId = request.getParameter("userId");
-			char[] pwd = request.getParameter("pwd").toCharArray();
+			char[] pwd = (request.getParameter("pwd") == null) ? new char[0]
+					: request.getParameter("pwd").toCharArray();
 
 			User user = null;
 
