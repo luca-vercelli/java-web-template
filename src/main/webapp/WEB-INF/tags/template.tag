@@ -4,7 +4,7 @@
 <html lang="${sessionBean.language}">
 
 <head>
-<jsp:include page="/WEB-INF/content/tiles/head.jsp" />
+<jsp:include page="/WEB-INF/tiles/head.jsp" />
 </head>
 
 <body class="nav-md">
@@ -13,11 +13,11 @@
 		<div class="main_container">
 
 			<!--  left side menu -->
-			<jsp:include page="/WEB-INF/content/tiles/pageMenu.jsp" />
+			<jsp:include page="/WEB-INF/tiles/pageMenu.jsp" />
 			<!--  /left side menu -->
 
 			<!-- top navigation -->
-			<jsp:include page="/WEB-INF/content/tiles/pageHeader.jsp" />
+			<jsp:include page="/WEB-INF/tiles/pageHeader.jsp" />
 			<!-- /top navigation -->
 
 			<!-- page content -->
@@ -27,7 +27,7 @@
 			<!-- /page content -->
 
 			<!--  footer content -->
-			<jsp:include page="/WEB-INF/content/tiles/pageFooter.jsp" />
+			<jsp:include page="/WEB-INF/tiles/pageFooter.jsp" />
 			<!--  /footer content  -->
 
 		</div>
