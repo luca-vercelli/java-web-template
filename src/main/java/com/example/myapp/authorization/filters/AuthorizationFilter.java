@@ -6,71 +6,78 @@
 package com.example.myapp.authorization.filters;
 
 import java.io.IOException;
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import javax.inject.Inject;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
 
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.container.ResourceInfo;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
-
-import com.example.myapp.authorization.entity.Role;
+import com.example.myapp.main.util.ApplicationProperties;
+import com.example.myapp.main.util.SessionBean;
 
 /**
  * Most implementations assume that roles are hard-written in some
- * annotations, @see e.g. https://stackoverflow.com/questions/26777083. We read
- * roled from a database table.
+ * annotations, @see e.g. https://stackoverflow.com/questions/26777083. Instead,
+ * we read roles from a database table.
  * 
  * @author luca vercelli
  *
  */
-@Provider
-public class AuthorizationFilter implements ContainerRequestFilter {
+@WebFilter(value = "authFilter", urlPatterns = { "*.html", "*.htm", "*.xhtml", "*.jsp", "/rest" })
+public class AuthorizationFilter implements Filter {
 
-	@Context
-	private ResourceInfo resourceInfo;
+	@Inject
+	Logger LOG;
+
+	@Inject
+	ApplicationProperties appProps;
+
+	@Inject
+	SessionBean sessionBean;
 
 	@Override
-	public void filter(ContainerRequestContext requestContext) throws IOException {
+	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
+			throws IOException, ServletException {
 
-		// Get the resource class which matches with the requested URL
-		// Extract the roles declared by it
-		Class<?> resourceClass = resourceInfo.getResourceClass();
-		List<Role> classRoles = extractRoles(resourceClass);
+		if (req instanceof HttpServletRequest && resp instanceof HttpServletResponse) {
 
-		// Get the resource method which matches with the requested URL
-		// Extract the roles declared by it
-		Method resourceMethod = resourceInfo.getResourceMethod();
-		List<Role> methodRoles = extractRoles(resourceMethod);
+			boolean authorizaionRequired = false; // TODO: true
+			boolean authorizationSuccess = false;
 
-		try {
+			HttpServletRequest request = (HttpServletRequest) req;
+			HttpServletResponse response = (HttpServletResponse) resp;
+			String contextPath = request.getContextPath();
+			String uri = request.getRequestURI();
 
-			// Check if the user is allowed to execute the method
-			// The method annotations override the class annotations
-			if (methodRoles.isEmpty()) {
-				checkPermissions(classRoles);
+			uri = uri.replaceAll("/+", "/"); // convert /myapp///ui -> /myapp/ui
+
+			// TODO: authorizationSuccess = ...
+
+			if (!authorizaionRequired || authorizationSuccess) {
+				chain.doFilter(req, resp); // Just continue chain
 			} else {
-				checkPermissions(methodRoles);
+				LOG.info("Redirecting to login page");
+				response.sendRedirect(contextPath + appProps.getProperty("404errorPage.uri"));
 			}
 
-		} catch (Exception e) {
-			requestContext.abortWith(Response.status(Response.Status.FORBIDDEN).build());
+		} else {
+			// should not pass here
+			LOG.error("Not HTTP ? Why here?");
+			chain.doFilter(req, resp); // Just continue chain
 		}
 	}
 
-	private List<Role> extractRoles(Object classOrMethod) {
-		// TODO Auto-generated method stub
-		return null;
+	@Override
+	public void init(FilterConfig filterConfig) throws ServletException {
 	}
 
-	private void checkPermissions(List<Role> allowedRoles) throws Exception {
-		// Check if the user contains one of the allowed roles
-		// Throw an Exception if the user has not permission to execute the
-		// method
+	@Override
+	public void destroy() {
 	}
 }
