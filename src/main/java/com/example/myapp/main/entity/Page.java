@@ -82,10 +82,7 @@ public class Page {
 	 * @return
 	 */
 	@ManyToMany
-	@JoinTable(name = "APP_PAGE_ROLES", 
-		joinColumns = @JoinColumn(name = "PAGE_ID", referencedColumnName = "ID"), 
-		inverseJoinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")
-	)
+	@JoinTable(name = "APP_PAGE_ROLES", joinColumns = @JoinColumn(name = "PAGE_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID"))
 	public Set<Role> getAuthorizedRoles() {
 		return authorizedRoles;
 	}
@@ -97,5 +94,20 @@ public class Page {
 	@Override
 	public String toString() {
 		return "Page #" + description;
+	}
+
+	@Override
+	public int hashCode() {
+		return ("" + id).hashCode();
+	}
+
+	@Override
+	public boolean equals(Object o2) {
+		if (o2 == null || !(o2 instanceof Role))
+			return false;
+		Page r2 = (Page) o2;
+		if (r2.id == null || this.id == null)
+			return false;
+		return r2.id.equals(this.id);
 	}
 }

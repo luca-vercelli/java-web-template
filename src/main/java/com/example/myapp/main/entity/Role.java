@@ -43,4 +43,19 @@ public class Role {
 	public String toString() {
 		return "Role #" + description;
 	}
+
+	@Override
+	public int hashCode() {
+		return ("" + id).hashCode();
+	}
+
+	@Override
+	public boolean equals(Object o2) {
+		if (o2 == null || !(o2 instanceof Role))
+			return false;
+		Role r2 = (Role) o2;
+		if (r2.id == null || this.id == null)
+			return false;
+		return r2.id.equals(this.id);
+	}
 }

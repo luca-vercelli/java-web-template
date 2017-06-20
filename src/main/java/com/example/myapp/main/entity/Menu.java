@@ -87,10 +87,7 @@ public class Menu {
 		this.parentMenu = parentMenu;
 	}
 
-	@JoinTable(name = "APP_MENU_PAGES", 
-			joinColumns = @JoinColumn(name = "MENU_ID", referencedColumnName = "ID"), 
-			inverseJoinColumns = @JoinColumn(name = "PAGE_ID", referencedColumnName = "ID")
-	)
+	@JoinTable(name = "APP_MENU_PAGES", joinColumns = @JoinColumn(name = "MENU_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "PAGE_ID", referencedColumnName = "ID"))
 	@ManyToMany
 	@OrderBy("ordering")
 	public List<Page> getPages() {
@@ -117,10 +114,7 @@ public class Menu {
 	 * @return
 	 */
 	@ManyToMany
-	@JoinTable(name = "APP_MENU_ROLES",
-		joinColumns = @JoinColumn(name = "MENU_ID"), 
-		inverseJoinColumns = @JoinColumn(name = "ROLE_ID")
-	)
+	@JoinTable(name = "APP_MENU_ROLES", joinColumns = @JoinColumn(name = "MENU_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
 	public Set<Role> getAuthorizedRoles() {
 		return authorizedRoles;
 	}
@@ -132,5 +126,20 @@ public class Menu {
 	@Override
 	public String toString() {
 		return "Menu #" + description;
+	}
+
+	@Override
+	public int hashCode() {
+		return ("" + id).hashCode();
+	}
+
+	@Override
+	public boolean equals(Object o2) {
+		if (o2 == null || !(o2 instanceof Role))
+			return false;
+		Menu r2 = (Menu) o2;
+		if (r2.id == null || this.id == null)
+			return false;
+		return r2.id.equals(this.id);
 	}
 }
