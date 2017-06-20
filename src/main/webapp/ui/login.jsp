@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 
-<c:set var="language" value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}" scope="session" />
+<c:set var="language" value="${not empty param.language ? fn:substring(param.language,0,2) : not empty language ? fn:substring(language,0,2) : fn:substring(pageContext.request.locale,0,2)}" scope="session" />
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="global" />
 <fmt:message key="login.password.lost" var="login_password_lost" />
@@ -78,7 +79,7 @@
               <form>
 	            <select id="language" name="language" onchange="submit()" >
                 	<option value="en" ${language == 'en' ? 'selected' : ''}>English</option>
-                	<option value="it_IT" ${language == 'it_IT' ? 'selected' : ''}>Italiano</option>
+                	<option value="it" ${language == 'it' ? 'selected' : ''}>Italiano</option>
             	</select>
         	  </form>
           </section>
