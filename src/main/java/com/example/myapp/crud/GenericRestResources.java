@@ -74,8 +74,8 @@ public class GenericRestResources {
 			pagesize = DEFAULT_PAGESIZE;
 		if (page == null || page.equals(ZERO))
 			page = 1;
-
-		List<?> list = manager.find(clazz, pagesize, (page - 1) * pagesize + 1, sort, order);
+		
+		List<?> list = manager.find(clazz, pagesize, (page - 1) * pagesize, sort, order);
 
 		// ListType and GenericEntity are needed in order to handle generics
 		Type genericType = new ListType(clazz);

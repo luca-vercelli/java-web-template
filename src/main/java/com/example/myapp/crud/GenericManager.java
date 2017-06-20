@@ -141,12 +141,12 @@ public class GenericManager {
 	 * firstResult, and with given ordering. Useful for pagination.
 	 * 
 	 * Notice that "maxResult" is in fact the size of a page, while
-	 * "firstResult" = (pageNumber-1)*pageSize + 1
+	 * "firstResult" = (pageNumber-1)*pageSize
 	 * 
 	 * @param maxResult
 	 *            max number of elements to retrieve
 	 * @param firstResult
-	 *            positional order of first element to retrieve (1-based).
+	 *            positional order of first element to retrieve (0-based).
 	 * @param sort
 	 *            attribute for ordering (optional)
 	 * @param order
