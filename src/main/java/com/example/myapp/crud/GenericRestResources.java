@@ -43,7 +43,7 @@ import com.sun.messaging.jmq.io.Status;
  *
  */
 @Stateless
-@Path("rsr")
+@Path("/")
 @Produces(MediaType.APPLICATION_JSON)
 public class GenericRestResources {
 

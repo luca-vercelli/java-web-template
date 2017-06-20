@@ -1,13 +1,18 @@
 <!DOCTYPE html>
-<%@page contentType="text/html"%>
-<%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
+<%@ page contentType="text/html"%>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${sessionBean.language}" />
+<fmt:setBundle basename="com.example.myapp.crud.crud" />
+<c:set var="entity" value="${ param.entity }" />
 
 <t:template>
 
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3>Plain Page</h3>
+                <h3><fmt:message key="title.${entity}" /></h3>
               </div>
 
               <div class="title_right">
@@ -53,5 +58,12 @@
               </div>
             </div>
           </div>
-
+    
+    <script>
+     var entity = '${entity}';
+    </script>      
+	<script src="../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+	<script src="../vendors/bootstrap-growl/js/bootstrap-growl.min.js"></script>
+	<script src="../vendors/java-web-template/js/crud.js"></script>
+	
 </t:template>

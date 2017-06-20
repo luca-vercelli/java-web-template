@@ -7,11 +7,16 @@ package com.example.myapp.crud.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.example.myapp.main.enums.BooleanYN;
 
 @Entity
 @Table(name = "APP_GRID_COLUMN")
@@ -20,10 +25,11 @@ public class GridColumn {
 	private Grid grid;
 	private Integer order;
 	private String attributeName;
-	private String description; // FIXME what about i18n?
+	private String description;
+	private BooleanYN readOnly;
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	public Long getId() {
 		return id;
@@ -43,7 +49,7 @@ public class GridColumn {
 		this.grid = grid;
 	}
 
-	@Column(name = "N_ORDER") // "ORDER" not always allowed
+	@Column(name = "ORDERING") // "ORDER" not always allowed
 	public Integer getOrder() {
 		return order;
 	}
@@ -68,6 +74,16 @@ public class GridColumn {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@Column(name = "READ_ONLY")
+	@Enumerated(EnumType.ORDINAL)
+	public BooleanYN getReadOnly() {
+		return readOnly;
+	}
+
+	public void setReadOnly(BooleanYN readOnly) {
+		this.readOnly = readOnly;
 	}
 
 }

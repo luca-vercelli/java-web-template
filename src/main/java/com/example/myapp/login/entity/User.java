@@ -24,7 +24,7 @@ import javax.persistence.TemporalType;
 import javax.security.auth.Subject;
 
 import com.example.myapp.main.entity.Role;
-import com.example.myapp.main.enums.Boolean;
+import com.example.myapp.main.enums.BooleanYN;
 
 /**
  * A login user. This class implements Principal, so it can be integrated with
@@ -41,7 +41,7 @@ public class User implements Principal {
 	private String personName;
 	private String personSurname;
 	private Date birthdate;
-	private Boolean active = Boolean.Y;
+	private BooleanYN active = BooleanYN.Y;
 
 	private Set<Role> roles = new HashSet<Role>();
 
@@ -89,11 +89,11 @@ public class User implements Principal {
 
 	@Column(name = "ACTIVE")
 	@Enumerated(EnumType.ORDINAL)
-	public Boolean getActive() {
+	public BooleanYN getActive() {
 		return active;
 	}
 
-	public void setActive(Boolean active) {
+	public void setActive(BooleanYN active) {
 		this.active = active;
 	}
 

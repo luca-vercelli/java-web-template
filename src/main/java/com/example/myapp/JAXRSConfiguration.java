@@ -14,7 +14,7 @@ import javax.ws.rs.core.Application;
  *
  * @author airhacks.com
  */
-@ApplicationPath("rest")
+@ApplicationPath("/rest")
 public class JAXRSConfiguration extends Application {
 	
 }

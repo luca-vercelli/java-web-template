@@ -23,7 +23,7 @@ import com.example.myapp.login.util.PasswordAuthentication;
 import com.example.myapp.main.entity.Menu;
 import com.example.myapp.main.entity.Page;
 import com.example.myapp.main.entity.Role;
-import com.example.myapp.main.enums.Boolean;
+import com.example.myapp.main.enums.BooleanYN;
 import com.example.myapp.main.util.ApplicationProperties;
 
 @Stateless
@@ -83,7 +83,7 @@ public class UsersManager {
 	public User getUserByNameAndPassword(String name, char[] password) {
 
 		TypedQuery<User> query = em.createQuery("from User where name = :name and active = :true", User.class)
-				.setParameter("name", name).setParameter("true", Boolean.Y);
+				.setParameter("name", name).setParameter("true", BooleanYN.Y);
 
 		List<User> users = query.getResultList();
 

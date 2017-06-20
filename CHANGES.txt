@@ -5,7 +5,7 @@ w.r.t. the original Gentelella 1.4, we did the following modifications:
 * login page: remove Registration stuff
 * crud page
 * custom.js: handle "?" in menu urls (more or less)
-
+* bootstrap-growl
 
 Following features lack in gentelella:
 * favicon
