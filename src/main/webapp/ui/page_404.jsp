@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<%@page contentType="text/html"%>
-<%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
+<%@ page contentType="text/html"%>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setBundle basename="global" />
 <fmt:setLocale value="${sessionBean.language}" />
 <html lang="${sessionBean.language}">
   <head>
