@@ -15,7 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.example.myapp.authorization.entity.Role;
@@ -83,8 +83,11 @@ public class Page {
 	 * 
 	 * @return
 	 */
-	@OneToMany
-	@JoinTable(name = "APP_PAGE_ROLES", joinColumns = @JoinColumn(name = "PAGE_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+	@ManyToMany
+	@JoinTable(name = "APP_PAGE_ROLES", 
+		joinColumns = @JoinColumn(name = "PAGE_ID", referencedColumnName = "ID"), 
+		inverseJoinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")
+	)
 	public Set<Role> getAuthorizedRoles() {
 		return authorizedRoles;
 	}

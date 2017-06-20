@@ -89,9 +89,10 @@ public class Menu {
 		this.parentMenu = parentMenu;
 	}
 
-	@JoinTable(name = "APP_MENU_PAGES", joinColumns = {
-			@JoinColumn(name = "MENU_ID", referencedColumnName = "ID") }, inverseJoinColumns = {
-					@JoinColumn(name = "PAGE_ID", referencedColumnName = "ID") })
+	@JoinTable(name = "APP_MENU_PAGES", 
+			joinColumns = @JoinColumn(name = "MENU_ID", referencedColumnName = "ID"), 
+			inverseJoinColumns = @JoinColumn(name = "PAGE_ID", referencedColumnName = "ID")
+	)
 	@ManyToMany
 	@OrderBy("ordering")
 	public List<Page> getPages() {
@@ -117,8 +118,11 @@ public class Menu {
 	 * 
 	 * @return
 	 */
-	@OneToMany
-	@JoinTable(name = "APP_MENU_ROLES", joinColumns = @JoinColumn(name = "MENU_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+	@ManyToMany
+	@JoinTable(name = "APP_MENU_ROLES",
+		joinColumns = @JoinColumn(name = "MENU_ID"), 
+		inverseJoinColumns = @JoinColumn(name = "ROLE_ID")
+	)
 	public Set<Role> getAuthorizedRoles() {
 		return authorizedRoles;
 	}
