@@ -8,3 +8,4 @@ w.r.t. the original Gentelella 1.4, we did the following modifications:
 Following features lack in gentelella:
 * favicon
 * password reset page
+* fullscreen: https://stackoverflow.com/questions/1125084 (second answer)
