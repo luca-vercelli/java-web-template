@@ -138,7 +138,7 @@ public class User implements Principal {
 	// == RELATIONS ==============================
 
 	@OneToMany
-	@JoinTable(name = "APP_USER_ROLES", joinColumns = @JoinColumn(name = "USER_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+	@JoinTable(name = "APP_USER_ROLES", joinColumns = @JoinColumn(name = "USERNAME"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
 	public Set<Role> getRoles() {
 		return roles;
 	}
