@@ -195,7 +195,7 @@ public class UsersManager {
 			}
 		}
 
-		if (menu.getPages().isEmpty() && menu.getSubmenus().isEmpty())
+		if (menu2.getPages().isEmpty() && menu2.getSubmenus().isEmpty())
 			return null;
 		else
 			return menu2;
