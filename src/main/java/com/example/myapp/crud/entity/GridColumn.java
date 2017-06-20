@@ -40,7 +40,7 @@ public class GridColumn {
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "GRID_ID")
+	@JoinColumn(name = "GRID_ID", nullable = false)
 	public Grid getGrid() {
 		return grid;
 	}
@@ -76,7 +76,7 @@ public class GridColumn {
 		this.description = description;
 	}
 
-	@Column(name = "READ_ONLY")
+	@Column(name = "READ_ONLY", nullable = false)
 	@Enumerated(EnumType.ORDINAL)
 	public BooleanYN getReadOnly() {
 		return readOnly;
@@ -84,6 +84,26 @@ public class GridColumn {
 
 	public void setReadOnly(BooleanYN readOnly) {
 		this.readOnly = readOnly;
+	}
+
+	@Override
+	public String toString() {
+		return "Grid Column #" + description + " for Grid #" + getGrid().getDescription();
+	}
+
+	@Override
+	public int hashCode() {
+		return ("" + id).hashCode();
+	}
+
+	@Override
+	public boolean equals(Object o2) {
+		if (o2 == null || !(o2 instanceof GridColumn))
+			return false;
+		GridColumn r2 = (GridColumn) o2;
+		if (r2.id == null || this.id == null)
+			return false;
+		return r2.id.equals(this.id);
 	}
 
 }

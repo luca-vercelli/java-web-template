@@ -3,8 +3,8 @@ package com.example.myapp.login.actions;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import com.example.myapp.login.entity.User;
 import com.example.myapp.login.helpers.UsersManager;
+import com.example.myapp.main.entity.User;
 import com.example.myapp.main.util.SessionBean;
 
 @Stateless

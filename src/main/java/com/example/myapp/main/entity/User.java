@@ -3,7 +3,7 @@
 * Luca Vercelli 2017
 * Released under GPLv3 
 */
-package com.example.myapp.login.entity;
+package com.example.myapp.main.entity;
 
 import java.security.Principal;
 import java.util.Date;
@@ -22,8 +22,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.security.auth.Subject;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
-import com.example.myapp.main.entity.Role;
 import com.example.myapp.main.enums.BooleanYN;
 
 /**
@@ -33,6 +34,7 @@ import com.example.myapp.main.enums.BooleanYN;
  */
 @Entity
 @Table(name = "APP_USERS")
+@XmlRootElement
 public class User implements Principal {
 
 	private String username;
@@ -59,23 +61,6 @@ public class User implements Principal {
 		this.username = username;
 	}
 
-	/**
-	 * I need to override this method, due to Javassist's current limitations.
-	 * 
-	 * @see java.security.Principal#implies(javax.security.auth.Subject)
-	 */
-	@Override
-	public boolean implies(Subject subject) {
-		if (subject == null)
-			return false;
-		return subject.getPrincipals().contains(this);
-	}
-
-	@Override
-	public String toString() {
-		return "user #" + username;
-	}
-
 	@Column(name = "EMAIL")
 	public String getEmail() {
 		return this.email;
@@ -98,6 +83,7 @@ public class User implements Principal {
 	}
 
 	@Column(name = "PASSWD")
+	@XmlTransient
 	public String getEncryptedPassword() {
 		return encryptedPassword;
 	}
@@ -135,15 +121,46 @@ public class User implements Principal {
 		this.birthdate = birthdate;
 	}
 
-	// == RELATIONS ==============================
-
 	@OneToMany
 	@JoinTable(name = "APP_USER_ROLES", joinColumns = @JoinColumn(name = "USERNAME"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+	@XmlTransient
 	public Set<Role> getRoles() {
 		return roles;
 	}
 
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+
+	/**
+	 * I need to override this method, due to Javassist's current limitations.
+	 * 
+	 * @see java.security.Principal#implies(javax.security.auth.Subject)
+	 */
+	@Override
+	public boolean implies(Subject subject) {
+		if (subject == null)
+			return false;
+		return subject.getPrincipals().contains(this);
+	}
+
+	@Override
+	public String toString() {
+		return "user #" + username;
+	}
+
+	@Override
+	public int hashCode() {
+		return username.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object o2) {
+		if (o2 == null || !(o2 instanceof User))
+			return false;
+		User r2 = (User) o2;
+		if (r2.username == null || this.username == null)
+			return false;
+		return r2.username.equals(this.username);
 	}
 }

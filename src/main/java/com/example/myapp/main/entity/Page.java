@@ -17,9 +17,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "APP_PAGE")
+@XmlRootElement
 public class Page {
 
 	private Long id;
@@ -83,6 +86,7 @@ public class Page {
 	 */
 	@ManyToMany
 	@JoinTable(name = "APP_PAGE_ROLES", joinColumns = @JoinColumn(name = "PAGE_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID"))
+	@XmlTransient
 	public Set<Role> getAuthorizedRoles() {
 		return authorizedRoles;
 	}
@@ -103,7 +107,7 @@ public class Page {
 
 	@Override
 	public boolean equals(Object o2) {
-		if (o2 == null || !(o2 instanceof Role))
+		if (o2 == null || !(o2 instanceof Page))
 			return false;
 		Page r2 = (Page) o2;
 		if (r2.id == null || this.id == null)

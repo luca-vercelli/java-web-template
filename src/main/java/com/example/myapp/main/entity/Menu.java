@@ -23,6 +23,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "APP_MENU")
@@ -79,6 +80,7 @@ public class Menu {
 
 	@ManyToOne
 	@JoinColumn(name = "PARENT_MENU_ID")
+	@XmlTransient
 	public Menu getParentMenu() {
 		return parentMenu;
 	}
@@ -89,6 +91,7 @@ public class Menu {
 
 	@JoinTable(name = "APP_MENU_PAGES", joinColumns = @JoinColumn(name = "MENU_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "PAGE_ID", referencedColumnName = "ID"))
 	@ManyToMany
+	@XmlTransient // FIXME should not be
 	@OrderBy("ordering")
 	public List<Page> getPages() {
 		return pages;
@@ -99,6 +102,7 @@ public class Menu {
 	}
 
 	@OneToMany(mappedBy = "parentMenu")
+	@XmlTransient
 	@OrderBy("ordering")
 	public List<Menu> getSubmenus() {
 		return submenus;
@@ -115,6 +119,7 @@ public class Menu {
 	 */
 	@ManyToMany
 	@JoinTable(name = "APP_MENU_ROLES", joinColumns = @JoinColumn(name = "MENU_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+	@XmlTransient
 	public Set<Role> getAuthorizedRoles() {
 		return authorizedRoles;
 	}
@@ -135,7 +140,7 @@ public class Menu {
 
 	@Override
 	public boolean equals(Object o2) {
-		if (o2 == null || !(o2 instanceof Role))
+		if (o2 == null || !(o2 instanceof Menu))
 			return false;
 		Menu r2 = (Menu) o2;
 		if (r2.id == null || this.id == null)

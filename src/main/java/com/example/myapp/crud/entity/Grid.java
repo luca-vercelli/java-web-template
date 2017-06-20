@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * In order to display an Entity on a grid, or to export it to an Excel sheet,
@@ -47,7 +48,7 @@ public class Grid {
 		this.id = id;
 	}
 
-	@Column(name = "ENTITY")
+	@Column(name = "ENTITY", nullable = false)
 	public String getEntity() {
 		return entity;
 	}
@@ -66,11 +67,32 @@ public class Grid {
 	}
 
 	@OneToMany(mappedBy = "grid")
+	@XmlTransient // FIXME should not be
 	public List<GridColumn> getColumns() {
 		return columns;
 	}
 
 	public void setColumns(List<GridColumn> columns) {
 		this.columns = columns;
+	}
+
+	@Override
+	public String toString() {
+		return "Grid #" + description + " for " + entity;
+	}
+
+	@Override
+	public int hashCode() {
+		return ("" + id).hashCode();
+	}
+
+	@Override
+	public boolean equals(Object o2) {
+		if (o2 == null || !(o2 instanceof Grid))
+			return false;
+		Grid r2 = (Grid) o2;
+		if (r2.id == null || this.id == null)
+			return false;
+		return r2.id.equals(this.id);
 	}
 }

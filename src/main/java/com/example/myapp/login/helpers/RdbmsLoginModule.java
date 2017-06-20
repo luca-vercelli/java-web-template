@@ -9,7 +9,7 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import com.example.myapp.login.entity.User;
+import com.example.myapp.main.entity.User;
 
 /**
  * This LoginModule authenticates a given username/password against local

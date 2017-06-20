@@ -18,11 +18,11 @@ import javax.security.auth.login.LoginException;
 import org.slf4j.Logger;
 
 import com.example.myapp.crud.GenericManager;
-import com.example.myapp.login.entity.User;
 import com.example.myapp.login.util.PasswordAuthentication;
 import com.example.myapp.main.entity.Menu;
 import com.example.myapp.main.entity.Page;
 import com.example.myapp.main.entity.Role;
+import com.example.myapp.main.entity.User;
 import com.example.myapp.main.enums.BooleanYN;
 import com.example.myapp.main.util.ApplicationProperties;
 

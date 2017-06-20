@@ -15,8 +15,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.example.myapp.login.entity.User;
 import com.example.myapp.login.helpers.UsersManager;
+import com.example.myapp.main.entity.User;
 import com.example.myapp.main.util.SessionBean;
 import com.sun.messaging.jmq.io.Status;
 

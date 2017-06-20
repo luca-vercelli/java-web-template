@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 
-import com.example.myapp.login.entity.User;
 import com.example.myapp.login.helpers.UsersManager;
+import com.example.myapp.main.entity.User;
 import com.example.myapp.main.util.ApplicationProperties;
 import com.example.myapp.main.util.SessionBean;
 
