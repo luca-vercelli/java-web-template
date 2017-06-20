@@ -16,17 +16,17 @@
 	<error-page>
 		<!-- Forbidden directory listing -->
 		<error-code>403</error-code>
-		<location>/ui/page_403.html</location>
+		<location>/ui/page_403.jsp</location>
 	</error-page>
 	<error-page>
 		<!-- Missing resource -->
 		<error-code>404</error-code>
-		<location>/ui/page_404.html</location>
+		<location>/ui/page_404.jsp</location>
 	</error-page>
 	<error-page>
 		<!-- Uncaught exception -->
 		<error-code>500</error-code>
-		<location>/ui/page_500.html</location>
+		<location>/ui/page_500.jsp</location>
 	</error-page>
 	
 </web-app>
