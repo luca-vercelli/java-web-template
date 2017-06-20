@@ -4,6 +4,8 @@ w.r.t. the original Gentelella 1.4, we did the following modifications:
 * menus moved to database
 * login page: remove Registration stuff
 * crud page
+* custom.js: handle "?" in menu urls (more or less)
+
 
 Following features lack in gentelella:
 * favicon

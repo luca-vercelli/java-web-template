@@ -117,10 +117,12 @@ $MENU_TOGGLE.on('click', function() {
 });
 
 	// check active menu
-	$SIDEBAR_MENU.find('a[href="' + CURRENT_URL + '"]').parent('li').addClass('current-page');
-
+	
+	// 2 lines modified for java-web-template
+	// $SIDEBAR_MENU.find('a[href="' + CURRENT_URL + '"]').parent('li').addClass('current-page');
+    // FIXME you shold not rely on urls for this...
 	$SIDEBAR_MENU.find('a').filter(function () {
-		return this.href == CURRENT_URL;
+		return this.href.split('#')[0].split('?')[0] == CURRENT_URL;
 	}).parent('li').addClass('current-page').parents('ul').slideDown(function() {
 		setContentHeight();
 	}).parent().addClass('active');
