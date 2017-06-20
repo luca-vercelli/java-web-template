@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -66,7 +67,7 @@ public class Grid {
 		this.description = description;
 	}
 
-	@OneToMany(mappedBy = "grid")
+	@OneToMany(mappedBy = "grid", fetch = FetchType.EAGER)
 	@XmlTransient // FIXME should not be
 	public List<GridColumn> getColumns() {
 		return columns;

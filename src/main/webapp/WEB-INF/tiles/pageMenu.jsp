@@ -1,4 +1,4 @@
-<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${sessionBean.language}" />
 <fmt:setBundle basename="global" />
@@ -6,7 +6,7 @@
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>Gentelella Alela!</span></a>
+              <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span><fmt:message key="application.title" /></span></a>
             </div>
 
             <div class="clearfix"></div>
@@ -66,17 +66,22 @@
             <!-- /sidebar menu -->
 
             <!-- /menu footer buttons -->
+            <fmt:message key="menu.settings" var="settings" />
+            <fmt:message key="menu.fullscreen" var="fullscreen" />
+            <fmt:message key="menu.lock" var="lock" />
+            <fmt:message key="menu.logout" var="logout" />
+            
             <div class="sidebar-footer hidden-small">
-              <a data-toggle="tooltip" data-placement="top" title="Settings">
+              <a data-toggle="tooltip" data-placement="top" title="${settings}">
                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
               </a>
-              <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+              <a data-toggle="tooltip" data-placement="top" title="${fullscreen}">
                 <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
               </a>
-              <a data-toggle="tooltip" data-placement="top" title="Lock">
+              <a data-toggle="tooltip" data-placement="top" title="${lock}">
                 <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
               </a>
-              <a data-toggle="tooltip" data-placement="top" title="Logout" href="doLogout">
+              <a data-toggle="tooltip" data-placement="top" title="${logout}" href="doLogout">
                 <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
               </a>
             </div>

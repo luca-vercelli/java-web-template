@@ -3,7 +3,7 @@
 * Luca Vercelli 2017
 * Released under GPLv3 
 */
-package com.example.myapp.crud;
+package com.example.myapp.crud.resources;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -28,6 +28,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.example.myapp.crud.GenericManager;
 import com.sun.messaging.jmq.io.Status;
 
 /**
@@ -47,8 +48,9 @@ import com.sun.messaging.jmq.io.Status;
 @Produces(MediaType.APPLICATION_JSON)
 public class GenericRestResources {
 
-	private static final Integer ZERO = 0;
-	private static final Integer DEFAULT_PAGESIZE = 20;
+	public static final Integer ZERO = 0;
+	//FIXME put in app properties?
+	public static final Integer DEFAULT_PAGESIZE = 20;
 
 	@Inject
 	GenericManager manager;
