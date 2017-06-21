@@ -13,6 +13,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 
 import com.example.myapp.crud.GenericManager;
@@ -102,6 +103,38 @@ public class GridResources {
 		GenericEntity<Object> genericList = new GenericEntity<Object>(entities, genericType);
 
 		return Response.ok(genericList).build();
+
+	}
+
+	/**
+	 * Export Grid to XLSX.
+	 * 
+	 * @param entity
+	 * @return
+	 */
+	@GET
+	@Path("{entity}/ExportXLSX")
+	public Response exportXLSX(@PathParam("entity") String entity) {
+
+		// FIXME duplicated code
+
+		Class<?> clazz = genericManager.getEntityClass(entity);
+		if (clazz == null)
+			return Response.status(Status.NOT_FOUND).build();
+
+		List<Grid> grids = genericManager.findByProperty(Grid.class, "entity", entity);
+
+		if (grids.isEmpty())
+			return Response.status(Status.NOT_FOUND).build();
+		// TODO create default grid
+
+		if (grids.size() > 1)
+			LOG.warn("More grids found for entity " + entity + ". This is not supported yet. We take the first one.");
+
+		XSSFWorkbook wb = gridManager.excel(grids.get(0));
+
+		//FIXME
+		return Response.ok(wb).build();
 
 	}
 
