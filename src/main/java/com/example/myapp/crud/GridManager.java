@@ -31,7 +31,7 @@ public class GridManager {
 	 * @param grid
 	 * @return
 	 */
-	public List<?> find(Grid grid) {
+	public List<Object[]> find(Grid grid) {
 
 		String query = "SELECT ";
 		String comma = "";
@@ -46,11 +46,35 @@ public class GridManager {
 
 		// TODO order by? filters?
 
-		List<?> items = em.createQuery(query).getResultList();
-		if (!items.isEmpty()) {
-			System.out.println("CLASS= " + items.get(0).getClass());
-		}
+		@SuppressWarnings("unchecked")
+		List<Object[]> items = em.createQuery(query).getResultList();
 		return items;
+	}
+
+	public List<Grid> findGridsForEntity(String entity) {
+		List<Grid> grids = genericManager.findByProperty(Grid.class, "entity", entity);
+		return grids;
+	}
+
+	/**
+	 * Create default Grid, if needed.
+	 * 
+	 * @param entity
+	 * @return
+	 */
+	public Grid createDefaultGrid(String entity) {
+		List<Grid> grids = findGridsForEntity(entity);
+		if (!grids.isEmpty())
+			return grids.get(0);
+		Grid grid = new Grid();
+		grid.setEntity(entity);
+		grid.setDescription(entity);
+
+		
+		// TODO load metadata...
+
+		grid = genericManager.save(grid);
+		return grid;
 	}
 
 	/**
@@ -62,7 +86,7 @@ public class GridManager {
 	 * @return
 	 */
 	public XSSFWorkbook excel(Grid grid) {
-		List<?> items = find(grid);
+		List<Object[]> items = find(grid);
 
 		XSSFWorkbook wb = new XSSFWorkbook();
 		XSSFSheet sheet = wb.createSheet();
