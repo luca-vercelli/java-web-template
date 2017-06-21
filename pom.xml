@@ -69,6 +69,13 @@
 			<version>1.9.3</version>
 		</dependency>
 
+		<!-- in/out Excel -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.11</version>
+		</dependency>
+		
 		<!-- GlassFish embedded web server -->
 		<dependency>
 			<groupId>org.glassfish.main.extras</groupId>
