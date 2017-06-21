@@ -28,7 +28,7 @@ function askForGridAndDataThenBuildDataTable() {
 		return askForDataThenBuildDataTable(gridData);
 	
 	$.ajax({
-		url: "../rest/" + entity + "/Grid",
+		url: "../rest/" + entity + "/GridMetaData",
 		type: "GET",
 		dataType : "json",
 		success: askForDataThenBuildDataTable,
@@ -45,7 +45,7 @@ function askForDataThenBuildDataTable(varGridData) {
 	gridData = varGridData;
 	
 	$.ajax({
-		url: "../rest/" + entity,
+		url: "../rest/" + entity + "/Grid",
 		type: "GET",
 		dataType : "json",
 		success: buildDataTable,
