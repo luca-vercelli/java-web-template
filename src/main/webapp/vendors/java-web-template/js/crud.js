@@ -63,7 +63,7 @@ function buildDataTable(data) {
 	var _columns = [];
 	for (var x in gridData) {
 		_columns.push({
-			'data': x.columnDefinition
+			'data': gridData[x].columnDefinition
 		});
 	}
 	
