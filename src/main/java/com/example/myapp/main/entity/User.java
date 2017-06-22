@@ -14,6 +14,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -33,10 +35,11 @@ import com.example.myapp.main.enums.BooleanYN;
  *
  */
 @Entity
-@Table(name = "APP_USERS")
+@Table(name = "APP_USER")
 @XmlRootElement
 public class User implements Principal {
 
+	private Long id;
 	private String username;
 	private String email;
 	private String encryptedPassword;
@@ -47,11 +50,21 @@ public class User implements Principal {
 
 	private Set<Role> roles = new HashSet<Role>();
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	/**
-	 * This is JAAS username, and also user's primary key.
+	 * This is JAAS username.
 	 */
 	@Override
-	@Id
 	@Column(name = "USERNAME", unique = true)
 	public String getName() {
 		return username;
@@ -61,7 +74,7 @@ public class User implements Principal {
 		this.username = username;
 	}
 
-	@Column(name = "EMAIL")
+	@Column(name = "EMAIL", unique = true)
 	public String getEmail() {
 		return this.email;
 	}
@@ -69,8 +82,6 @@ public class User implements Principal {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	// === OTHER IMPORTANT NON-KEY FIELDS ===============================
 
 	@Column(name = "ACTIVE")
 	@Enumerated(EnumType.ORDINAL)
@@ -122,7 +133,7 @@ public class User implements Principal {
 	}
 
 	@OneToMany
-	@JoinTable(name = "APP_USER_ROLES", joinColumns = @JoinColumn(name = "USERNAME"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+	@JoinTable(name = "APP_USER_ROLES", joinColumns = @JoinColumn(name = "USER_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
 	@XmlTransient
 	public Set<Role> getRoles() {
 		return roles;
