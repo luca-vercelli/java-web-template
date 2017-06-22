@@ -4,7 +4,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -75,17 +78,15 @@ public class GridResources {
 		if (grid == null)
 			Response.status(Status.NOT_FOUND).build();
 
-		List<?> entities = gridManager.find(grid);
+		List<Object[]> entities = gridManager.find(grid);
 
 		LOG.info("QUA entities=" + entities.size());
 
 		// ListType and GenericEntity are needed in order to handle generics
-		Type genericType = new ListType(genericManager.getEntityClass(entity));
+		Type genericType = new ListType(String.class);
 		GenericEntity<Object> genericList = new GenericEntity<Object>(entities, genericType);
 
-		LOG.info("QUA gen.entities=" + genericList + " type=" + genericType);
-
-		return Response.ok(genericList).build();
+		return Response.ok(genericList).build(); // TEST
 
 	}
 
@@ -142,9 +143,11 @@ public class GridResources {
 	@Path("test/test")
 	public Response test() {
 
-		genericManager.getEntityClass("sometthing");
-
-		return Response.ok().build();
+		Map test = new HashMap();
+		test.put("colonna1", "pippo");
+		test.put("colonna2", "pluto");
+		
+		return Response.ok(test).build();
 
 	}
 }
