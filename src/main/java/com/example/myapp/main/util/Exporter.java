@@ -3,7 +3,9 @@ package com.example.myapp.main.util;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 import javax.ejb.Stateless;
 
@@ -40,12 +42,15 @@ public class Exporter {
 			comma = ", ";
 		}
 
+		NumberFormat formatter = NumberFormat.getInstance(Locale.US);
+
 		for (Object[] item : rows) {
 			comma = "";
 			for (Object value : item) {
 
 				if (value instanceof Number) {
-					fw.write(comma + Double.toString(((Number) value).doubleValue()).replaceAll(",", "."));
+
+					fw.write(comma + formatter.format(value));
 				} else {
 					fw.write(comma + "\"" + value.toString() + "\"");
 				}
