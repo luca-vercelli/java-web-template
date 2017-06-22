@@ -48,8 +48,34 @@ public class GridManager {
 
 		@SuppressWarnings("unchecked")
 		List<Object[]> items = em.createQuery(query).getResultList();
-
+		
 		return items;
+	}
+
+	public List<Grid> findGridsForEntity(String entity) {
+		List<Grid> grids = genericManager.findByProperty(Grid.class, "entity", entity);
+		return grids;
+	}
+
+	/**
+	 * Create default Grid, if needed.
+	 * 
+	 * @param entity
+	 * @return
+	 */
+	public Grid createDefaultGrid(String entity) {
+		List<Grid> grids = findGridsForEntity(entity);
+		if (!grids.isEmpty())
+			return grids.get(0);
+		Grid grid = new Grid();
+		grid.setEntity(entity);
+		grid.setDescription(entity);
+
+		
+		// TODO load metadata...
+
+		grid = genericManager.save(grid);
+		return grid;
 	}
 
 	/**
