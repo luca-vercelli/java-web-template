@@ -160,9 +160,9 @@ public class UsersManager {
 	}
 
 	/**
-	 * Return an instance of given Menu whose submenus and subpages are all and
+	 * Return a <b>detached</b> instance of given Menu whose submenus and subpages are all and
 	 * only the ones that the user is allowed to. Return null if user is not
-	 * allowed at all. Please do not save the returned instance!!!
+	 * allowed at all. Please do not save this instance!!!
 	 * 
 	 * @param user
 	 * @return

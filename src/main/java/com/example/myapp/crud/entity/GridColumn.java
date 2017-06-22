@@ -23,10 +23,20 @@ import com.example.myapp.main.enums.BooleanYN;
 public class GridColumn {
 	private Long id;
 	private Grid grid;
-	private Integer order;
-	private String attributeName;
+	private Integer ordering;
+	private String columnDefinition;
 	private String description;
 	private BooleanYN readOnly;
+
+	public GridColumn() {
+	}
+
+	public GridColumn(String columnDefinition, String description, Integer order, BooleanYN readOnly) {
+		this.columnDefinition = columnDefinition;
+		this.description = description;
+		this.ordering = order;
+		this.readOnly = readOnly;
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,21 +60,21 @@ public class GridColumn {
 	}
 
 	@Column(name = "ORDERING") // "ORDER" not always allowed
-	public Integer getOrder() {
-		return order;
+	public Integer getOrdering() {
+		return ordering;
 	}
 
-	public void setOrder(Integer order) {
-		this.order = order;
+	public void setOrdering(Integer order) {
+		this.ordering = order;
 	}
 
-	@Column(name = "ATTR_NAME")
-	public String getAttributeName() {
-		return attributeName;
+	@Column(name = "COL_DEF")
+	public String getColumnDefinition() {
+		return columnDefinition;
 	}
 
-	public void setAttributeName(String attributeName) {
-		this.attributeName = attributeName;
+	public void setColumnDefinition(String columnDefinition) {
+		this.columnDefinition = columnDefinition;
 	}
 
 	@Column(name = "DESCRIPTION")

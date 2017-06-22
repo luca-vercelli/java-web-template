@@ -1,17 +1,21 @@
 package com.example.myapp.crud;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.metamodel.Attribute;
+import javax.persistence.metamodel.EntityType;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 
 import com.example.myapp.crud.entity.Grid;
 import com.example.myapp.crud.entity.GridColumn;
+import com.example.myapp.main.enums.BooleanYN;
 import com.example.myapp.main.util.Exporter;
 
 @Stateless
@@ -41,10 +45,10 @@ public class GridManager {
 		String query = "SELECT ";
 		String comma = "";
 		for (GridColumn c : grid.getColumns()) {
-			if (c.getOrder() == null)
+			if (c.getOrdering() == null)
 				continue; // not needed
 			query += comma;
-			query += c.getAttributeName();
+			query += c.getColumnDefinition();
 			comma = ",";
 		}
 		query += " FROM " + grid.getEntity();
@@ -66,7 +70,7 @@ public class GridManager {
 	 * Return a Grid for given entity, and create it if neededd.
 	 * 
 	 * @param entity
-	 * @return
+	 * @return null if entity does not exist
 	 */
 	public Grid getGrid(String entity) {
 
@@ -102,10 +106,29 @@ public class GridManager {
 		grid.setEntity(entity);
 		grid.setDescription(entity);
 
-		// TODO load metadata...
-
-		grid = genericManager.save(grid);
+		// guess there is a better solution
+		EntityType<?> et = getEntity(entity);
+		Set<?> attrs = et.getAttributes(); // FIXME should be
+											// Set<Attribute<?,?>> but gives
+											// error
+		int colnum = 0;
+		for (Object x : attrs) {
+			if (x instanceof Attribute) {
+				Attribute<?, ?> a = (Attribute<?, ?>) x;
+				grid.getColumns().add(new GridColumn(a.getName(), a.getName(), colnum++, BooleanYN.N));
+			}
+		}
+		grid = genericManager.save(grid); // FIXME check if columns are saved
 		return grid;
+	}
+
+	private EntityType<?> getEntity(String entity) {
+		for (EntityType<?> entityType : em.getMetamodel().getEntities()) {
+			if (entityType.getName().equals(entity)) {
+				return entityType;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -124,7 +147,7 @@ public class GridManager {
 		String[] headers = new String[grid.getColumns().size()];
 		int colnum = 0;
 		for (GridColumn gc : grid.getColumns()) {
-			if (gc.getOrder() == null)
+			if (gc.getOrdering() == null)
 				continue; // this means not needed in view
 			headers[colnum++] = gc.getDescription(); // TODO i18n
 		}

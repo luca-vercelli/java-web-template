@@ -103,4 +103,16 @@ public class GridResources {
 
 	}
 
+	/**
+	 * This is just a debug internal path
+	 */
+	@GET
+	@Path("test/test")
+	public Response test() {
+
+		genericManager.getEntityClass("sometthing");
+
+		return Response.ok().build();
+
+	}
 }

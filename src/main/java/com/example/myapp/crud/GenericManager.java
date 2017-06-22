@@ -12,12 +12,14 @@ import java.util.List;
 import java.util.Map;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.metamodel.EntityType;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
 
 /**
  * Not very different from EntityManager. Just a bit more.
@@ -32,6 +34,9 @@ public class GenericManager {
 	private EntityManager em;
 
 	private Map<String, Class<?>> entityCache = new HashMap<String, Class<?>>();
+
+	@Inject
+	Logger LOG;
 
 	/**
 	 * Return a managed entity Class, if any, or null if entity is not managed.
