@@ -11,8 +11,9 @@ $(document).ready(function(){
 	
 });
 
-function serverError(data) {
-	$.bootstrapGrowl("Error while contacting server: " + data, {
+function serverError(data, status) {
+
+	$.bootstrapGrowl("Error while contacting server: " + data.status+ " - "+ data.statusText, {
 		type : 'danger',
 		align : 'center',
 		width : 'auto'
@@ -28,7 +29,7 @@ function askForGridAndDataThenBuildDataTable() {
 		return askForDataThenBuildDataTable(gridData);
 	
 	$.ajax({
-		url: "../rest/" + entity + "/GridMetaData",
+		url: "../rest/" + entity + "/gridMetadata",
 		type: "GET",
 		dataType : "json",
 		success: askForDataThenBuildDataTable,
@@ -45,7 +46,7 @@ function askForDataThenBuildDataTable(varGridData) {
 	gridData = varGridData;
 	
 	$.ajax({
-		url: "../rest/" + entity + "/Grid",
+		url: "../rest/" + entity + "/grid",
 		type: "GET",
 		dataType : "json",
 		success: buildDataTable,
@@ -62,8 +63,7 @@ function buildDataTable(data) {
 	var _columns = [];
 	for (var x in gridData) {
 		_columns.push({
-			'data': x.attributeName
-			//FIXME così mi vincolo un po'
+			'data': x.columnDefinition
 		});
 	}
 	

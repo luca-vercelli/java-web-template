@@ -77,9 +77,13 @@ public class GridResources {
 
 		List<?> entities = gridManager.find(grid);
 
+		LOG.info("QUA entities=" + entities.size());
+
 		// ListType and GenericEntity are needed in order to handle generics
 		Type genericType = new ListType(genericManager.getEntityClass(entity));
 		GenericEntity<Object> genericList = new GenericEntity<Object>(entities, genericType);
+
+		LOG.info("QUA gen.entities=" + genericList + " type=" + genericType);
 
 		return Response.ok(genericList).build();
 
