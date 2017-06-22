@@ -46,7 +46,7 @@ function askForDataThenBuildDataTable(varGridData) {
 	gridData = varGridData;
 	
 	$.ajax({
-		url: "../rest/" + entity + "/grid",
+		url: "../rest/" + entity,
 		type: "GET",
 		dataType : "json",
 		success: buildDataTable,

@@ -68,6 +68,10 @@ public class GridColumn {
 		this.ordering = order;
 	}
 
+	/**
+	 * This formula must be understood both by HQL and Javascript...
+	 * @return
+	 */
 	@Column(name = "COL_DEF")
 	public String getColumnDefinition() {
 		return columnDefinition;
