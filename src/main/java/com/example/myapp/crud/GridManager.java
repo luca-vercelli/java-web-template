@@ -31,7 +31,7 @@ public class GridManager {
 	 * @param grid
 	 * @return
 	 */
-	public List<?> find(Grid grid) {
+	public List<Object[]> find(Grid grid) {
 
 		String query = "SELECT ";
 		String comma = "";
@@ -46,10 +46,9 @@ public class GridManager {
 
 		// TODO order by? filters?
 
-		List<?> items = em.createQuery(query).getResultList();
-		if (!items.isEmpty()) {
-			System.out.println("CLASS= " + items.get(0).getClass());
-		}
+		@SuppressWarnings("unchecked")
+		List<Object[]> items = em.createQuery(query).getResultList();
+
 		return items;
 	}
 
@@ -62,7 +61,7 @@ public class GridManager {
 	 * @return
 	 */
 	public XSSFWorkbook excel(Grid grid) {
-		List<?> items = find(grid);
+		List<Object[]> items = find(grid);
 
 		XSSFWorkbook wb = new XSSFWorkbook();
 		XSSFSheet sheet = wb.createSheet();
@@ -77,11 +76,17 @@ public class GridManager {
 			c.setCellValue(gc.getDescription()); // TODO i18n
 		}
 
-		for (Object item : items) {
+		for (Object[] item : items) {
 			colnum = 0;
 			for (GridColumn gc : grid.getColumns()) {
+				Object value = item[colnum];
 				Cell c = row.createCell(colnum++);
-				// c.setCellValue(item.method());
+				//FIXME many more types
+				if (value instanceof Number) {
+					c.setCellValue(((Number) value).doubleValue());
+				} else {
+					c.setCellValue(value.toString());
+				}
 			}
 		}
 
