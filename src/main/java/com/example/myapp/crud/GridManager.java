@@ -7,13 +7,12 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
 
 import com.example.myapp.crud.entity.Grid;
 import com.example.myapp.crud.entity.GridColumn;
-import org.apache.poi.ss.usermodel.Cell;
+import com.example.myapp.main.util.Exporter;
 
 @Stateless
 public class GridManager {
@@ -23,6 +22,12 @@ public class GridManager {
 
 	@Inject
 	GenericManager genericManager;
+
+	@Inject
+	Exporter exporter;
+
+	@Inject
+	Logger LOG;
 
 	/**
 	 * For a given grid (and entity), extract only the columns specified in the
@@ -48,7 +53,7 @@ public class GridManager {
 
 		@SuppressWarnings("unchecked")
 		List<Object[]> items = em.createQuery(query).getResultList();
-		
+
 		return items;
 	}
 
@@ -58,20 +63,45 @@ public class GridManager {
 	}
 
 	/**
-	 * Create default Grid, if needed.
+	 * Return a Grid for given entity, and create it if neededd.
 	 * 
 	 * @param entity
 	 * @return
 	 */
-	public Grid createDefaultGrid(String entity) {
-		List<Grid> grids = findGridsForEntity(entity);
-		if (!grids.isEmpty())
-			return grids.get(0);
+	public Grid getGrid(String entity) {
+
+		Class<?> clazz = genericManager.getEntityClass(entity);
+		if (clazz == null)
+			return null;
+
+		List<Grid> grids = genericManager.findByProperty(Grid.class, "entity", entity);
+
+		Grid grid = null;
+
+		if (grids.isEmpty())
+			grid = createDefaultGrid(entity);
+		else {
+			if (grids.size() > 1)
+				LOG.warn("More grids found for entity " + entity
+						+ ". This is not supported yet. We take the first one.");
+			grid = grids.get(0);
+		}
+
+		return grid;
+	}
+
+	/**
+	 * Create default Grid. There is no check if Grid already existed or not.
+	 * 
+	 * @param entity
+	 * @return
+	 */
+	protected Grid createDefaultGrid(String entity) {
+
 		Grid grid = new Grid();
 		grid.setEntity(entity);
 		grid.setDescription(entity);
 
-		
 		// TODO load metadata...
 
 		grid = genericManager.save(grid);
@@ -87,36 +117,19 @@ public class GridManager {
 	 * @return
 	 */
 	public XSSFWorkbook excel(Grid grid) {
+
 		List<Object[]> items = find(grid);
 
-		XSSFWorkbook wb = new XSSFWorkbook();
-		XSSFSheet sheet = wb.createSheet();
-		Row row = sheet.createRow(0);
-
+		// FIXME lambda?
+		String[] headers = new String[grid.getColumns().size()];
 		int colnum = 0;
 		for (GridColumn gc : grid.getColumns()) {
 			if (gc.getOrder() == null)
 				continue; // this means not needed in view
-			Cell c = row.createCell(colnum++);
-			// c.setCellStyle(arg0); //TODO
-			c.setCellValue(gc.getDescription()); // TODO i18n
+			headers[colnum++] = gc.getDescription(); // TODO i18n
 		}
 
-		for (Object[] item : items) {
-			colnum = 0;
-			for (GridColumn gc : grid.getColumns()) {
-				Object value = item[colnum];
-				Cell c = row.createCell(colnum++);
-				//FIXME many more types
-				if (value instanceof Number) {
-					c.setCellValue(((Number) value).doubleValue());
-				} else {
-					c.setCellValue(value.toString());
-				}
-			}
-		}
-
-		return wb;
+		return exporter.exportXLSX(headers, items);
 	}
 
 }

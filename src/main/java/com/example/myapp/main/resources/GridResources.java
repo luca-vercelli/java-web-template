@@ -38,28 +38,15 @@ public class GridResources {
 	Logger LOG;
 
 	@GET
-	@Path("{entity}/GridMetaData")
+	@Path("{entity}/gridMetadata")
 	public Response findMetaData(@PathParam("entity") String entity) {
 
 		// TODO better to return a Grid with all its columns, instead of a
 		// List<GridColumn>
 
-		Class<?> clazz = genericManager.getEntityClass(entity);
-		if (clazz == null)
-			return Response.status(Status.NOT_FOUND).build();
-
-		List<Grid> grids = gridManager.findGridsForEntity(entity);
-
-		Grid grid = null;
-
-		if (grids.isEmpty())
-			grid = gridManager.createDefaultGrid(entity);
-		else {
-			if (grids.size() > 1)
-				LOG.warn("More grids found for entity " + entity
-						+ ". This is not supported yet. We take the first one.");
-			grid = grids.get(0);
-		}
+		Grid grid = gridManager.getGrid(entity);
+		if (grid == null)
+			Response.status(Status.NOT_FOUND).build();
 
 		List<GridColumn> columns = grid.getColumns();
 
@@ -78,28 +65,17 @@ public class GridResources {
 	 * @return
 	 */
 	@GET
-	@Path("{entity}/Grid")
+	@Path("{entity}/grid")
 	public Response find(@PathParam("entity") String entity) {
 
-		// FIXME duplicated code
+		Grid grid = gridManager.getGrid(entity);
+		if (grid == null)
+			Response.status(Status.NOT_FOUND).build();
 
-		Class<?> clazz = genericManager.getEntityClass(entity);
-		if (clazz == null)
-			return Response.status(Status.NOT_FOUND).build();
-
-		List<Grid> grids = genericManager.findByProperty(Grid.class, "entity", entity);
-
-		if (grids.isEmpty())
-			return Response.status(Status.NOT_FOUND).build();
-		// TODO create default grid
-
-		if (grids.size() > 1)
-			LOG.warn("More grids found for entity " + entity + ". This is not supported yet. We take the first one.");
-
-		List<?> entities = gridManager.find(grids.get(0));
+		List<?> entities = gridManager.find(grid);
 
 		// ListType and GenericEntity are needed in order to handle generics
-		Type genericType = new ListType(clazz);
+		Type genericType = new ListType(genericManager.getEntityClass(entity));
 		GenericEntity<Object> genericList = new GenericEntity<Object>(entities, genericType);
 
 		return Response.ok(genericList).build();
@@ -113,27 +89,16 @@ public class GridResources {
 	 * @return
 	 */
 	@GET
-	@Path("{entity}/ExportXLSX")
+	@Path("{entity}/gridXLSX")
 	public Response exportXLSX(@PathParam("entity") String entity) {
 
-		// FIXME duplicated code
+		Grid grid = gridManager.getGrid(entity);
+		if (grid == null)
+			Response.status(Status.NOT_FOUND).build();
 
-		Class<?> clazz = genericManager.getEntityClass(entity);
-		if (clazz == null)
-			return Response.status(Status.NOT_FOUND).build();
+		XSSFWorkbook wb = gridManager.excel(grid);
 
-		List<Grid> grids = genericManager.findByProperty(Grid.class, "entity", entity);
-
-		if (grids.isEmpty())
-			return Response.status(Status.NOT_FOUND).build();
-		// TODO create default grid
-
-		if (grids.size() > 1)
-			LOG.warn("More grids found for entity " + entity + ". This is not supported yet. We take the first one.");
-
-		XSSFWorkbook wb = gridManager.excel(grids.get(0));
-
-		//FIXME
+		// FIXME
 		return Response.ok(wb).build();
 
 	}
