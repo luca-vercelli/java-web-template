@@ -67,9 +67,6 @@ function buildDataTable(data) {
 		});
 	}
 	
-	alert ("Here: " + _columns[0].data);
-	alert ("and: " + _columns[1].data);
-	
 	//FIXME dataTable i18n?
 	
 	$("#mainTable").DataTable( {
