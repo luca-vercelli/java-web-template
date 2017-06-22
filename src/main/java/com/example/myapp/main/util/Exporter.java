@@ -1,5 +1,8 @@
 package com.example.myapp.main.util;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -19,6 +22,43 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class Exporter {
 
 	/**
+	 * Simple and buggy export to a standard CSV file ("." as decimal separator,
+	 * "," as column delimiter, '"' as string delimiter)
+	 * 
+	 * @param headers
+	 * @param rows
+	 * @return
+	 * @throws IOException
+	 */
+	public File exportCSV(String[] headers, List<Object[]> rows) throws IOException {
+		File f = File.createTempFile("export", ".csv");
+		FileWriter fw = new FileWriter(f);
+
+		String comma = "";
+		for (String s : headers) {
+			fw.write(comma + "\"" + s + "\"");
+			comma = ", ";
+		}
+
+		for (Object[] item : rows) {
+			comma = "";
+			for (Object value : item) {
+
+				if (value instanceof Number) {
+					fw.write(comma + Double.toString(((Number) value).doubleValue()).replaceAll(",", "."));
+				} else {
+					fw.write(comma + "\"" + value.toString() + "\"");
+				}
+				comma = ", ";
+			}
+			fw.flush();
+		}
+
+		fw.close();
+		return f;
+	}
+
+	/**
 	 * Create a (currently very simple) XLSX workbook that contains given data.
 	 * 
 	 * @param headers
@@ -28,6 +68,8 @@ public class Exporter {
 	public XSSFWorkbook exportXLSX(String[] headers, List<Object[]> rows) {
 
 		// FIXME handle columns format
+
+		// FIXME better to save to a File?
 
 		XSSFWorkbook wb = new XSSFWorkbook();
 		Sheet sheet = wb.createSheet();

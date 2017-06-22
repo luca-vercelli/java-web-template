@@ -1,5 +1,8 @@
 package com.example.myapp.main.resources;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -87,20 +90,45 @@ public class GridResources {
 	 * 
 	 * @param entity
 	 * @return
+	 * @throws IOException
 	 */
 	@GET
 	@Path("{entity}/gridXLSX")
-	public Response exportXLSX(@PathParam("entity") String entity) {
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	public Response exportXLSX(@PathParam("entity") String entity) throws IOException {
 
 		Grid grid = gridManager.getGrid(entity);
 		if (grid == null)
 			Response.status(Status.NOT_FOUND).build();
 
-		XSSFWorkbook wb = gridManager.excel(grid);
+		XSSFWorkbook wb = gridManager.exportXLSX(grid);
+		ByteArrayOutputStream boas = new ByteArrayOutputStream();
+		wb.write(boas);
 
-		// FIXME
-		return Response.ok(wb).build();
+		return Response.ok(boas).header("Content-Disposition", "attachment; filename=\"Export-" + entity + ".xlsx\"")
+				.header("Set-Cookie", "fileDownload=true; path=/").build();
+	}
 
+	/**
+	 * Export Grid to CSV.
+	 * 
+	 * @param entity
+	 * @return
+	 * @throws IOException
+	 */
+	@GET
+	@Path("{entity}/gridCSV")
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	public Response exportCSV(@PathParam("entity") String entity) throws IOException {
+
+		Grid grid = gridManager.getGrid(entity);
+		if (grid == null)
+			Response.status(Status.NOT_FOUND).build();
+
+		File f = gridManager.exportCSV(grid);
+
+		return Response.ok(f).header("Content-Disposition", "attachment; filename=\"Export-" + entity + ".csv\"")
+				.header("Set-Cookie", "fileDownload=true; path=/").build();
 	}
 
 	/**

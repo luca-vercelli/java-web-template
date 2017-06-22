@@ -1,5 +1,7 @@
 package com.example.myapp.crud;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -134,12 +136,10 @@ public class GridManager {
 	/**
 	 * Export grid in XLSX format.
 	 * 
-	 * Similar routines could be implemented for XLS and CSV.
-	 * 
 	 * @param grid
 	 * @return
 	 */
-	public XSSFWorkbook excel(Grid grid) {
+	public XSSFWorkbook exportXLSX(Grid grid) {
 
 		List<Object[]> items = find(grid);
 
@@ -153,6 +153,29 @@ public class GridManager {
 		}
 
 		return exporter.exportXLSX(headers, items);
+	}
+
+	/**
+	 * Export grid in CSV format.
+	 * 
+	 * @param grid
+	 * @return
+	 * @throws IOException 
+	 */
+	public File exportCSV(Grid grid) throws IOException {
+
+		List<Object[]> items = find(grid);
+
+		// FIXME lambda?
+		String[] headers = new String[grid.getColumns().size()];
+		int colnum = 0;
+		for (GridColumn gc : grid.getColumns()) {
+			if (gc.getOrdering() == null)
+				continue; // this means not needed in view
+			headers[colnum++] = gc.getDescription(); // TODO i18n
+		}
+
+		return exporter.exportCSV(headers, items);
 	}
 
 }
