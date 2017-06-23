@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlTransient;
 
 import com.example.myapp.main.enums.BooleanYN;
 
@@ -51,6 +52,7 @@ public class GridColumn {
 
 	@ManyToOne
 	@JoinColumn(name = "GRID_ID", nullable = false)
+	@XmlTransient
 	public Grid getGrid() {
 		return grid;
 	}

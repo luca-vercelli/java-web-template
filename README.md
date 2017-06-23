@@ -7,7 +7,7 @@ Moreover we want to use "best practice"'s wherever possible.
 ## DISCLAIMER
 Modern applications should be plain HTML, with data loaded asincronously via Ajax. RESt, OData, JSON technologies should be used.
 So we consider Struts, Spring, JSF frameworks obsolete (tell me if and why not).
-JSP/JSTL may still be worth for some purposes (e.g. templating and translations).
+JSP/JSTL may still be worth for some purposes (e.g. templating and translations). Probably this is not true with Handlebars and/or Angular JS.
 
 Annotations should always be preferred to configuration files.
 

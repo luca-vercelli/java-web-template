@@ -63,7 +63,8 @@ function buildDataTable(data) {
 	var _columns = [];
 	for (var x in gridData) {
 		_columns.push({
-			'data': gridData[x].columnDefinition
+			data: gridData[x].columnDefinition,
+			title: gridData[x].columnDefinition //FIXME ...should decode...
 		});
 	}
 	
