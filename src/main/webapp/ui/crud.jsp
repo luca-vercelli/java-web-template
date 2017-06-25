@@ -9,6 +9,11 @@
 
 <t:template>
 
+	<!-- FIXME what about https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css 
+	and https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css?
+	 -->
+    <link href="../vendors/datatables.net-select/css/select.dataTables.min.css" rel="stylesheet">
+
           <div class="">
             <div class="page-title">
               <div class="title_left">
@@ -51,8 +56,10 @@
     
     <script>
      var entity = '${entity}';
-    </script>      
+    </script>
 	<script src="../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+	<script src="../vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+	<script src="../vendors/datatables.net-select/js/dataTables.select.min.js"></script>
 	<script src="../vendors/bootstrap-growl/js/bootstrap-growl.min.js"></script>
 	<script src="js/crud/crud.js"></script>
 	
