@@ -12,7 +12,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.EntityType;
 
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 
 import com.example.myapp.crud.entity.Grid;
@@ -136,10 +135,9 @@ public class GridManager {
 	/**
 	 * Export grid in XLSX format.
 	 * 
-	 * @param grid
-	 * @return
+	 * @param grid @return @throws IOException @throws
 	 */
-	public XSSFWorkbook exportXLSX(Grid grid) {
+	public File exportXLSX(Grid grid) throws IOException {
 
 		List<Object[]> items = find(grid);
 
@@ -160,7 +158,7 @@ public class GridManager {
 	 * 
 	 * @param grid
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public File exportCSV(Grid grid) throws IOException {
 

@@ -1,10 +1,8 @@
 package com.example.myapp.main.resources;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +16,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 
 import com.example.myapp.crud.GenericManager;
@@ -106,11 +102,9 @@ public class GridResources {
 		if (grid == null)
 			Response.status(Status.NOT_FOUND).build();
 
-		XSSFWorkbook wb = gridManager.exportXLSX(grid);
-		ByteArrayOutputStream boas = new ByteArrayOutputStream();
-		wb.write(boas);
+		File f = gridManager.exportXLSX(grid);
 
-		return Response.ok(boas).header("Content-Disposition", "attachment; filename=\"Export-" + entity + ".xlsx\"")
+		return Response.ok(f).header("Content-Disposition", "attachment; filename=\"Export-" + entity + ".xlsx\"")
 				.header("Set-Cookie", "fileDownload=true; path=/").build();
 	}
 
@@ -139,14 +133,16 @@ public class GridResources {
 	/**
 	 * This is just a debug internal path
 	 */
+	@SuppressWarnings("unchecked")
 	@GET
 	@Path("test/test")
 	public Response test() {
 
+		@SuppressWarnings("rawtypes")
 		Map test = new HashMap();
 		test.put("colonna1", "pippo");
 		test.put("colonna2", "pluto");
-		
+
 		return Response.ok(test).build();
 
 	}

@@ -1,6 +1,7 @@
 package com.example.myapp.main.util;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.NumberFormat;
@@ -12,6 +13,7 @@ import javax.ejb.Stateless;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -69,12 +71,14 @@ public class Exporter {
 	 * @param headers
 	 * @param rows
 	 * @return
+	 * @throws IOException
+	 * @throws InvalidFormatException
 	 */
-	public XSSFWorkbook exportXLSX(String[] headers, List<Object[]> rows) {
+	public File exportXLSX(String[] headers, List<Object[]> rows) throws IOException {
 
 		// FIXME handle columns format
 
-		// FIXME better to save to a File?
+		File f = File.createTempFile("export", ".xlsx");
 
 		XSSFWorkbook wb = new XSSFWorkbook();
 		Sheet sheet = wb.createSheet();
@@ -89,20 +93,28 @@ public class Exporter {
 			c.setCellValue(s);
 		}
 
+		int rownum = 1;
 		for (Object[] item : rows) {
+			row = sheet.createRow(rownum);
 			colnum = 0;
 			for (Object value : item) {
-				Cell c = row.createCell(colnum++);
+				Cell c = row.createCell(colnum);
 				// FIXME many more types
 				if (value instanceof Number) {
 					c.setCellValue(((Number) value).doubleValue());
 				} else {
 					c.setCellValue(value.toString());
 				}
+				++colnum;
 			}
+			++rownum;
 		}
 
-		return wb;
+		FileOutputStream fileOut = new FileOutputStream(f.getAbsolutePath());
+		wb.write(fileOut);
+		fileOut.close();
+
+		return f;
 
 	}
 

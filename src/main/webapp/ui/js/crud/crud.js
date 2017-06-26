@@ -93,9 +93,9 @@ function PageData(entity) {
 		
 		//FIXME dataTable i18n?
 		
+		var myself = this;
 		
 	    $("#mainTable").DataTable( {
-			data: data,
 			// order: [[ 0, "desc" ]],
 	        // TODO 
 			ajax: {
@@ -127,10 +127,36 @@ function PageData(entity) {
 	            }
 	        },
 	        select: true,
+	        dom: 'Bfrtip',
 	        buttons: [
-	            { extend: "create" },
-	            { extend: "edit" },
-	            { extend: "remove" }
+				{
+					text : 'New',
+					className : 'button',
+					action : function() {
+						myself.newRow();
+					}
+				},
+				{
+					text : 'Edit',
+					className : 'button',
+					action : function(x) {
+						myself.editRow(x);
+					}
+				},
+				{
+					text : 'Delete',
+					className : 'button',
+					action : function(x) {
+						myself.deleteRow(x);
+					}
+				},
+				{
+					text : 'XLS',
+					className : 'button',
+					action : function() {
+						myself.exportXls();
+					}
+				}
 	        ],
 			columns: this._columns
 		});
@@ -160,6 +186,30 @@ function PageData(entity) {
 
 	};
 
+	/**
+	* Crud implementation
+	*/ 
+	this.newRow = function() {
+		alert("Not implemented yet!");
+	}
+
+	/**
+	* Crud implementation
+	*/ 
+	this.editRow = function(x) {
+		alert("Not implemented yet!");
+	}
+
+	/**
+	* Crud implementation
+	*/ 
+	this.deleteRow = function(x) {
+		alert("Not implemented yet!");
+	}
+
+	this.exportXls = function() {
+		window.open("../rest/" + entity + "/gridXLSX");
+	}
 }
 
 function inspect(obj) {
