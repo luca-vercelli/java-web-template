@@ -44,7 +44,7 @@ function PageData(entity) {
 
 		var _columns = [];
 		for (var x in gridData) {
-			this._columns.push({
+			_columns.push({
 				data: gridData[x].columnDefinition,
 				title: gridData[x].columnDefinition //FIXME ...should decode...
 			});
@@ -59,7 +59,7 @@ function PageData(entity) {
 
 		var _form_fields = [];
 		for (var x in gridData) {
-			this._form_fields.push({
+			_form_fields.push({
 				label: gridData[x].columnDefinition,
 				name: gridData[x].columnDefinition //FIXME ...should decode...
 			});
@@ -71,11 +71,6 @@ function PageData(entity) {
 	 * Ask server for data, then call buildDataTable()
 	 */
 	this.askForDataThenBuildDataTable = function(gridData) {
-
-		var s = "NOW ";
-		for (var i in this)
-			s += i+":"+this[i]+"\r\n";
-		alert(s);
 		
 		this._gridData = gridData;
 		this._columns = this.createColumns(gridData);
@@ -87,71 +82,26 @@ function PageData(entity) {
 //	        fields: this._form_fields
 //	    } );
 		
-//		buildDataTable();
-		
-		var myself = this;
-		
-		$.ajax({
-			url: "../rest/" + entity,
-			type: "GET",
-			dataType : "json",
-			success: function() {
-				myself.buildDataTable();
-			},
-			error: function() {
-				myself.serverError();
-			} 
-		});
+		this.buildDataTable();
 
 	};
 
 	/**
-	 * Build datatable using data from 'data' and columns from 'gridData'
+	 * Build a DataTable with 'ajax' option, select, buttons
 	 */
-	this.buildDataTable = function(data) {
+	this.buildDataTable = function() {
 		
 		//FIXME dataTable i18n?
 		
-//	    $('#mainTable').DataTable( {
-//	        dom: "Bfrtip",  //FIXME comment this ????
-//        ajax: "../rest/" + this.entity,
-//	        columns: this._columns,
-//	        select: true,
-//	        buttons: [
-//	            { extend: "create", editor: this.editor },
-//	            { extend: "edit",   editor: this.editor },
-//	            { extend: "remove", editor: this.editor }
-//	        ],
-//	        language: {
-//	        	decimal: ",",
-//	            sEmptyTable:     "Nessun dato presente nella tabella",
-//	            sInfo:           "Vista da _START_ a _END_ di _TOTAL_ elementi",
-//	            sInfoEmpty:      "Vista da 0 a 0 di 0 elementi",
-//	            sInfoFiltered:   "(filtrati da _MAX_ elementi totali)",
-//	            sInfoPostFix:    "",
-//	            sInfoThousands:  ".",
-//	            sLengthMenu:     "Visualizza _MENU_ elementi",
-//	            sLoadingRecords: "Caricamento...",
-//	            sProcessing:     "Elaborazione...",
-//	            sSearch:         "Cerca:",
-//	            sZeroRecords:    "La ricerca non ha portato alcun risultato.",
-//	            oPaginate: {
-//	                sFirst:      "Inizio",
-//	                sPrevious:   "Precedente",
-//	                sNext:       "Successivo",
-//	                sLast:       "Fine"
-//	            },
-//	            oAria: {
-//	                sSortAscending:  ": attiva per ordinare la colonna in ordine crescente",
-//	                sSortDescending: ": attiva per ordinare la colonna in ordine decrescente"
-//	            }
-//	        }
-//	    } );
-	    
+		
 	    $("#mainTable").DataTable( {
 			data: data,
 			// order: [[ 0, "desc" ]],
-	        // TODO ajax: "../rest/" + this.entity,
+	        // TODO 
+			ajax: {
+				url: "../rest/" + this.entity,
+				dataSrc: ""
+			},
 	        language: {
 	        	decimal: ",",
 	            sEmptyTable:     "Nessun dato presente nella tabella",
@@ -176,6 +126,12 @@ function PageData(entity) {
 	                sSortDescending: ": attiva per ordinare la colonna in ordine decrescente"
 	            }
 	        },
+	        select: true,
+	        buttons: [
+	            { extend: "create" },
+	            { extend: "edit" },
+	            { extend: "remove" }
+	        ],
 			columns: this._columns
 		});
 	};
@@ -194,11 +150,11 @@ function PageData(entity) {
 			url: "../rest/" + entity + "/gridMetadata",
 			type: "GET",
 			dataType : "json",
-			success: function() {
-				myself.askForDataThenBuildDataTable();	
+			success: function(data) {
+				myself.askForDataThenBuildDataTable(data);	
 			},
-			error: function() {
-				myself.serverError();
+			error: function(data) {
+				myself.serverError(data);
 			}
 		});
 
