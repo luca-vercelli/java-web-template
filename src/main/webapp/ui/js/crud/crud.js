@@ -12,18 +12,21 @@ var pageData = null;
 
 $(document).ready(function(){
 	
-	pageData = new PageData(entity);
+	pageData = new PageData(entity, '#mainTable', '#modalDialog');
 	pageData.askForGridAndDataThenBuildDataTable();
 	
 });
 
-function PageData(entity) {
+function PageData(entity, tableSelector, modalDialogSelector) {
 	
 	this.entity = entity;
-	this.editor = null
+	this.tableSelector = tableSelector;
+	this.modalDialogSelector = modalDialogSelector;
+	this.datatable = null;
 	this._gridData = null;
 	this._columns = null;
 	this._form_fields = null;
+	this.modalWindow = null;
 
 	/**
 	 * Output an error message
@@ -69,21 +72,38 @@ function PageData(entity) {
 	};
 
 	/**
+	 * Create and return a modal window containing editable controls
+	 */
+	this.createModalWindow = function(form_fields) {
+		
+		$(this.modalDialogSelector).hide();
+		
+		var dt = null;
+
+		//TODO
+		
+/*		dt = $(this.modalDialogSelector).DataTable({
+			data: form_fields,
+			columns: [
+				{data: 'label' },
+				{data: 'name' }
+			]
+		}); */
+		
+		return dt;
+	};
+
+	/**
 	 * Ask server for data, then call buildDataTable()
 	 */
 	this.askForDataThenBuildDataTable = function(gridData) {
 		
 		this._gridData = gridData;
 		this._columns = this.createColumns(gridData);
-		this._form_fields = this.createFormFields(gridData);
-
-//		this.editor = new $.fn.dataTable.Editor({
-//	        ajax: "../rest/" + this.entity,
-//	        table: "#example",
-//	        fields: this._form_fields
-//	    } );
-		
 		this.buildDataTable();
+
+		this._form_fields = this.createFormFields(gridData);
+		this.modalWindow = this.createModalWindow(this._form_fields);
 
 	};
 
@@ -96,7 +116,7 @@ function PageData(entity) {
 		
 		var myself = this;
 		
-	    $("#mainTable").DataTable( {
+	    this.datatable = $(this.tableSelector).DataTable( {
 			// order: [[ 0, "desc" ]],
 	        // TODO 
 			ajax: {
@@ -158,7 +178,7 @@ function PageData(entity) {
 			type: "GET",
 			dataType : "json",
 			success: function(data) {
-				myself.askForDataThenBuildDataTable(data);	
+				myself.askForDataThenBuildDataTable(data)
 			},
 			error: function(data) {
 				myself.serverError(data);
@@ -172,25 +192,55 @@ function PageData(entity) {
 	*/ 
 	this.newRow = function() {
 		alert("Not implemented yet!");
-	}
+		$(this.modalDialogSelector).show();
+	};
 
 	/**
 	* Crud implementation
 	*/ 
-	this.editRow = function(x) {
+	this.editRow = function() {
 		alert("Not implemented yet!");
-	}
+		$(this.modalDialogSelector).show();
+	};
+
+	/**
+	* Crud implementation
+	*/ 
+	this.copyRow = function() {
+		alert("Not implemented yet!");
+		$(this.modalDialogSelector).show();
+	};
 
 	/**
 	* Crud implementation
 	*/ 
 	this.deleteRow = function(x) {
-		alert("Not implemented yet!");
-	}
+		//delete of each one selected rows
+		var myself = this;
+		var rows = this.datatable.rows( { selected: true } );
+		
+		alert(rows.count());
+		
+		if (rows.count() == 0) {
+			alert ('No rows selected.');
+		} else {
+			rows.every( function( rowIdx, tableLoop, rowLoop ) {
+				var data = this.data();
+				$.ajax({
+				    url: "../rest/" + entity + "(" + data.id  +")",
+				    type: 'DELETE',
+				    success: myself.datatable.ajax.reload,
+				    error: myself.serverError,
+				    data: null,
+				    contentType: 'json'
+				  });
+			});
+		}
+	};
 
 	this.exportXls = function() {
 		window.open("../rest/" + entity + "/gridXLSX");
-	}
+	};
 }
 
 function inspect(obj) {

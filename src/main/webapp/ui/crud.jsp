@@ -63,4 +63,5 @@
 	<script src="../vendors/bootstrap-growl/js/bootstrap-growl.min.js"></script>
 	<script src="js/crud/crud.js"></script>
 	
+	<div id="modalDialog"></div>
 </t:template>
