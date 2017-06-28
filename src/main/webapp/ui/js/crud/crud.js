@@ -71,8 +71,7 @@ function PageData(entity, tableSelector, modalDialogSelector) {
 		
 	    this.datatable = $(this.tableSelector).DataTable( {
 			// order: [[ 0, "desc" ]],
-	        // TODO
-			ajax: {
+	        ajax: {
 				url: "../rest/" + this.entity,
 				dataSrc: ""
 			},

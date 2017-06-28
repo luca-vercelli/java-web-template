@@ -259,14 +259,19 @@
             selected: true
           });
 
-
+          // AJAX edit
+ 		  var useAjax = (dt.ajax && dt.ajax.url());
+ 		 
           var data = "";
 
           data += "<form name='altEditor-form' role='form'>";
 
           for (var j in columnDefs) {
-            data += "<div class='form-group'><div class='col-sm-3 col-md-3 col-lg-3 text-right' style='padding-top:7px;'><label for='" + columnDefs[j].title + "'>" + columnDefs[j].title + ":</label></div><div class='col-sm-9 col-md-9 col-lg-9'><input type='text'  id='" + columnDefs[j].title + "' name='" + columnDefs[j].title + "' placeholder='" + columnDefs[j].title + "' style='overflow:hidden'  class='form-control  form-control-sm' value='" + adata.data()[0][j] + "'></div><div style='clear:both;'></div></div>";
-
+        	  if (useAjax) {
+                  data += "<div class='form-group'><div class='col-sm-3 col-md-3 col-lg-3 text-right' style='padding-top:7px;'><label for='" + columnDefs[j].title + "'>" + columnDefs[j].title + ":</label></div><div class='col-sm-9 col-md-9 col-lg-9'><input type='text'  id='" + columnDefs[j].title + "' name='" + columnDefs[j].title + "' placeholder='" + columnDefs[j].title + "' style='overflow:hidden'  class='form-control  form-control-sm' value='" + adata.data()[0][columnDefs[j].title] + "'></div><div style='clear:both;'></div></div>";
+        	  } else {
+                  data += "<div class='form-group'><div class='col-sm-3 col-md-3 col-lg-3 text-right' style='padding-top:7px;'><label for='" + columnDefs[j].title + "'>" + columnDefs[j].title + ":</label></div><div class='col-sm-9 col-md-9 col-lg-9'><input type='text'  id='" + columnDefs[j].title + "' name='" + columnDefs[j].title + "' placeholder='" + columnDefs[j].title + "' style='overflow:hidden'  class='form-control  form-control-sm' value='" + adata.data()[0][j] + "'></div><div style='clear:both;'></div></div>";
+        	  }
           }
           data += "</form>";
 
@@ -290,10 +295,17 @@
 
          var data = [];
 
+         // AJAX edit
+		  var useAjax = (dt.ajax && dt.ajax.url());
+		  
          $('form[name="altEditor-form"] input').each(function( i )
          {
-            data.push( $(this).val() );
-         });        
+  			if (useAjax) {
+				data[$(this).attr('id')] = $(this).val();
+			} else {
+                data.push( $(this).val() );
+			}
+  		 });        
 
          $('#altEditor-modal .modal-body .alert').remove();
 
@@ -301,9 +313,31 @@
              <strong>Success!</strong> This record has been updated.\
            </div>';
 
-           $('#altEditor-modal .modal-body').append(message);
+         var message_err = '<div class="alert" role="alert">\
+             <strong>Error.</strong> Cannot update record.\
+           </div>';
 
-           dt.row({ selected:true }).data(data);
+           var row = dt.row({ selected:true });
+           
+           if (useAjax) {
+				$.ajax({
+				    url: '' + dt.ajax.url() + "(" + row.data().id  +")",
+				    type: 'PUT',
+				    success: function() {
+			        	 row.data(data);
+				         $('#altEditor-modal .modal-body').append(message);
+				    },
+				    error: function() {
+				         $('#altEditor-modal .modal-body').append(message_err);
+				    },
+				    data: row.data(),
+				    contentType: 'json'
+				  });
+        } else {
+        	 row.data(data);
+	         $('#altEditor-modal .modal-body').append(message);      	 
+        }
+           
        },
 
 
@@ -329,11 +363,18 @@
           });
 
           var data = "";
+          
+          // AJAX edit
+ 		 var useAjax = (dt.ajax && dt.ajax.url());
 
           data += "<form name='altEditor-form' role='form'>";
           for (var i in columnDefs) {
-
-            data += "<div class='form-group'><label for='" + columnDefs[i].title + "'>" + columnDefs[i].title + " : </label><input  type='hidden'  id='" + columnDefs[i].title + "' name='" + columnDefs[i].title + "' placeholder='" + columnDefs[i].title + "' style='overflow:hidden'  class='form-control' value='" + adata.data()[0][i] + "' >" + adata.data()[0][i] + "</input></div>";
+        	  
+        	  if (useAjax) {
+                  data += "<div class='form-group'><label for='" + columnDefs[i].title + "'>" + columnDefs[i].title + " : </label><input  type='hidden'  id='" + columnDefs[i].title + "' name='" + columnDefs[i].title + "' placeholder='" + columnDefs[i].title + "' style='overflow:hidden'  class='form-control' value='" + adata.data()[0][columnDefs[i].title] + "' >" + adata.data()[0][columnDefs[i].title] + "</input></div>";
+        	  } else {
+                  data += "<div class='form-group'><label for='" + columnDefs[i].title + "'>" + columnDefs[i].title + " : </label><input  type='hidden'  id='" + columnDefs[i].title + "' name='" + columnDefs[i].title + "' placeholder='" + columnDefs[i].title + "' style='overflow:hidden'  class='form-control' value='" + adata.data()[0][i] + "' >" + adata.data()[0][i] + "</input></div>";
+        	  }
  
           }
           data += "</form>";
@@ -361,11 +402,37 @@
            <strong>Success!</strong> This record has been deleted.\
          </div>';
 
-         $('#altEditor-modal .modal-body').append(message);
+         var message_err = '<div class="alert" role="alert">\
+           <strong>Error</strong> Cannot delete the record.\
+         </div>';
          
-         dt.row({ selected:true }).remove();
+         var row = dt.row({ selected:true });
+         
+         // AJAX edit
+		 var useAjax = (dt.ajax && dt.ajax.url());
+         
+         if (useAjax) {
+				$.ajax({
+				    url: '' + dt.ajax.url() + "(" + row.data().id  +")",
+				    type: 'DELETE',
+				    success: function() {
+				         row.remove();
+				         dt.draw();
+				         $('#altEditor-modal .modal-body').append(message);
+				    },
+				    error: function() {
+				         $('#altEditor-modal .modal-body').append(message_err);
+				    },
+				    //error: myself.serverError,
+				    data: null,
+				    contentType: 'json'
+				  });
+         } else {
+	         row.remove();
+	         dt.draw();
+	         $('#altEditor-modal .modal-body').append(message);      	 
+         }
 
-         dt.draw();
 
        },
 
@@ -415,24 +482,49 @@
         console.log('add row')
          var that = this;
          var dt = this.s.dt;
+		 
+         // AJAX edit
+		 var useAjax = (dt.ajax && dt.ajax.url());
 
          var data = [];
 
          $('form[name="altEditor-form"] input').each(function( i )
          {
-            data.push( $(this).val() );
+ 			if (useAjax) {
+				data[$(this).attr('id')] = $(this).val();
+			} else {
+                data.push( $(this).val() );
+			}
          });     
 
          $('#altEditor-modal .modal-body .alert').remove();
 
          var message = '<div class="alert alert-success" role="alert">\
-           <strong>Success!</strong> This record has been added.\
-         </div>';
+             <strong>Success!</strong> This record has been added.\
+           </div>';
 
-         $('#altEditor-modal .modal-body').append(message);
+         var message_err = '<div class="alert" role="alert">\
+             <strong>Error.</strong> Cannot add record.\
+           </div>';
 
-         dt.row.add(data).draw(false);
-
+           if (useAjax) {
+				$.ajax({
+				    url: '' + dt.ajax.url(),
+				    type: 'PUT',
+				    success: function(newdata) {
+				    	 dt.row.add(newdata).draw(false);
+				         $('#altEditor-modal .modal-body').append(message);
+				    },
+				    error: function() {
+				         $('#altEditor-modal .modal-body').append(message_err);
+				    },
+				    data: row.data(),
+				    contentType: 'json'
+				  });
+         } else {
+    	  	 dt.row.add(data).draw(false);
+	         $('#altEditor-modal .modal-body').append(message);      	 
+         }
        },
 
        _getExecutionLocationFolder: function() {
