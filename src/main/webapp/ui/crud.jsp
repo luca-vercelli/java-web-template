@@ -9,10 +9,11 @@
 
 <t:template>
 
-	<!-- FIXME what about https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css 
-	and https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css?
-	 -->
-    <link href="../vendors/datatables.net-select/css/select.dataTables.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css"/>
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.dataTables.min.css"/>
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.1.2/css/select.dataTables.min.css"/>
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.0.2/css/responsive.dataTables.min.css"/>
 
           <div class="">
             <div class="page-title">
@@ -53,15 +54,20 @@
               </div>
             </div>
           </div>
+
+	<div id="modalDialog"></div>
     
     <script>
      var entity = '${entity}';
     </script>
-	<script src="../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-	<script src="../vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-	<script src="../vendors/datatables.net-select/js/dataTables.select.min.js"></script>
-	<script src="../vendors/bootstrap-growl/js/bootstrap-growl.min.js"></script>
+    
+	<script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.1.2/js/dataTables.buttons.min.js"></script>
+	<script src="https://cdn.datatables.net/select/1.1.2/js/dataTables.select.min.js"></script>
+	<script src="https://cdn.datatables.net/responsive/2.0.2/js/dataTables.responsive.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js"></script>
+	
+	<script src="js/altEditor/dataTables.altEditor.free.js"></script>
 	<script src="js/crud/crud.js"></script>
 	
-	<div id="modalDialog"></div>
 </t:template>

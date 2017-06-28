@@ -36,6 +36,7 @@ Technologies:
 * connection pool: commons DBCP? C3PO?
 * logging: sl4j + log4j
 * Gentelella 1.4 frontend (jquery 3 + bootstrap 3)
+* Crud: "free datatables editor alternative" from http://kingkode.com/free-datatables-editor-alternative/
 * testing: junit 4
 * javax.emails
 * JAAS ? Java EE security? (up to Java EE 8 that's bad)

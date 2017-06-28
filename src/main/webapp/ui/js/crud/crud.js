@@ -1,7 +1,5 @@
 /**
- *  WebTemplate 1.0
- *  Luca Vercelli 2017
- *  Released under GPLv3 
+ * WebTemplate 1.0 Luca Vercelli 2017 Released under GPLv3
  */
 
 // the global var 'entity' must have been set in main page
@@ -49,7 +47,7 @@ function PageData(entity, tableSelector, modalDialogSelector) {
 		for (var x in gridData) {
 			_columns.push({
 				data: gridData[x].columnDefinition,
-				title: gridData[x].columnDefinition //FIXME ...should decode...
+				title: gridData[x].columnDefinition // FIXME ...should decode...
 			});
 		}
 		return _columns;
@@ -65,7 +63,7 @@ function PageData(entity, tableSelector, modalDialogSelector) {
 			if (!gridData[x].readOnly)
 			_form_fields.push({
 				label: gridData[x].columnDefinition,
-				name: gridData[x].columnDefinition //FIXME ...should decode...
+				name: gridData[x].columnDefinition // FIXME ...should decode...
 			});
 		}
 		return _form_fields;
@@ -80,15 +78,12 @@ function PageData(entity, tableSelector, modalDialogSelector) {
 		
 		var dt = null;
 
-		//TODO
+		// TODO
 		
-/*		dt = $(this.modalDialogSelector).DataTable({
-			data: form_fields,
-			columns: [
-				{data: 'label' },
-				{data: 'name' }
-			]
-		}); */
+/*
+ * dt = $(this.modalDialogSelector).DataTable({ data: form_fields, columns: [
+ * {data: 'label' }, {data: 'name' } ] });
+ */
 		
 		return dt;
 	};
@@ -103,7 +98,7 @@ function PageData(entity, tableSelector, modalDialogSelector) {
 		this.buildDataTable();
 
 		this._form_fields = this.createFormFields(gridData);
-		this.modalWindow = this.createModalWindow(this._form_fields);
+		//this.modalWindow = this.createModalWindow(this._form_fields);
 
 	};
 
@@ -112,59 +107,76 @@ function PageData(entity, tableSelector, modalDialogSelector) {
 	 */
 	this.buildDataTable = function() {
 		
-		//FIXME dataTable i18n?
-		
 		var myself = this;
 		
 	    this.datatable = $(this.tableSelector).DataTable( {
 			// order: [[ 0, "desc" ]],
-	        // TODO 
+	        // TODO
 			ajax: {
 				url: "../rest/" + this.entity,
 				dataSrc: ""
 			},
+			columns: this._columns,
 	        language: {
-	        	url : 'language/datatables_it.json',
+	        	url : 'language/datatables_it.json', // FIXME i18n
 	        	dataType: 'json'
 	        },
 	        select: true,
-	        dom: 'Bfrtip',
+	        dom: 'Bfrtip', // buttons position
+	        select: 'single',
+	        responsive: true,
+	        altEditor: true,     // Enable altEditor
 	        buttons: [
-				{
-					text : 'New',
-					className : 'button',
-					action : function() {
-						myself.newRow();
-					}
-				},
-				{
-					text : 'Edit',
-					className : 'button',
-					action : function(x) {
-						myself.editRow(x);
-					}
-				},
-				{
-					text : 'Delete',
-					className : 'button',
-					action : function(x) {
-						myself.deleteRow(x);
-					}
-				},
-				{
-					text : 'XLS',
-					className : 'button',
-					action : function() {
-						myself.exportXls();
-					}
+	        	{
+	            text: 'Add',
+	            name: 'add'        // do not change name
+	          },
+	          {
+	            extend: 'selected', // Bind to Selected row
+	            text: 'Edit',
+	            name: 'edit'        // do not change name
+	          },
+	          {
+	            extend: 'selected', // Bind to Selected row
+	            text: 'Delete',
+	            name: 'delete'      // do not change name
+	         }]
+	        /*	        buttons: [
+			{
+				text : 'New',
+				className : 'button',
+				action : function() {
+					myself.newRow();
 				}
-	        ],
-			columns: this._columns
+			},
+			{
+				text : 'Edit',
+				className : 'button',
+				action : function(x) {
+					myself.editRow(x);
+				}
+			},
+			{
+				text : 'Delete',
+				className : 'button',
+				action : function(x) {
+					myself.deleteRow(x);
+				}
+			},
+			{
+				text : 'XLS',
+				className : 'button',
+				action : function() {
+					myself.exportXls();
+				}
+			}
+        ]*/
 		});
 	};
 
 	/**
-	 * Ask server for grid data, if needed, then call askForDataThenBuildDataTable()
+	 * Ask server for grid data, if needed, then call
+	 * askForDataThenBuildDataTable()
 	 */
 	this.askForGridAndDataThenBuildDataTable = function() {
 		
@@ -188,34 +200,34 @@ function PageData(entity, tableSelector, modalDialogSelector) {
 	};
 
 	/**
-	* Crud implementation
-	*/ 
+	 * Crud implementation
+	 */ 
 	this.newRow = function() {
 		alert("Not implemented yet!");
 		$(this.modalDialogSelector).show();
 	};
 
 	/**
-	* Crud implementation
-	*/ 
+	 * Crud implementation
+	 */ 
 	this.editRow = function() {
 		alert("Not implemented yet!");
 		$(this.modalDialogSelector).show();
 	};
 
 	/**
-	* Crud implementation
-	*/ 
+	 * Crud implementation
+	 */ 
 	this.copyRow = function() {
 		alert("Not implemented yet!");
 		$(this.modalDialogSelector).show();
 	};
 
 	/**
-	* Crud implementation
-	*/ 
+	 * Crud implementation
+	 */ 
 	this.deleteRow = function(x) {
-		//delete of each one selected rows
+		// delete of each one selected rows
 		var myself = this;
 		var rows = this.datatable.rows( { selected: true } );
 		
