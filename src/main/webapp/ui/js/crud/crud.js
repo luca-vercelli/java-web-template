@@ -150,7 +150,6 @@ function PageData(entity, tableSelector, modalDialogSelector) {
 			dataType : "json",
 			success: function(data) {
 				myself.askForDataThenBuildDataTable(data);
-				alert (myself.datatable.ajax); //DEBUG
 			},
 			error: function(data) {
 				myself.serverError(data);

@@ -330,7 +330,7 @@
 				    error: function() {
 				         $('#altEditor-modal .modal-body').append(message_err);
 				    },
-				    data: row.data(),
+				    data: data,
 				    contentType: 'json'
 				  });
         } else {
@@ -510,7 +510,7 @@
            if (useAjax) {
 				$.ajax({
 				    url: '' + dt.ajax.url(),
-				    type: 'PUT',
+				    type: 'POST',
 				    success: function(newdata) {
 				    	 dt.row.add(newdata).draw(false);
 				         $('#altEditor-modal .modal-body').append(message);
@@ -518,7 +518,7 @@
 				    error: function() {
 				         $('#altEditor-modal .modal-body').append(message_err);
 				    },
-				    data: row.data(),
+				    data: data,
 				    contentType: 'json'
 				  });
          } else {
