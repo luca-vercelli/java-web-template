@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,8 +29,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class Exporter {
 
 	/**
-	 * Simple and buggy export to a standard CSV file ("." as decimal separator,
-	 * "," as column delimiter, '"' as string delimiter)
+	 * Simple export to a standard CSV file ("." as decimal separator, "," as
+	 * column delimiter, '"' as string delimiter)
 	 * 
 	 * @param headers
 	 * @param rows
@@ -38,31 +41,47 @@ public class Exporter {
 		File f = File.createTempFile("export", ".csv");
 		FileWriter fw = new FileWriter(f);
 
+		final String FIELD_DELIMITER = ", ";
+		final String ROW_DELIMITER = "\r\n";
+		final String STRING_DELIMITER = "\"";
+
 		String comma = "";
 		for (String s : headers) {
 			fw.write(comma + "\"" + s + "\"");
 			comma = ", ";
 		}
 
-		NumberFormat formatter = NumberFormat.getInstance(Locale.US);
-
 		for (Object[] item : rows) {
 			comma = "";
 			for (Object value : item) {
 
-				if (value instanceof Number) {
-
-					fw.write(comma + formatter.format(value));
-				} else {
-					fw.write(comma + "\"" + value.toString() + "\"");
-				}
-				comma = ", ";
+				fw.write(comma + formatCSVField(value, STRING_DELIMITER));
+				comma = FIELD_DELIMITER;
 			}
+			fw.write(ROW_DELIMITER);
 			fw.flush();
 		}
 
 		fw.close();
 		return f;
+	}
+
+	private NumberFormat formatter = NumberFormat.getInstance(Locale.US);
+	private DateFormat dateFormatter = DateFormat.getInstance();
+
+	private String formatCSVField(Object value, String stringDelimiter) {
+
+		if (value == null)
+			return "";
+
+		if (value instanceof Number) {
+			return formatter.format(value);
+		} else if (value instanceof Date) {
+			return dateFormatter.format(value);
+		} else {
+			String sanitizedString = value.toString().replaceAll("\r", "").replaceAll("\n", "").replaceAll("\"", "'");
+			return stringDelimiter + sanitizedString + stringDelimiter;
+		}
 	}
 
 	/**
@@ -98,13 +117,8 @@ public class Exporter {
 			row = sheet.createRow(rownum);
 			colnum = 0;
 			for (Object value : item) {
-				Cell c = row.createCell(colnum);
-				// FIXME many more types
-				if (value instanceof Number) {
-					c.setCellValue(((Number) value).doubleValue());
-				} else {
-					c.setCellValue(value.toString());
-				}
+				Cell cell = row.createCell(colnum);
+				formatXLSXField(value, cell);
 				++colnum;
 			}
 			++rownum;
@@ -127,5 +141,19 @@ public class Exporter {
 		fontBlueBold.setColor(HSSFColor.DARK_BLUE.index);
 		cs.setFont(fontBlueBold);
 		return cs;
+	}
+
+	private void formatXLSXField(Object value, Cell c) {
+		if (value == null)
+			return;
+		if (value instanceof Number) {
+			c.setCellValue(((Number) value).doubleValue());
+		} else if (value instanceof Date) {
+			c.setCellValue((Date) value);
+		} else if (value instanceof Calendar) {
+			c.setCellValue((Calendar) value);
+		} else {
+			c.setCellValue(value.toString());
+		}
 	}
 }
