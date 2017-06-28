@@ -9,7 +9,6 @@
 
 <t:template>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css"/>
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.dataTables.min.css"/>
 <link rel="stylesheet" href="https://cdn.datatables.net/select/1.1.2/css/select.dataTables.min.css"/>
@@ -54,8 +53,6 @@
               </div>
             </div>
           </div>
-
-	<div id="modalDialog"></div>
     
     <script>
      var entity = '${entity}';

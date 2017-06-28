@@ -23,8 +23,6 @@ function PageData(entity, tableSelector, modalDialogSelector) {
 	this.datatable = null;
 	this._gridData = null;
 	this._columns = null;
-	this._form_fields = null;
-	this.modalWindow = null;
 
 	/**
 	 * Output an error message
@@ -54,41 +52,6 @@ function PageData(entity, tableSelector, modalDialogSelector) {
 	};
 
 	/**
-	 * Create and return Editor's form definition array
-	 */
-	this.createFormFields = function(gridData) {
-
-		var _form_fields = [];
-		for (var x in gridData) {
-			if (!gridData[x].readOnly)
-			_form_fields.push({
-				label: gridData[x].columnDefinition,
-				name: gridData[x].columnDefinition // FIXME ...should decode...
-			});
-		}
-		return _form_fields;
-	};
-
-	/**
-	 * Create and return a modal window containing editable controls
-	 */
-	this.createModalWindow = function(form_fields) {
-		
-		$(this.modalDialogSelector).hide();
-		
-		var dt = null;
-
-		// TODO
-		
-/*
- * dt = $(this.modalDialogSelector).DataTable({ data: form_fields, columns: [
- * {data: 'label' }, {data: 'name' } ] });
- */
-		
-		return dt;
-	};
-
-	/**
 	 * Ask server for data, then call buildDataTable()
 	 */
 	this.askForDataThenBuildDataTable = function(gridData) {
@@ -97,13 +60,10 @@ function PageData(entity, tableSelector, modalDialogSelector) {
 		this._columns = this.createColumns(gridData);
 		this.buildDataTable();
 
-		this._form_fields = this.createFormFields(gridData);
-		//this.modalWindow = this.createModalWindow(this._form_fields);
-
 	};
 
 	/**
-	 * Build a DataTable with 'ajax' option, select, buttons
+	 * Build a DataTable with 'ajax' option, single select, buttons, altEditor
 	 */
 	this.buildDataTable = function() {
 		
@@ -190,7 +150,8 @@ function PageData(entity, tableSelector, modalDialogSelector) {
 			type: "GET",
 			dataType : "json",
 			success: function(data) {
-				myself.askForDataThenBuildDataTable(data)
+				myself.askForDataThenBuildDataTable(data);
+				alert (myself.datatable.ajax); //DEBUG
 			},
 			error: function(data) {
 				myself.serverError(data);
