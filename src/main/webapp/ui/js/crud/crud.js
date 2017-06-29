@@ -87,49 +87,25 @@ function PageData(entity, tableSelector, modalDialogSelector) {
 	        altEditor: true,     // Enable altEditor
 	        buttons: [
 	        	{
-	            text: 'Add',
-	            name: 'add'        // do not change name
-	          },
-	          {
-	            extend: 'selected', // Bind to Selected row
-	            text: 'Edit',
-	            name: 'edit'        // do not change name
-	          },
-	          {
-	            extend: 'selected', // Bind to Selected row
-	            text: 'Delete',
-	            name: 'delete'      // do not change name
-	         }]
-	        /*	        buttons: [
-			{
-				text : 'New',
-				className : 'button',
-				action : function() {
-					myself.newRow();
-				}
-			},
-			{
-				text : 'Edit',
-				className : 'button',
-				action : function(x) {
-					myself.editRow(x);
-				}
-			},
-			{
-				text : 'Delete',
-				className : 'button',
-				action : function(x) {
-					myself.deleteRow(x);
-				}
-			},
-			{
-				text : 'XLS',
-				className : 'button',
-				action : function() {
-					myself.exportXls();
-				}
-			}
-        ]*/
+		            text: 'Add',
+		            name: 'add'        // do not change name
+		        },
+		        {
+		            extend: 'selected', // Bind to Selected row
+		            text: 'Edit',
+		            name: 'edit'        // do not change name
+		        },
+		        {
+		            extend: 'selected', // Bind to Selected row
+		            text: 'Delete',
+		            name: 'delete'      // do not change name
+		        },
+				{
+					text : 'XLS',
+					action : function() {
+						myself.exportXls();
+					}
+				}]
 		});
 	};
 
@@ -156,57 +132,6 @@ function PageData(entity, tableSelector, modalDialogSelector) {
 			}
 		});
 
-	};
-
-	/**
-	 * Crud implementation
-	 */ 
-	this.newRow = function() {
-		alert("Not implemented yet!");
-		$(this.modalDialogSelector).show();
-	};
-
-	/**
-	 * Crud implementation
-	 */ 
-	this.editRow = function() {
-		alert("Not implemented yet!");
-		$(this.modalDialogSelector).show();
-	};
-
-	/**
-	 * Crud implementation
-	 */ 
-	this.copyRow = function() {
-		alert("Not implemented yet!");
-		$(this.modalDialogSelector).show();
-	};
-
-	/**
-	 * Crud implementation
-	 */ 
-	this.deleteRow = function(x) {
-		// delete of each one selected rows
-		var myself = this;
-		var rows = this.datatable.rows( { selected: true } );
-		
-		alert(rows.count());
-		
-		if (rows.count() == 0) {
-			alert ('No rows selected.');
-		} else {
-			rows.every( function( rowIdx, tableLoop, rowLoop ) {
-				var data = this.data();
-				$.ajax({
-				    url: "../rest/" + entity + "(" + data.id  +")",
-				    type: 'DELETE',
-				    success: myself.datatable.ajax.reload,
-				    error: myself.serverError,
-				    data: null,
-				    contentType: 'json'
-				  });
-			});
-		}
 	};
 
 	this.exportXls = function() {
