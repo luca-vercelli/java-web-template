@@ -3,10 +3,12 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 
 <t:template>
-
+	<jsp:attribute name="head_area">
     <!-- bootstrap-wysiwyg -->
     <link href="../vendors/google-code-prettify/bin/prettify.min.css" rel="stylesheet">
+    </jsp:attribute>
     
+	<jsp:attribute name="body_area">
           <div class="">
 
             <div class="page-title">
@@ -256,10 +258,13 @@
               </div>
             </div>
           </div>
-
+          
+    </jsp:attribute>
+    
+	<jsp:attribute name="footer_area">
     <!-- bootstrap-wysiwyg -->
     <script src="../vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
     <script src="../vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
     <script src="../vendors/google-code-prettify/src/prettify.js"></script>
-    
+    </jsp:attribute>
 </t:template>

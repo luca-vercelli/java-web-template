@@ -3,10 +3,12 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 
 <t:template>
-    
+	<jsp:attribute name="head_area">
     <!-- Dropzone.js -->
     <link href="../vendors/dropzone/dist/min/dropzone.min.css" rel="stylesheet">
-    
+	</jsp:attribute>
+
+	<jsp:attribute name="body_area">    
           <div class="">
             <div class="page-title">
               <div class="title_left">
@@ -61,8 +63,10 @@
               </div>
             </div>
           </div>
-          
+    </jsp:attribute>
+    
+	<jsp:attribute name="body_area">
     <!-- Dropzone.js -->
     <script src="../vendors/dropzone/dist/min/dropzone.min.js"></script>
-    
+    </jsp:attribute>
 </t:template>

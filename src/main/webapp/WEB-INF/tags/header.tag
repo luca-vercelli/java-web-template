@@ -1,3 +1,4 @@
+<%@ tag description="WebApp Template - page header"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
@@ -95,7 +96,6 @@
             </nav>
           </div>
         </div>
-
 
     <!-- jQuery -->
     <script src="../vendors/jquery/dist/jquery.min.js"></script>

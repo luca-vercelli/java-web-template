@@ -4,11 +4,14 @@
 
 <t:template>
 
+<jsp:attribute name="head_area">
     <!-- bootstrap-progressbar -->
     <link href="../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
     <!-- bootstrap-daterangepicker -->
     <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+</jsp:attribute>
 
+<jsp:attribute name="body_area">
           <div class="">
             <div class="row top_tiles" style="margin: 10px 0;">
               <div class="col-md-3 col-sm-3 col-xs-6 tile">
@@ -567,7 +570,9 @@
               </div>
             </div>
           </div>
+</jsp:attribute>
 
+<jsp:attribute name="footer_area">
     <!-- Chart.js -->
     <script src="../vendors/Chart.js/dist/Chart.min.js"></script>
     <!-- jQuery Sparklines -->
@@ -596,5 +601,6 @@
     <!-- bootstrap-daterangepicker -->
     <script src="../vendors/moment/min/moment.min.js"></script>
     <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
-    
+</jsp:attribute>
+
 </t:template>

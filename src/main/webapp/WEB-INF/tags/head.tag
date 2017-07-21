@@ -1,5 +1,8 @@
+<%@ tag description="WebApp Template - HTML HEAD"%>
+<%@ attribute name="head_area" fragment="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <fmt:setLocale value="${sessionBean.language}" />
 <fmt:setBundle basename="global" />
 
@@ -26,4 +29,4 @@
     <!-- FIXME not included in Gentelella -->
     <link rel="icon" href="images/favicon.ico" type="image/ico" />
 
-    
+    <jsp:invoke fragment="head_area"/>

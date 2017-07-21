@@ -3,10 +3,12 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 
 <t:template>
-
+	<jsp:attribute name="head_area">
    <!-- iCheck -->
    <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+   </jsp:attribute>
    
+	<jsp:attribute name="body_area">
           <div class="">
             <div class="page-title">
               <div class="title_left">
@@ -458,7 +460,11 @@
             </div>
           </div>
           
+    </jsp:attribute>
+    
+   	<jsp:attribute name="footer_area">
     <!-- iCheck -->
     <script src="../vendors/iCheck/icheck.min.js"></script>
-
+	</jsp:attribute>
+	
 </t:template>

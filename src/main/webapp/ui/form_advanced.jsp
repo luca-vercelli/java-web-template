@@ -3,7 +3,7 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 
 <t:template>
-
+	<jsp:attribute name="head_area">
     <!-- bootstrap-daterangepicker -->
     <link href="../vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
     <!-- bootstrap-datetimepicker -->
@@ -14,7 +14,9 @@
     <link href="../vendors/ion.rangeSlider/css/ion.rangeSlider.skinFlat.css" rel="stylesheet">
     <!-- Bootstrap Colorpicker -->
     <link href="../vendors/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+    </jsp:attribute>
     
+	<jsp:attribute name="body_area">
           <div class="">
             <div class="page-title">
               <div class="title_left">
@@ -924,8 +926,9 @@
               </div>
             </div>
           </div>
+</jsp:attribute>
 
-
+<jsp:attribute name="footer_area">
     <!-- bootstrap-daterangepicker -->
     <script src="../vendors/moment/min/moment.min.js"></script>
     <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
@@ -972,5 +975,5 @@
         $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
     });
 </script>
-
+</jsp:attribute>
 </t:template>

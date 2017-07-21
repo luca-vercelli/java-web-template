@@ -3,7 +3,7 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 
 <t:template>
-
+	<jsp:attribute name="body_area">
           <div class="">
             <div class="page-title">
               <div class="title_left">
@@ -279,8 +279,10 @@
               </div>
             </div>
           </div>
-
-    <!-- morris.js -->
+	</jsp:attribute>
+	
+	<jsp:attribute name="footer_area">
+	<!-- morris.js -->
     <script src="../vendors/raphael/raphael.min.js"></script>
     <script src="../vendors/morris.js/morris.min.js"></script>
     <!-- bootstrap-progressbar -->
@@ -288,5 +290,6 @@
     <!-- bootstrap-daterangepicker -->
     <script src="../vendors/moment/min/moment.min.js"></script>
     <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+    </jsp:attribute>
     
 </t:template>

@@ -3,12 +3,14 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 
 <t:template>
-
+	<jsp:attribute name="head_area">
     <!-- iCheck -->
     <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
     <!-- JQVMap -->
     <link href="../vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>
-
+	</jsp:attribute>
+	
+	<jsp:attribute name="body_area">
           <div class="">
             <div class="page-title">
               <div class="title_left">
@@ -161,7 +163,8 @@
               </div>
             </div>
           </div>
-
+</jsp:attribute>
+	<jsp:attribute name="footer_area">
     <!-- jQuery Sparklines -->
     <script src="../vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
     <!-- JQVMap -->
@@ -171,5 +174,5 @@
     <script src="../vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
     <!-- easy-pie-chart -->
     <script src="../vendors/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js"></script>
-    
+    </jsp:attribute>
 </t:template>

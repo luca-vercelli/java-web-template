@@ -1,10 +1,19 @@
-<%@tag description="WebApp Template - Gentelella"%>
-<%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ tag description="WebApp Template - Gentelella"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <html lang="${sessionBean.language}">
 
+<%@ attribute name="head_area" fragment="true"%>
+<%@ attribute name="body_area" fragment="true" required="true"%>
+<%@ attribute name="footer_area" fragment="true"%>
+
 <head>
-<jsp:include page="/WEB-INF/tiles/head.jsp" />
+<t:head>
+	<jsp:attribute name="head_area">
+    		<jsp:invoke fragment="head_area" />
+    	</jsp:attribute>
+</t:head>
 </head>
 
 <body class="nav-md">
@@ -13,21 +22,25 @@
 		<div class="main_container">
 
 			<!--  left side menu -->
-			<jsp:include page="/WEB-INF/tiles/pageMenu.jsp" />
+			<t:menu />
 			<!--  /left side menu -->
 
 			<!-- top navigation -->
-			<jsp:include page="/WEB-INF/tiles/pageHeader.jsp" />
+			<t:header />
 			<!-- /top navigation -->
 
 			<!-- page content -->
 			<div class="right_col" role="main">
-				<jsp:doBody />
+				<jsp:invoke fragment="body_area" />
 			</div>
 			<!-- /page content -->
 
 			<!--  footer content -->
-			<jsp:include page="/WEB-INF/tiles/pageFooter.jsp" />
+			<t:footer>
+				<jsp:attribute name="footer_area">
+    				<jsp:invoke fragment="footer_area" />
+    			</jsp:attribute>
+			</t:footer>
 			<!--  /footer content  -->
 
 		</div>

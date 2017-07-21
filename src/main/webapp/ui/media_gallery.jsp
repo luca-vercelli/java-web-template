@@ -3,7 +3,7 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 
 <t:template>
-
+	<jsp:attribute name="body_area">
           <div class="">
             <div class="page-title">
               <div class="title_left">
@@ -245,5 +245,5 @@
               </div>
             </div>
           </div>
-
+	</jsp:attribute>
 </t:template>

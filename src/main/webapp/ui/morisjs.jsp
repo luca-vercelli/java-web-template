@@ -3,11 +3,13 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 
 <t:template>
-
+	<jsp:attribute name="head_area">
     <!-- iCheck -->
     <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+    </jsp:attribute>
     
-          <div class="">
+	<jsp:attribute name="body_area">
+	      <div class="">
             <div class="page-title">
               <div class="title_left">
                 <h3>Morris Js</h3>
@@ -204,9 +206,11 @@
               <!-- /line graph -->
             </div>
           </div>
-
-    <!-- morris.js -->
+	</jsp:attribute>
+	
+	<jsp:attribute name="footer_area">
+	<!-- morris.js -->
     <script src="../vendors/raphael/raphael.min.js"></script>
     <script src="../vendors/morris.js/morris.min.js"></script>
-    
+    </jsp:attribute>
 </t:template>

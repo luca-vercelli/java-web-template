@@ -3,7 +3,7 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 
 <t:template>
-
+	<jsp:attribute name="body_area">
     <!-- bootstrap-progressbar -->
     <link href="../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
     
@@ -615,7 +615,9 @@
               </div>
             </div>
           </div>
-
+	</jsp:attribute>
+	
+	<jsp:attribute name="body_area">
     <!-- Chart.js -->
     <script src="../vendors/Chart.js/dist/Chart.min.js"></script>
     <!-- jQuery Sparklines -->
@@ -624,5 +626,5 @@
     <script src="../vendors/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js"></script>
     <!-- bootstrap-progressbar -->
     <script src="../vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
-    
+    </jsp:attribute>
 </t:template>
