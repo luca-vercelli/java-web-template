@@ -6,10 +6,6 @@
 package com.example.myapp.firstrun.filters;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,13 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 
-import com.example.myapp.login.helpers.UsersManager;
-import com.example.myapp.main.entity.Menu;
-import com.example.myapp.main.entity.Page;
-import com.example.myapp.main.entity.Role;
-import com.example.myapp.main.entity.Settings;
-import com.example.myapp.main.entity.User;
-import com.example.myapp.main.enums.BooleanYN;
+import com.example.myapp.firstrun.ejb.FirstRun;
 
 /**
  * This Filter determines if database exists and is populated. After
@@ -41,20 +31,19 @@ import com.example.myapp.main.enums.BooleanYN;
  * If database tables do not exist, this will raise an exception.
  * 
  * Anyway, check will be performed just once after each reboot.
+ * 
+ * This should execute *before* login filter...
  *
  */
-@WebFilter(urlPatterns = { "*" })
-@Stateless
+@WebFilter("/*")
 public class FirstRunFilter implements Filter {
 
 	@Inject
 	Logger LOG;
-
 	@PersistenceContext
 	EntityManager em;
-
 	@Inject
-	UsersManager usersManager;
+	FirstRun firstRunPopulator;
 
 	private boolean databasePopulated = false;
 
@@ -72,7 +61,7 @@ public class FirstRunFilter implements Filter {
 				LOG.debug("" + n + " rows found in APP_SETTINGS");
 
 				if (n == 0L) {
-					populateDatabase();
+					firstRunPopulator.populateDatabase();
 					databasePopulated = true;
 				}
 
@@ -91,58 +80,5 @@ public class FirstRunFilter implements Filter {
 
 	@Override
 	public void destroy() {
-	}
-
-	/**
-	 * This is the point where database is really populated for the first time.
-	 */
-	protected void populateDatabase() {
-
-		LOG.info("Populating database...");
-
-		// "ADMIN" ROLE AND USER
-		Role r = new Role("admin");
-		em.persist(r);
-
-		User u = new User("admin", "admin@example.com", "Admin", ".", BooleanYN.Y, null);
-		usersManager.setPassword(u, "admin".toCharArray());
-		em.persist(u);
-
-		u.getRoles().add(r);
-
-		em.persist(u);
-
-		// "USER" ROLE AND USER
-		r = new Role("user");
-		em.persist(r);
-
-		u = new User("user", "user@example.com", "User", ".", BooleanYN.Y, null);
-		usersManager.setPassword(u, "user".toCharArray());
-		em.persist(u);
-
-		u.getRoles().add(r);
-
-		em.persist(u);
-
-		// SETTINGS record
-		Settings s = new Settings();
-		em.persist(s);
-
-		LOG.info("Done.");
-
-		// PAGES
-		Menu menuGeneral = new Menu("menu.section_general", 10, null, null);
-		em.persist(menuGeneral);
-
-		Menu menuLiveon = new Menu("menu.section_liveon", 20, null, null);
-		em.persist(menuLiveon);
-
-		Menu menuHome = new Menu("menu.home", 10, menuGeneral, "home");
-		List<Page> pages = menuHome.getPages();
-		pages.add(new Page("index.jsp", "page.dashboard", 10, null));
-		pages.add(new Page("index2.jsp", "page.dashboard2", 20, null));
-		pages.add(new Page("index3.jsp", "page.dashboard3", 30, null));
-		em.persist(menuHome);
-
 	}
 }
