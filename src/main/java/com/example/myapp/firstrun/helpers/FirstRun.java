@@ -3,7 +3,7 @@
 * Luca Vercelli 2017
 * Released under GPLv3 
 */
-package com.example.myapp.firstrun.ejb;
+package com.example.myapp.firstrun.helpers;
 
 import java.util.List;
 

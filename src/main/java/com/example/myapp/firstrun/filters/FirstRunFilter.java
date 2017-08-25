@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 
-import com.example.myapp.firstrun.ejb.FirstRun;
+import com.example.myapp.firstrun.helpers.FirstRun;
 
 /**
  * This Filter determines if database exists and is populated. After
