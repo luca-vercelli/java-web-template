@@ -42,26 +42,26 @@ public class FirstRun {
 		LOG.info("Populating database...");
 
 		// "ADMIN" ROLE AND USER
-		Role r = new Role("admin");
-		em.persist(r);
+		Role roleAdmin = new Role("admin");
+		em.persist(roleAdmin);
 
 		User u = new User("admin", "admin@example.com", "Admin", ".", BooleanYN.Y, null);
 		usersManager.setPassword(u, "admin".toCharArray());
 		em.persist(u);
 
-		u.getRoles().add(r);
+		u.getRoles().add(roleAdmin);
 
 		em.persist(u);
 
 		// "USER" ROLE AND USER
-		r = new Role("user");
-		em.persist(r);
+		Role roleUser = new Role("user");
+		em.persist(roleUser);
 
 		u = new User("user", "user@example.com", "User", ".", BooleanYN.Y, null);
 		usersManager.setPassword(u, "user".toCharArray());
 		em.persist(u);
 
-		u.getRoles().add(r);
+		u.getRoles().add(roleUser);
 
 		em.persist(u);
 
@@ -78,20 +78,49 @@ public class FirstRun {
 		Menu menuLiveon = new Menu("menu.section_liveon", 20, null, null);
 		em.persist(menuLiveon);
 
+		Page page;
+		List<Page> pages;
+
 		Menu menuHome = new Menu("menu.home", 10, menuGeneral, "home");
-		
-		Page p1 = new Page("index.jsp", "page.dashboard", 10, null);
-		em.persist(p1);
-		Page p2 = new Page("index2.jsp", "page.dashboard2", 20, null);
-		em.persist(p2);
-		Page p3 = new Page("index3.jsp", "page.dashboard3", 30, null);
-		em.persist(p3);
-		
-		List<Page> pages = menuHome.getPages();
-		pages.add(p1);
-		pages.add(p2);
-		pages.add(p3);
+
+		pages = menuHome.getPages();
+
+		page = new Page("index.jsp", "page.dashboard", 10, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("index2.jsp", "page.dashboard2", 20, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("index3.jsp", "page.dashboard3", 30, null);
+		em.persist(page);
+		pages.add(page);
+
 		em.persist(menuHome);
 
+		Menu menuAdmin = new Menu("menu.admin", 15, menuGeneral, "table");
+
+		page = new Page("crud.jsp?entity=User", "page.crud_users", 10, null);
+		page.getAuthorizedRoles().add(roleAdmin);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("crud.jsp?entity=Role", "page.crud_roles", 20, null);
+		page.getAuthorizedRoles().add(roleAdmin);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("crud.jsp?entity=Page", "page.crud_pages", 30, null);
+		page.getAuthorizedRoles().add(roleAdmin);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("crud.jsp?entity=Menu", "page.crud_menus", 40, null);
+		page.getAuthorizedRoles().add(roleAdmin);
+		em.persist(page);
+		pages.add(page);
+
+		em.persist(menuAdmin);
 	}
 }

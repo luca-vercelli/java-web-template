@@ -1,3 +1,5 @@
+--an example of SQL-based first run. We do not use this.
+
 INSERT INTO APP_SETTINGS(SETUP_DATE) VALUES(CURRENT TIMESTAMP);
 
 --Users and Roles
