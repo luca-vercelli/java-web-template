@@ -56,6 +56,8 @@ Features:
 * authorizations
 * all features as /modules/ so that they can be freely used or not
 * translations: text-file-based JSTL translations. We think this is very ugly, anyway, it's quite standard.
+* first run install. We don't like JPA's sql-load-script-source feature, as it is not portable across databases.
+* a custom I18nFilter, that in our opinion is easier to use than JSTL' fmt feature.
 
 Modules and interface should be independent: standalone Swing, or AngularJS frontends should work as well.
 

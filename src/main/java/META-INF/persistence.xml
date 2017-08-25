@@ -31,12 +31,11 @@
 				value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform" />
 
 			<!-- If your DBA allows that, use CREATE the first time in order to create 
-				all tables. This won't populate tables. In SQLLite, an exception will be 
-				raised about creating relations, but it is not a problem. -->
+				all tables. This won't populate tables.  -->
 			<property name="javax.persistence.schema-generation.database.action"
 				value="drop-and-create" />
-			<property name="javax.persistence.sql-load-script-source"
-				value="INSTALL.SQL" />
+			<!-- property name="javax.persistence.sql-load-script-source"
+				value="INSTALL.SQL" /-->
 
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.DerbyTenSevenDialect" />
