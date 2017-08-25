@@ -61,3 +61,8 @@ Features:
 
 Modules and interface should be independent: standalone Swing, or AngularJS frontends should work as well.
 
+## How to use this project
+* Download, either with Git or with Eclipse (eGit plugin)
+* Compile, either with Maven or Eclipse (m2e plugin)
+* Run class com.example.webserver.Main, either with Eclipse or command line.
+
