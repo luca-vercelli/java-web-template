@@ -7,6 +7,7 @@ package com.example.myapp.firstrun.filters;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -26,6 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 
 import com.example.myapp.login.helpers.UsersManager;
+import com.example.myapp.main.entity.Menu;
+import com.example.myapp.main.entity.Page;
 import com.example.myapp.main.entity.Role;
 import com.example.myapp.main.entity.Settings;
 import com.example.myapp.main.entity.User;
@@ -46,13 +49,13 @@ public class FirstRunFilter implements Filter {
 
 	@Inject
 	Logger LOG;
-	
+
 	@PersistenceContext
 	EntityManager em;
-	
+
 	@Inject
 	UsersManager usersManager;
-	
+
 	private boolean databasePopulated = false;
 
 	@Override
@@ -96,19 +99,12 @@ public class FirstRunFilter implements Filter {
 	protected void populateDatabase() {
 
 		LOG.info("Populating database...");
-		
+
 		// "ADMIN" ROLE AND USER
-		Role r = new Role();
-		r.setDescription("admin");
+		Role r = new Role("admin");
 		em.persist(r);
 
-		User u = new User();
-		u.setActive(BooleanYN.Y);
-		u.setName("admin");
-		u.setPersonName("Admin");
-		u.setPersonSurname(".");
-		u.setEmail("admin@example.com");
-
+		User u = new User("admin", "admin@example.com", "Admin", ".", BooleanYN.Y, null);
 		usersManager.setPassword(u, "admin".toCharArray());
 		em.persist(u);
 
@@ -117,17 +113,10 @@ public class FirstRunFilter implements Filter {
 		em.persist(u);
 
 		// "USER" ROLE AND USER
-		r = new Role();
-		r.setDescription("user");
+		r = new Role("user");
 		em.persist(r);
 
-		u = new User();
-		u.setActive(BooleanYN.Y);
-		u.setName("user");
-		u.setPersonName("User");
-		u.setPersonSurname(".");
-		u.setEmail("user@example.com");
-
+		u = new User("user", "user@example.com", "User", ".", BooleanYN.Y, null);
 		usersManager.setPassword(u, "user".toCharArray());
 		em.persist(u);
 
@@ -137,10 +126,23 @@ public class FirstRunFilter implements Filter {
 
 		// SETTINGS record
 		Settings s = new Settings();
-		s.setSetupDate(new Date());
 		em.persist(s);
-		
+
 		LOG.info("Done.");
-		
+
+		// PAGES
+		Menu menuGeneral = new Menu("menu.section_general", 10, null, null);
+		em.persist(menuGeneral);
+
+		Menu menuLiveon = new Menu("menu.section_liveon", 20, null, null);
+		em.persist(menuLiveon);
+
+		Menu menuHome = new Menu("menu.home", 10, menuGeneral, "home");
+		List<Page> pages = menuHome.getPages();
+		pages.add(new Page("index.jsp", "page.dashboard", 10, null));
+		pages.add(new Page("index2.jsp", "page.dashboard2", 20, null));
+		pages.add(new Page("index3.jsp", "page.dashboard3", 30, null));
+		em.persist(menuHome);
+
 	}
 }

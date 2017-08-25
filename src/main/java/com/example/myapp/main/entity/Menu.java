@@ -40,6 +40,16 @@ public class Menu {
 	private List<Page> pages = new ArrayList<>();
 	private Set<Role> authorizedRoles = new HashSet<Role>();
 
+	public Menu() {
+	}
+
+	public Menu(String description, Integer ordering, Menu parentMenu, String icon) {
+		this.description = description;
+		this.ordering = ordering;
+		this.parentMenu = parentMenu;
+		this.icon = icon;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")

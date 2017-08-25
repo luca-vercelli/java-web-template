@@ -50,6 +50,19 @@ public class User implements Principal {
 
 	private Set<Role> roles = new HashSet<Role>();
 
+	public User() {
+	}
+
+	public User(String username, String email, String personName, String personSurname, BooleanYN active,
+			Date birthdate) {
+		this.username = username;
+		this.email = email;
+		this.personName = personName;
+		this.personSurname = personSurname;
+		this.active = active;
+		this.birthdate = birthdate;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")

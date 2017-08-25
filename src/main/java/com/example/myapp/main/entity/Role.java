@@ -21,6 +21,13 @@ public class Role {
 	private Long id;
 	private String description;
 
+	public Role() {
+	}
+
+	public Role(String description) {
+		this.description = description;
+	}
+
 	@Id
 	@Column(name = "ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

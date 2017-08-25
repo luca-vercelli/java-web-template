@@ -33,6 +33,16 @@ public class Page {
 
 	private Set<Role> authorizedRoles = new HashSet<Role>();
 
+	public Page() {
+	}
+
+	public Page(String url, String description, Integer ordering, String icon) {
+		this.url = url;
+		this.description = description;
+		this.ordering = ordering;
+		this.icon = icon;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")

@@ -23,6 +23,9 @@ public class Settings {
 	private Long id;
 	private Date setupDate = new Date();
 
+	public Settings() {
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
