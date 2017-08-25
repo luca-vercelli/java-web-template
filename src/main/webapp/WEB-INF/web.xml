@@ -29,6 +29,7 @@
 		<location>/ui/page_500.jsp</location>
 	</error-page>
 	
+	<!-- Glassfish does not support json by default. Other webservers may do. -->
     <mime-mapping>
         <extension>json</extension>
         <mime-type>application/json</mime-type>
