@@ -32,7 +32,7 @@ import com.example.myapp.firstrun.ejb.FirstRun;
  * 
  * Anyway, check will be performed just once after each reboot.
  * 
- * This should execute *before* login filter...
+ * This should execute *before* any filter that use database. How to?
  *
  */
 @WebFilter("/*")
@@ -64,9 +64,10 @@ public class FirstRunFilter implements Filter {
 					firstRunPopulator.populateDatabase();
 					databasePopulated = true;
 				}
-
-				chain.doFilter(req, resp); // Just continue chain
 			}
+			
+			chain.doFilter(req, resp); // Continue chain
+			
 		} else {
 			// should not pass here
 			System.err.println("Not HTTP ? Why here?");
