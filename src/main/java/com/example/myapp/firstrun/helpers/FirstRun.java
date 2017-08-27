@@ -100,6 +100,7 @@ public class FirstRun {
 		em.persist(menuHome);
 
 		Menu menuAdmin = new Menu("menu.admin", 15, menuGeneral, "table");
+		pages = menuAdmin.getPages();
 
 		page = new Page("crud.jsp?entity=User", "page.crud_users", 10, null);
 		page.getAuthorizedRoles().add(roleAdmin);
@@ -122,5 +123,113 @@ public class FirstRun {
 		pages.add(page);
 
 		em.persist(menuAdmin);
+
+		Menu menuTables = new Menu("menu.tables", 20, menuGeneral, "table");
+		pages = menuTables.getPages();
+
+		page = new Page("tables.jsp", "page.tables", 10, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("tables_dynamic.jsp", "page.tables_dynamic", 20, null);
+		em.persist(page);
+		pages.add(page);
+
+		em.persist(menuTables);
+
+		Menu menuForms = new Menu("menu.forms", 30, menuGeneral, "edit");
+		pages = menuForms.getPages();
+
+		page = new Page("form.jsp", "page.form", 10, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("form_advanced.jsp", "page.form_advanced", 20, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("form_validation.jsp", "page.form_validation", 30, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("form_wizards.jsp", "page.form_wizards", 40, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("form_upload.jsp", "page.form_upload", 50, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("form_buttons.jsp", "page.form_buttons", 60, null);
+		em.persist(page);
+		pages.add(page);
+
+		em.persist(menuForms);
+
+		Menu menuUIElements = new Menu("menu.ui_elements", 40, menuGeneral, "desktop");
+		pages = menuForms.getPages();
+
+		page = new Page("general_elements.jsp", "page.ui_general_elements", 10, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("media_gallery.jsp", "page.ui_media_gallery", 20, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("typography.jsp", "page.ui_typography", 30, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("icons.jsp", "page.ui_icons", 40, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("glyphicons.jsp", "page.ui_glyphicons", 50, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("widgets.jsp", "page.ui_widgets", 60, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("invoice.jsp", "page.ui_invoice", 70, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("inbox.jsp", "page.ui_inbox", 80, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("calendar.jsp", "page.ui_calendar", 90, null);
+		em.persist(page);
+		pages.add(page);
+
+		em.persist(menuUIElements);
+
+		Menu menuDataPresentation = new Menu("menu.data_presentation", 50, menuGeneral, "bar-chart-o");
+		pages = menuForms.getPages();
+
+		page = new Page("chartjs.jsp", "page.chartjs", 10, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("chartjs2.jsp", "page.chartjs2", 20, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("morisjs.jsp", "page.morisjs", 30, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("echarts.jsp", "page.echarts", 40, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("other_charts.jsp", "page.charts_other", 50, null);
+		em.persist(page);
+		pages.add(page);
+
+		em.persist(menuDataPresentation);
 	}
 }
