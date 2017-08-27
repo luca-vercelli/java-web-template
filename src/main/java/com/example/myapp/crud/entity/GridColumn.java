@@ -32,6 +32,9 @@ public class GridColumn {
 	public GridColumn() {
 	}
 
+	/**
+	 * Full constructor.
+	 */
 	public GridColumn(String columnDefinition, String description, Integer order, BooleanYN readOnly) {
 		this.columnDefinition = columnDefinition;
 		this.description = description;
@@ -51,7 +54,7 @@ public class GridColumn {
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "GRID_ID", nullable = false)
+	@JoinColumn(name = "GRID_ID")
 	@XmlTransient
 	public Grid getGrid() {
 		return grid;
@@ -72,6 +75,7 @@ public class GridColumn {
 
 	/**
 	 * This formula must be understood both by HQL and Javascript...
+	 * 
 	 * @return
 	 */
 	@Column(name = "COL_DEF")

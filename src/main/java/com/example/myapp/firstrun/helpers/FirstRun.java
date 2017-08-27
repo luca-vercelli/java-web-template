@@ -14,6 +14,8 @@ import javax.persistence.PersistenceContext;
 
 import org.slf4j.Logger;
 
+import com.example.myapp.crud.entity.Grid;
+import com.example.myapp.crud.entity.GridColumn;
 import com.example.myapp.login.helpers.UsersManager;
 import com.example.myapp.main.entity.Menu;
 import com.example.myapp.main.entity.Page;
@@ -80,10 +82,10 @@ public class FirstRun {
 
 		Page page;
 		List<Page> pages;
+		Menu menu;
 
-		Menu menuHome = new Menu("menu.home", 10, menuGeneral, "home");
-
-		pages = menuHome.getPages();
+		menu = new Menu("menu.home", 10, menuGeneral, "home");
+		pages = menu.getPages();
 
 		page = new Page("index.jsp", "page.dashboard", 10, null);
 		em.persist(page);
@@ -97,10 +99,10 @@ public class FirstRun {
 		em.persist(page);
 		pages.add(page);
 
-		em.persist(menuHome);
+		em.persist(menu);
 
-		Menu menuAdmin = new Menu("menu.admin", 15, menuGeneral, "table");
-		pages = menuAdmin.getPages();
+		menu = new Menu("menu.admin", 15, menuGeneral, "table");
+		pages = menu.getPages();
 
 		page = new Page("crud.jsp?entity=User", "page.crud_users", 10, null);
 		page.getAuthorizedRoles().add(roleAdmin);
@@ -122,10 +124,10 @@ public class FirstRun {
 		em.persist(page);
 		pages.add(page);
 
-		em.persist(menuAdmin);
+		em.persist(menu);
 
-		Menu menuTables = new Menu("menu.tables", 20, menuGeneral, "table");
-		pages = menuTables.getPages();
+		menu = new Menu("menu.tables", 20, menuGeneral, "table");
+		pages = menu.getPages();
 
 		page = new Page("tables.jsp", "page.tables", 10, null);
 		em.persist(page);
@@ -135,10 +137,10 @@ public class FirstRun {
 		em.persist(page);
 		pages.add(page);
 
-		em.persist(menuTables);
+		em.persist(menu);
 
-		Menu menuForms = new Menu("menu.forms", 30, menuGeneral, "edit");
-		pages = menuForms.getPages();
+		menu = new Menu("menu.forms", 30, menuGeneral, "edit");
+		pages = menu.getPages();
 
 		page = new Page("form.jsp", "page.form", 10, null);
 		em.persist(page);
@@ -164,10 +166,10 @@ public class FirstRun {
 		em.persist(page);
 		pages.add(page);
 
-		em.persist(menuForms);
+		em.persist(menu);
 
-		Menu menuUIElements = new Menu("menu.ui_elements", 40, menuGeneral, "desktop");
-		pages = menuForms.getPages();
+		menu = new Menu("menu.ui_elements", 40, menuGeneral, "desktop");
+		pages = menu.getPages();
 
 		page = new Page("general_elements.jsp", "page.ui_general_elements", 10, null);
 		em.persist(page);
@@ -205,10 +207,10 @@ public class FirstRun {
 		em.persist(page);
 		pages.add(page);
 
-		em.persist(menuUIElements);
+		em.persist(menu);
 
-		Menu menuDataPresentation = new Menu("menu.data_presentation", 50, menuGeneral, "bar-chart-o");
-		pages = menuForms.getPages();
+		menu = new Menu("menu.data_presentation", 50, menuGeneral, "bar-chart-o");
+		pages = menu.getPages();
 
 		page = new Page("chartjs.jsp", "page.chartjs", 10, null);
 		em.persist(page);
@@ -230,6 +232,122 @@ public class FirstRun {
 		em.persist(page);
 		pages.add(page);
 
-		em.persist(menuDataPresentation);
+		em.persist(menu);
+
+		menu = new Menu("menu.layouts", 60, menuGeneral, "clone");
+		pages = menu.getPages();
+
+		page = new Page("fixed_sidebar.jsp", "page.layout_fixed_sidebar", 10, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("fixed_footer.jsp", "page.layout_fixed_footer", 20, null);
+		em.persist(page);
+		pages.add(page);
+
+		em.persist(menu);
+
+		menu = new Menu("menu.more", 10, menuLiveon, "bug");
+		pages = menu.getPages();
+
+		page = new Page("e_commerce.jsp", "page.e_commerce", 10, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("projects.jsp", "page.project", 20, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("project_detail.jsp", "page.project_detail", 30, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("contacts.jsp", "page.contacts", 40, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("profile.jsp", "page.profile", 50, null);
+		em.persist(page);
+		pages.add(page);
+
+		em.persist(menu);
+
+		Menu menuMultilevel = new Menu("menu.multilevel", 20, menuLiveon, "sitemap");
+		List<Menu> submenus = menuMultilevel.getSubmenus();
+
+		page = new Page("level2.jsp", "page.level_two", 10, null);
+		em.persist(page);
+
+		menu = new Menu("menu.level_one_a", 10, menuLiveon, "sitemap");
+		menu.getPages().add(page);
+		em.persist(menu);
+		submenus.add(menu);
+
+		menu = new Menu("menu.level_one_b", 20, menuLiveon, "sitemap");
+		menu.getPages().add(page);
+		em.persist(menu);
+		submenus.add(menu);
+
+		menu = new Menu("menu.level_one_c", 30, menuLiveon, "sitemap");
+		menu.getPages().add(page);
+		em.persist(menu);
+		submenus.add(menu);
+
+		em.persist(menuMultilevel);
+
+		menu = new Menu("menu.extras", 30, menuLiveon, "bug");
+		pages = menu.getPages();
+
+		page = new Page("page_403.jsp", "page.error403", 10, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("page_404.jsp", "page.error404", 20, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("page_500.jsp", "page.error500", 30, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("plain_page.jsp", "page.plain", 40, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("page_login.jsp", "page.login", 50, null);
+		em.persist(page);
+		pages.add(page);
+
+		page = new Page("pricing_tables.jsp", "page.pricing_tables", 60, null);
+		em.persist(page);
+		pages.add(page);
+
+		em.persist(menu);
+
+		// GRIDS
+		Grid grid;
+
+		grid = new Grid("Role", "grid.role.default");
+		grid.getColumns().add(new GridColumn("id", "grid.role.id", 10, BooleanYN.Y));
+		grid.getColumns().add(new GridColumn("description", "grid.role.description", 20, BooleanYN.N));
+		em.persist(grid);
+		
+		grid = new Grid("User", "grid.user.default");
+		grid.getColumns().add(new GridColumn("id", "grid.user.id", 10, BooleanYN.Y));
+		grid.getColumns().add(new GridColumn("name", "grid.user.username", 20, BooleanYN.N));
+		grid.getColumns().add(new GridColumn("personName", "grid.user.name", 30, BooleanYN.N));
+		grid.getColumns().add(new GridColumn("personSurname", "grid.user.surname", 40, BooleanYN.N));
+		em.persist(grid);
+
+		grid = new Grid("Page", "grid.page.default");
+		grid.getColumns().add(new GridColumn("id", "grid.page.id", 10, BooleanYN.Y));
+		grid.getColumns().add(new GridColumn("description", "grid.page.description", 20, BooleanYN.N));
+		em.persist(grid);
+
+		grid = new Grid("Menu", "grid.menu.default");
+		grid.getColumns().add(new GridColumn("id", "grid.menu.id", 10, BooleanYN.Y));
+		grid.getColumns().add(new GridColumn("description", "grid.menu.description", 20, BooleanYN.N));
+		em.persist(grid);
+
 	}
 }

@@ -8,6 +8,7 @@ package com.example.myapp.crud.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -38,6 +39,17 @@ public class Grid {
 	private String description;
 	private List<GridColumn> columns = new ArrayList<>();
 
+	public Grid() {
+	}
+
+	/**
+	 * Full constructor
+	 */
+	public Grid(String entity, String description) {
+		this.entity = entity;
+		this.description = description;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
@@ -67,7 +79,7 @@ public class Grid {
 		this.description = description;
 	}
 
-	@OneToMany(mappedBy = "grid", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "grid", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@XmlTransient // FIXME should not be
 	public List<GridColumn> getColumns() {
 		return columns;
