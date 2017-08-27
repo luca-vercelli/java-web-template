@@ -9,7 +9,7 @@
 	<div class="clearfix"></div>
 </footer>
 
+<jsp:invoke fragment="footer_area"></jsp:invoke>
+
 <!-- Custom Theme Scripts -->
 <script src="../build/js/custom.js"></script>
-
-<jsp:invoke fragment="footer_area"></jsp:invoke>
