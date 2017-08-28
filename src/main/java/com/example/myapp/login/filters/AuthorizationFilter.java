@@ -6,6 +6,8 @@
 package com.example.myapp.login.filters;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -18,8 +20,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 
+import com.example.myapp.crud.GenericManager;
+import com.example.myapp.main.entity.Page;
+import com.example.myapp.main.entity.Role;
 import com.example.myapp.main.util.ApplicationProperties;
 import com.example.myapp.main.util.SessionBean;
+import com.example.myapp.main.util.WebFilterExclude;
 
 /**
  * Most implementations assume that roles are hard-written in some
@@ -34,12 +40,14 @@ public class AuthorizationFilter implements Filter {
 
 	@Inject
 	Logger LOG;
-
 	@Inject
 	ApplicationProperties appProps;
-
 	@Inject
 	SessionBean sessionBean;
+	@Inject
+	GenericManager genericManager;
+	@Inject
+	WebFilterExclude webFilterExclude;
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
@@ -47,23 +55,57 @@ public class AuthorizationFilter implements Filter {
 
 		if (req instanceof HttpServletRequest && resp instanceof HttpServletResponse) {
 
-			boolean authorizaionRequired = false; // TODO: true
-			boolean authorizationSuccess = false;
-
 			HttpServletRequest request = (HttpServletRequest) req;
 			HttpServletResponse response = (HttpServletResponse) resp;
-			String contextPath = request.getContextPath();
-			String uri = request.getRequestURI();
 
-			uri = uri.replaceAll("/+", "/"); // convert /myapp///ui -> /myapp/ui
+			boolean authorizationRequired = !webFilterExclude
+					.excludeUrl(appProps.getProperty("login.not.required.uris").split(","), request);
 
-			// TODO: authorizationSuccess = ...
+			boolean authorizationSuccess = false;
 
-			if (!authorizaionRequired || authorizationSuccess) {
-				chain.doFilter(req, resp); // Just continue chain
+			if (authorizationRequired) {
+
+				String uri = request.getRequestURI();
+				uri = uri.replaceAll("/+", "/"); // convert /myapp///ui ->
+													// /myapp/ui
+
+				String contextPath = request.getContextPath();
+				if (uri.length() > contextPath.length())
+					uri = uri.substring(contextPath.length());
+
+				// FIXME should cache auth?
+				List<Page> lp = genericManager.findByProperty(Page.class, "url", uri);
+				if (lp == null || lp.isEmpty()) {
+
+					LOG.warn("No Page item found for uri " + uri);
+					authorizationRequired = false;
+
+				} else {
+
+					LOG.info("Verifying authentication for Page " + uri);
+					Page page = lp.get(0);
+					boolean someAuthorizationWasSet = false;
+					for (Role r : sessionBean.getRoles()) {
+						someAuthorizationWasSet = true;
+						if (page.getAuthorizedRoles().contains(r)) {
+							authorizationSuccess = true;
+							break;
+						}
+					}
+
+					if (!someAuthorizationWasSet) {
+						// Page is subject to auth, however no auth were set
+						authorizationSuccess = true;
+					}
+				}
+			}
+
+			if (authorizationRequired && !authorizationSuccess) {
+				LOG.info("Redirecting to 403 page");
+				String contextPath = request.getContextPath();
+				response.sendRedirect(contextPath + appProps.getProperty("error403.uri"));
 			} else {
-				LOG.info("Redirecting to login page");
-				response.sendRedirect(contextPath + appProps.getProperty("404errorPage.uri"));
+				chain.doFilter(req, resp); // Just continue chain
 			}
 
 		} else {

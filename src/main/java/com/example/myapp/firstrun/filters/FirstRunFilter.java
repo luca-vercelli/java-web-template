@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 
 import com.example.myapp.firstrun.helpers.FirstRun;
 import com.example.myapp.main.util.ApplicationProperties;
+import com.example.myapp.main.util.WebFilterExclude;
 
 /**
  * This Filter determines if database exists and is populated. After
@@ -47,6 +48,8 @@ public class FirstRunFilter implements Filter {
 	FirstRun firstRunPopulator;
 	@Inject
 	ApplicationProperties appProps;
+	@Inject
+	WebFilterExclude webFilterExclude;
 
 	private boolean databasePopulated = false;
 
@@ -61,7 +64,7 @@ public class FirstRunFilter implements Filter {
 				HttpServletResponse response = (HttpServletResponse) resp;
 				String contextPath = request.getContextPath();
 
-				if (!excludeUrl(appProps.getProperty("errors.uris").split(","), request)) {
+				if (!webFilterExclude.excludeUrl(appProps.getProperty("errors.uris").split(","), request)) {
 
 					Long n = 0L;
 
@@ -104,29 +107,5 @@ public class FirstRunFilter implements Filter {
 
 	@Override
 	public void destroy() {
-	}
-	
-	/**
-	 * Return true if the given url is to be excluded by WebFilter. This is
-	 * because @WebFilter annotation does not allow excluding specific paths.
-	 * 
-	 * @param url
-	 * @param excludeUrls
-	 * @param request
-	 * @return
-	 */
-	private boolean excludeUrl(String[] excludeUrls, HttpServletRequest request) {
-		String uri = request.getRequestURI();
-		String contextPath = request.getContextPath();
-
-		uri = uri.replaceAll("/+", "/"); // convert /myapp///ui -> /myapp/ui
-
-		for (String excludeUrl : excludeUrls) {
-			excludeUrl = excludeUrl.trim();
-			if (!excludeUrl.equals("") && uri.startsWith(contextPath + excludeUrl)) {
-				return true;
-			}
-		}
-		return false;
 	}
 }
