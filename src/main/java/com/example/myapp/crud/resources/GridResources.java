@@ -1,4 +1,4 @@
-package com.example.myapp.main.resources;
+package com.example.myapp.crud.resources;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +22,6 @@ import com.example.myapp.crud.GenericManager;
 import com.example.myapp.crud.GridManager;
 import com.example.myapp.crud.entity.Grid;
 import com.example.myapp.crud.entity.GridColumn;
-import com.example.myapp.crud.resources.ListType;
 import com.sun.messaging.jmq.io.Status;
 
 @Stateless
@@ -32,10 +31,8 @@ public class GridResources {
 
 	@Inject
 	GenericManager genericManager;
-
 	@Inject
 	GridManager gridManager;
-
 	@Inject
 	Logger LOG;
 
