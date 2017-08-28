@@ -79,7 +79,7 @@ public class GridManager {
 		if (clazz == null)
 			return null;
 
-		List<Grid> grids = genericManager.findByProperty(Grid.class, "entity", entity);
+		List<Grid> grids = findGridsForEntity(entity);
 
 		Grid grid = null;
 
@@ -116,7 +116,7 @@ public class GridManager {
 		for (Object x : attrs) {
 			if (x instanceof Attribute) {
 				Attribute<?, ?> a = (Attribute<?, ?>) x;
-				grid.getColumns().add(new GridColumn(a.getName(), a.getName(), colnum++, BooleanYN.N));
+				grid.getColumns().add(new GridColumn(grid, a.getName(), a.getName(), colnum++, BooleanYN.N));
 			}
 		}
 		grid = genericManager.save(grid); // FIXME check if columns are saved

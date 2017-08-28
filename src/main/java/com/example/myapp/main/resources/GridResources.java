@@ -47,10 +47,16 @@ public class GridResources {
 		// List<GridColumn>
 
 		Grid grid = gridManager.getGrid(entity);
-		if (grid == null)
+		if (grid == null) {
+			LOG.error("No grid found for " + entity);
 			Response.status(Status.NOT_FOUND).build();
+		}
 
 		List<GridColumn> columns = grid.getColumns();
+		if (columns == null || columns.isEmpty()) {
+			LOG.error("No columns found for " + entity);
+			Response.status(Status.NOT_FOUND).build();
+		}
 
 		// ListType and GenericEntity are needed in order to handle generics
 		Type genericType = new ListType(GridColumn.class);
@@ -71,8 +77,10 @@ public class GridResources {
 	public Response find(@PathParam("entity") String entity) {
 
 		Grid grid = gridManager.getGrid(entity);
-		if (grid == null)
+		if (grid == null) {
+			LOG.error("No grid found for " + entity);
 			Response.status(Status.NOT_FOUND).build();
+		}
 
 		List<Object[]> entities = gridManager.find(grid);
 
@@ -99,8 +107,10 @@ public class GridResources {
 	public Response exportXLSX(@PathParam("entity") String entity) throws IOException {
 
 		Grid grid = gridManager.getGrid(entity);
-		if (grid == null)
+		if (grid == null) {
+			LOG.error("No grid found for " + entity);
 			Response.status(Status.NOT_FOUND).build();
+		}
 
 		File f = gridManager.exportXLSX(grid);
 
@@ -121,8 +131,10 @@ public class GridResources {
 	public Response exportCSV(@PathParam("entity") String entity) throws IOException {
 
 		Grid grid = gridManager.getGrid(entity);
-		if (grid == null)
+		if (grid == null) {
+			LOG.error("No grid found for " + entity);
 			Response.status(Status.NOT_FOUND).build();
+		}
 
 		File f = gridManager.exportCSV(grid);
 

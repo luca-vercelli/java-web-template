@@ -328,25 +328,25 @@ public class FirstRun {
 		Grid grid;
 
 		grid = new Grid("Role", "grid.role.default");
-		grid.getColumns().add(new GridColumn("id", "grid.role.id", 10, BooleanYN.Y));
-		grid.getColumns().add(new GridColumn("description", "grid.role.description", 20, BooleanYN.N));
+		grid.getColumns().add(new GridColumn(grid, "id", "grid.role.id", 10, BooleanYN.Y));
+		grid.getColumns().add(new GridColumn(grid, "description", "grid.role.description", 20, BooleanYN.N));
 		em.persist(grid);
-		
+
 		grid = new Grid("User", "grid.user.default");
-		grid.getColumns().add(new GridColumn("id", "grid.user.id", 10, BooleanYN.Y));
-		grid.getColumns().add(new GridColumn("name", "grid.user.username", 20, BooleanYN.N));
-		grid.getColumns().add(new GridColumn("personName", "grid.user.name", 30, BooleanYN.N));
-		grid.getColumns().add(new GridColumn("personSurname", "grid.user.surname", 40, BooleanYN.N));
+		grid.getColumns().add(new GridColumn(grid, "id", "grid.user.id", 10, BooleanYN.Y));
+		grid.getColumns().add(new GridColumn(grid, "name", "grid.user.username", 20, BooleanYN.N));
+		grid.getColumns().add(new GridColumn(grid, "personName", "grid.user.name", 30, BooleanYN.N));
+		grid.getColumns().add(new GridColumn(grid, "personSurname", "grid.user.surname", 40, BooleanYN.N));
 		em.persist(grid);
 
 		grid = new Grid("Page", "grid.page.default");
-		grid.getColumns().add(new GridColumn("id", "grid.page.id", 10, BooleanYN.Y));
-		grid.getColumns().add(new GridColumn("description", "grid.page.description", 20, BooleanYN.N));
+		grid.getColumns().add(new GridColumn(grid, "id", "grid.page.id", 10, BooleanYN.Y));
+		grid.getColumns().add(new GridColumn(grid, "description", "grid.page.description", 20, BooleanYN.N));
 		em.persist(grid);
 
 		grid = new Grid("Menu", "grid.menu.default");
-		grid.getColumns().add(new GridColumn("id", "grid.menu.id", 10, BooleanYN.Y));
-		grid.getColumns().add(new GridColumn("description", "grid.menu.description", 20, BooleanYN.N));
+		grid.getColumns().add(new GridColumn(grid, "id", "grid.menu.id", 10, BooleanYN.Y));
+		grid.getColumns().add(new GridColumn(grid, "description", "grid.menu.description", 20, BooleanYN.N));
 		em.persist(grid);
 
 	}

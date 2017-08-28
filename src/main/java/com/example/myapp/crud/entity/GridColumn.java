@@ -35,7 +35,8 @@ public class GridColumn {
 	/**
 	 * Full constructor.
 	 */
-	public GridColumn(String columnDefinition, String description, Integer order, BooleanYN readOnly) {
+	public GridColumn(Grid grid, String columnDefinition, String description, Integer order, BooleanYN readOnly) {
+		this.grid = grid;
 		this.columnDefinition = columnDefinition;
 		this.description = description;
 		this.ordering = order;
@@ -54,7 +55,7 @@ public class GridColumn {
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "GRID_ID")
+	@JoinColumn(name = "GRID_ID", nullable = false)
 	@XmlTransient
 	public Grid getGrid() {
 		return grid;
