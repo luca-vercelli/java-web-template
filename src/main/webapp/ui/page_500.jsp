@@ -33,8 +33,10 @@
           <div class="col-middle">
             <div class="text-center">
               <h1 class="error-number">500</h1>
-              <h2>Internal Server Error</h2>
-              <p>We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try refreshing. <a href="#">Report this?</a>
+              <h2><fmt:message key="page500.title" /></h2>
+              <p><fmt:message key="${param.errorcode}" />
+              </p>
+              <p><fmt:message key="page500.msg" /> <a href="#"><fmt:message key="pageerror.reportThis" /></a>
               </p>
               <div class="mid_center">
                 <h3>Search</h3>

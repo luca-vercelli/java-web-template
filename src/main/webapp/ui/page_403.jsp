@@ -33,8 +33,8 @@
           <div class="col-middle">
             <div class="text-center text-center">
               <h1 class="error-number">403</h1>
-              <h2>Access denied</h2>
-              <p>Full authentication is required to access this resource. <a href="#">Report this?</a>
+              <h2><fmt:message key="page403.title" /></h2>
+              <p><fmt:message key="page403.msg" /> <a href="#"><fmt:message key="pageerror.reportThis" /></a>
               </p>
               <div class="mid_center">
                 <h3>Search</h3>

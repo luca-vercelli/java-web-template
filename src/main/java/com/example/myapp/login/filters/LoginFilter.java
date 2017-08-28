@@ -34,13 +34,13 @@ public class LoginFilter implements Filter {
 
 	@Inject
 	Logger LOG;
-	
+
 	@Inject
 	ApplicationProperties appProps;
 
 	@Inject
 	SessionBean sessionBean;
-	
+
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
 			throws IOException, ServletException {
@@ -53,18 +53,9 @@ public class LoginFilter implements Filter {
 			HttpServletRequest request = (HttpServletRequest) req;
 			HttpServletResponse response = (HttpServletResponse) resp;
 			String contextPath = request.getContextPath();
-			String uri = request.getRequestURI();
 
-			uri = uri.replaceAll("/+", "/"); // convert /myapp///ui -> /myapp/ui
-
-			for (String allowedPath : appProps.getProperty("login.not.required.uris").split(",")) {
-
-				if (!allowedPath.equals("") && uri.startsWith(contextPath + allowedPath)) {
-					loginRequired = false;
-					break;
-				}
-			}
-
+			loginRequired = !excludeUrl(appProps.getProperty("login.not.required.uris"), request);
+			
 			if (sessionBean != null && loginRequired) {
 				loginSuccess = (sessionBean.getUser() != null);
 			}
@@ -91,4 +82,40 @@ public class LoginFilter implements Filter {
 	public void destroy() {
 	}
 
+	/**
+	 * Return true if the given url is to be excluded by WebFilter.
+	 * This is because @WebFilter annotation does not allow excluding specific paths.
+	 * 
+	 * @param url
+	 * @param excludeUrlsCSV
+	 * @param request
+	 * @return
+	 */
+	private boolean excludeUrl(String excludeUrlsCSV, HttpServletRequest request) {
+		return excludeUrl(excludeUrlsCSV.split(","), request);
+	}
+
+	/**
+	 * Return true if the given url is to be excluded by WebFilter.
+	 * This is because @WebFilter annotation does not allow excluding specific paths.
+	 * 
+	 * @param url
+	 * @param excludeUrls
+	 * @param request
+	 * @return
+	 */
+	private boolean excludeUrl(String[] excludeUrls, HttpServletRequest request) {
+		String uri = request.getRequestURI();
+		String contextPath = request.getContextPath();
+
+		uri = uri.replaceAll("/+", "/"); // convert /myapp///ui -> /myapp/ui
+
+		for (String excludeUrl : excludeUrls) {
+			excludeUrl = excludeUrl.trim();
+			if (!excludeUrl.equals("") && uri.startsWith(contextPath + excludeUrl)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
