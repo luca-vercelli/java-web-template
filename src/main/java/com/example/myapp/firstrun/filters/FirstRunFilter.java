@@ -61,7 +61,7 @@ public class FirstRunFilter implements Filter {
 				HttpServletResponse response = (HttpServletResponse) resp;
 				String contextPath = request.getContextPath();
 
-				if (!excludeUrl(appProps.getProperty("errors.uris"), request)) {
+				if (!excludeUrl(appProps.getProperty("errors.uris").split(","), request)) {
 
 					Long n = 0L;
 
@@ -105,20 +105,7 @@ public class FirstRunFilter implements Filter {
 	@Override
 	public void destroy() {
 	}
-
-	/**
-	 * Return true if the given url is to be excluded by WebFilter. This is
-	 * because @WebFilter annotation does not allow excluding specific paths.
-	 * 
-	 * @param url
-	 * @param excludeUrlsCSV
-	 * @param request
-	 * @return
-	 */
-	private boolean excludeUrl(String excludeUrlsCSV, HttpServletRequest request) {
-		return excludeUrl(excludeUrlsCSV.split(","), request);
-	}
-
+	
 	/**
 	 * Return true if the given url is to be excluded by WebFilter. This is
 	 * because @WebFilter annotation does not allow excluding specific paths.

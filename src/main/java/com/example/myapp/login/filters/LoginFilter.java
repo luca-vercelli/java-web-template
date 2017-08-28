@@ -54,8 +54,8 @@ public class LoginFilter implements Filter {
 			HttpServletResponse response = (HttpServletResponse) resp;
 			String contextPath = request.getContextPath();
 
-			loginRequired = !excludeUrl(appProps.getProperty("login.not.required.uris"), request);
-			
+			loginRequired = !excludeUrl(appProps.getProperty("login.not.required.uris").split(","), request);
+
 			if (sessionBean != null && loginRequired) {
 				loginSuccess = (sessionBean.getUser() != null);
 			}
@@ -83,21 +83,8 @@ public class LoginFilter implements Filter {
 	}
 
 	/**
-	 * Return true if the given url is to be excluded by WebFilter.
-	 * This is because @WebFilter annotation does not allow excluding specific paths.
-	 * 
-	 * @param url
-	 * @param excludeUrlsCSV
-	 * @param request
-	 * @return
-	 */
-	private boolean excludeUrl(String excludeUrlsCSV, HttpServletRequest request) {
-		return excludeUrl(excludeUrlsCSV.split(","), request);
-	}
-
-	/**
-	 * Return true if the given url is to be excluded by WebFilter.
-	 * This is because @WebFilter annotation does not allow excluding specific paths.
+	 * Return true if the given url is to be excluded by WebFilter. This is
+	 * because @WebFilter annotation does not allow excluding specific paths.
 	 * 
 	 * @param url
 	 * @param excludeUrls
