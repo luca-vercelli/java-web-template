@@ -76,6 +76,14 @@
 			<version>3.11</version>
 		</dependency>
 		
+		<!-- PDF output -->
+		<dependency>
+			<!-- Later versions are AGPL licenced -->
+			<groupId>com.lowagie</groupId>
+			<artifactId>itext</artifactId>
+			<version>2.1.7</version>
+		</dependency>
+		
 		<!-- GlassFish embedded web server -->
 		<dependency>
 			<groupId>org.glassfish.main.extras</groupId>

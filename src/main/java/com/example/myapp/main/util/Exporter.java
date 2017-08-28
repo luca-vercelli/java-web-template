@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.StringReader;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.Calendar;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -24,9 +27,17 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+
+import com.lowagie.text.Document;
+import com.lowagie.text.html.simpleparser.HTMLWorker;
+import com.lowagie.text.pdf.PdfWriter;
 
 @Stateless
 public class Exporter {
+
+	@Inject
+	Logger LOG;
 
 	/**
 	 * Simple export to a standard CSV file ("." as decimal separator, "," as
@@ -154,6 +165,33 @@ public class Exporter {
 			c.setCellValue((Calendar) value);
 		} else {
 			c.setCellValue(value.toString());
+		}
+	}
+
+	/**
+	 * Generate a PDF from given HTML source code.
+	 * 
+	 * @param HTMLtext
+	 */
+	public File HTML2PDFExport(String HTMLtext) {
+		try {
+
+			File f = File.createTempFile("export", ".xlsx");
+
+			OutputStream os = new FileOutputStream(f);
+			Document doc = new Document();
+			PdfWriter.getInstance(doc, os);
+			doc.open();
+			HTMLWorker hw = new HTMLWorker(doc);
+			hw.parse(new StringReader(HTMLtext));
+			doc.close();
+			os.close();
+
+			return f;
+
+		} catch (Exception e) {
+			LOG.error("Exception during PDF conversion", e);
+			return null;
 		}
 	}
 }
