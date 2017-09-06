@@ -5,17 +5,10 @@
 */
 package com.example.myapp.firstrun.filters;
 
-import java.io.IOException;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 
 import com.example.myapp.firstrun.helpers.FirstRun;
+import com.example.myapp.main.util.AbstractRequestFilter;
 import com.example.myapp.main.util.ApplicationProperties;
 import com.example.myapp.main.util.WebFilterExclude;
 
@@ -38,7 +32,7 @@ import com.example.myapp.main.util.WebFilterExclude;
  *
  */
 @WebFilter(urlPatterns = { "*.html", "*.htm", "*.xhtml", "*.jsp" })
-public class FirstRunFilter implements Filter {
+public class FirstRunFilter extends AbstractRequestFilter {
 
 	@Inject
 	Logger LOG;
@@ -54,58 +48,38 @@ public class FirstRunFilter implements Filter {
 	private boolean databasePopulated = false;
 
 	@Override
-	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
-			throws IOException, ServletException {
-		if (req instanceof HttpServletRequest && resp instanceof HttpServletResponse) {
+	public boolean filterRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		if (!databasePopulated) {
 
-			if (!databasePopulated) {
+			String contextPath = request.getContextPath();
 
-				HttpServletRequest request = (HttpServletRequest) req;
-				HttpServletResponse response = (HttpServletResponse) resp;
-				String contextPath = request.getContextPath();
+			if (!webFilterExclude.excludeUrl(appProps.getProperty("errors.uris").split(","), request)) {
 
-				if (!webFilterExclude.excludeUrl(appProps.getProperty("errors.uris").split(","), request)) {
+				Long n = 0L;
 
-					Long n = 0L;
+				// is transaction required?
+				try {
+					TypedQuery<Long> query = em.createQuery("SELECT COUNT(*) FROM Settings", Long.class);
+					n = query.getSingleResult();
 
-					// is transaction required?
-					try {
-						TypedQuery<Long> query = em.createQuery("SELECT COUNT(*) FROM Settings", Long.class);
-						n = query.getSingleResult();
+					LOG.debug("" + n + " rows found in APP_SETTINGS");
 
-						LOG.debug("" + n + " rows found in APP_SETTINGS");
-
-						if (n == 0L) {
-							firstRunPopulator.populateDatabase();
-							databasePopulated = true;
-						}
-
-					} catch (Exception exc) {
-
-						LOG.error("Error during firstRun db connection", exc);
-
-						response.sendRedirect(
-								contextPath + appProps.getProperty("error500.uri") + "?errorcode=error.db.connection");
-						return;
-
+					if (n == 0L) {
+						firstRunPopulator.populateDatabase();
+						databasePopulated = true;
 					}
+
+				} catch (Exception exc) {
+
+					LOG.error("Error during firstRun db connection", exc);
+
+					response.sendRedirect(
+							contextPath + appProps.getProperty("error500.uri") + "?errorcode=error.db.connection");
+					return false;
+
 				}
 			}
-
-			chain.doFilter(req, resp); // Continue chain
-
-		} else {
-			// should not pass here
-			System.err.println("Not HTTP ? Why here?");
-			chain.doFilter(req, resp); // Just continue chain
 		}
-	}
-
-	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {
-	}
-
-	@Override
-	public void destroy() {
+		return true;
 	}
 }

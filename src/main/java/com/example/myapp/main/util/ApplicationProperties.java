@@ -16,6 +16,8 @@ import org.slf4j.Logger;
 /**
  * Load properties (if any) from file application.properties. The file is read
  * at first call to getInstance().
+ * 
+ * You may prefer store properties inside Settings.
  *
  */
 @ApplicationScoped
