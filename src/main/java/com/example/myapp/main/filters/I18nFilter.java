@@ -5,21 +5,20 @@
 */
 package com.example.myapp.main.filters;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.inject.Inject;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.HttpHeaders;
+
+import com.example.myapp.main.util.AbstractRequestFilter;
+import com.example.myapp.main.util.SessionBean;
 
 /**
  * Simple filter that load translations from globals.properties into "labels"
@@ -31,9 +30,15 @@ import javax.servlet.http.HttpServletResponse;
  *
  */
 @WebFilter(urlPatterns = { "*.html", "*.htm", "*.xhtml", "*.jsp" })
-public class I18nFilter implements Filter {
+public class I18nFilter extends AbstractRequestFilter {
 
 	static Map<String, Map<String, String>> properties = new HashMap<String, Map<String, String>>();
+
+	public static String COOKIE_NAME = "lang";
+	public static String ATTR_REQ_NAME = "labels";
+
+	@Inject
+	SessionBean sessionBean;
 
 	private Map<String, String> loadBundle(String lang) {
 		if (!properties.containsKey(lang)) {
@@ -48,30 +53,35 @@ public class I18nFilter implements Filter {
 	}
 
 	@Override
-	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
-			throws IOException, ServletException {
+	public boolean filterRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		if (req instanceof HttpServletRequest && resp instanceof HttpServletResponse) {
+		String lang = null;
 
-			String lang = "it"; // FIXME
-
-			req.setAttribute("labels", loadBundle(lang));
-
-			chain.doFilter(req, resp); // Just continue chain
-
-		} else {
-			// should not pass here
-			System.err.println("Not HTTP ? Why here?");
-			chain.doFilter(req, resp); // Just continue chain
+		// guess language
+		Cookie[] cookies = request.getCookies();
+		for (Cookie c : cookies)
+			if (c.getName().equals(COOKIE_NAME)) {
+				lang = c.getValue();
+				break;
+			}
+		if (lang == null) {
+			lang = request.getHeader(HttpHeaders.ACCEPT_LANGUAGE);
 		}
-	}
+		if (lang == null) {
+			lang = Locale.getDefault().getCountry();
+		}
+		if (lang == null) {
+			lang = "en";
+		}
 
-	@Override
-	public void init(FilterConfig fc) throws ServletException {
-	}
+		// set cookie
 
-	@Override
-	public void destroy() {
+		lang = lang.substring(0, 2).toLowerCase();
+		sessionBean.setLanguage(lang);
+		response.addCookie(new Cookie(COOKIE_NAME, lang));
+		request.setAttribute(ATTR_REQ_NAME, loadBundle(lang));
+
+		return true;
 	}
 
 }

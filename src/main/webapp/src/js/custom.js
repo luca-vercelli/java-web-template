@@ -242,3 +242,13 @@ if (typeof NProgress != 'undefined') {
         NProgress.done();
     });
 }
+
+// i18n
+/**
+ * Set language inside some cookie, then reload page
+ * @param lang
+ */
+function changeLanguage(lang) {
+	document.cookie = "lang=" + lang;
+	location.reload(true);
+}
