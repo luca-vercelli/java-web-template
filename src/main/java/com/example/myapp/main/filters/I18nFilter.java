@@ -32,7 +32,7 @@ import com.example.myapp.main.util.SessionBean;
 @WebFilter(urlPatterns = { "*.html", "*.htm", "*.xhtml", "*.jsp" })
 public class I18nFilter extends AbstractRequestFilter {
 
-	static Map<String, Map<String, String>> properties = new HashMap<String, Map<String, String>>();
+	static Map<String, Map<String, String>> langMap = new HashMap<String, Map<String, String>>();
 
 	public static String COOKIE_NAME = "lang";
 	public static String ATTR_REQ_NAME = "labels";
@@ -40,16 +40,20 @@ public class I18nFilter extends AbstractRequestFilter {
 	@Inject
 	SessionBean sessionBean;
 
-	private Map<String, String> loadBundle(String lang) {
-		if (!properties.containsKey(lang)) {
+	private Map<String, String> getLabelsMap(String lang) {
+		if (!langMap.containsKey(lang)) {
 			Map<String, String> newMap = new HashMap<String, String>();
-			ResourceBundle bundle = ResourceBundle.getBundle("global", Locale.forLanguageTag(lang));
+
+			// No fallback. Who cares about server's language?!
+			ResourceBundle bundle = ResourceBundle.getBundle("global", Locale.forLanguageTag(lang),
+					ResourceBundle.Control.getNoFallbackControl(ResourceBundle.Control.FORMAT_PROPERTIES));
+
 			for (String key : bundle.keySet()) {
 				newMap.put(key, bundle.getString(key));
 			}
-			properties.put(lang, newMap);
+			langMap.put(lang, newMap);
 		}
-		return properties.get(lang);
+		return langMap.get(lang);
 	}
 
 	@Override
@@ -74,12 +78,12 @@ public class I18nFilter extends AbstractRequestFilter {
 			lang = "en";
 		}
 
-		// set cookie
+		lang = lang.toLowerCase();
 
-		lang = lang.substring(0, 2).toLowerCase();
+		// set cookie and session data
 		sessionBean.setLanguage(lang);
 		response.addCookie(new Cookie(COOKIE_NAME, lang));
-		request.setAttribute(ATTR_REQ_NAME, loadBundle(lang));
+		request.setAttribute(ATTR_REQ_NAME, getLabelsMap(lang));
 
 		return true;
 	}
