@@ -24,7 +24,7 @@ import org.slf4j.Logger;
  *
  */
 @Stateless
-public class SendMails {
+public class MailManager {
 
 	@Inject
 	Logger LOG;

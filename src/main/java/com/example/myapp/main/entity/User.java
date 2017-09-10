@@ -37,6 +37,12 @@ import com.example.myapp.main.enums.BooleanYN;
 @Entity
 @Table(name = "APP_USER")
 @XmlRootElement
+/*@NamedQueries( {
+	@NamedQuery(name = "findByUsernamePassword", query = "from User where name = :name and active = :true"),
+	@NamedQuery(name = "findByEmailPassword", query = "from User where name = :name and active = :true"),
+	@NamedQuery(name = "findByEmail", query = "from User where name = :name and active = :true")
+}) //cannot fix error
+*/
 public class User implements Principal {
 
 	private Long id;

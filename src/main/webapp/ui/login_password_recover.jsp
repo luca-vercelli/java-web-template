@@ -45,10 +45,11 @@ See PR #337
         <div class="animate form login_form">
           <section class="login_content">
           <!-- /password recovery -->
-            <form action="index.html">
+            <form action="doPasswordRecovery">
               <h1>Password Reset</h1>
               <div class="form-group has-feedback">
                 <input type="email" class="form-control" name="email" placeholder="Your email" />
+                <input type="hidden" name="address" id="address"/>
                 <div class="form-control-feedback">
                   <i class="fa fa-envelope-o text-muted"></i>
                 </div>
@@ -76,5 +77,9 @@ See PR #337
         </div>
       </div>
     </div>
+    <script>
+    var address = location.href.substring(0, location.href.lastIndexOf("/"));
+    document.getElementById("address").value = address;
+    </script>
   </body>
 </html>

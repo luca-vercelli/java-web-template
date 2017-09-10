@@ -114,6 +114,22 @@ public class UsersManager {
 
 	}
 
+	public User getUserByEmail(String email) {
+
+		TypedQuery<User> query = em.createQuery("from User where email = :email ", User.class)
+				.setParameter("email", email);
+
+		List<User> users = query.getResultList();
+
+		for (User u : users) {
+			return u;
+			// FIXME what if more than 1?
+		}
+
+		return null;
+
+	}
+
 	/**
 	 * Authenticate given username and password through JAAS.
 	 * 
