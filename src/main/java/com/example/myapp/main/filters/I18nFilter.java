@@ -63,11 +63,12 @@ public class I18nFilter extends AbstractRequestFilter {
 
 		// guess language
 		Cookie[] cookies = request.getCookies();
-		for (Cookie c : cookies)
-			if (c.getName().equals(COOKIE_NAME)) {
-				lang = c.getValue();
-				break;
-			}
+		if (cookies != null)
+			for (Cookie c : cookies)
+				if (c.getName().equals(COOKIE_NAME)) {
+					lang = c.getValue();
+					break;
+				}
 		if (lang == null) {
 			lang = request.getHeader(HttpHeaders.ACCEPT_LANGUAGE);
 		}
