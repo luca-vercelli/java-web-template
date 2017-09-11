@@ -82,6 +82,7 @@ public class UsersManager {
 
 	public User getUserByNameAndPassword(String name, char[] password) {
 
+		//FIXME namedquery?
 		TypedQuery<User> query = em.createQuery("from User where name = :name and active = :true", User.class)
 				.setParameter("name", name).setParameter("true", BooleanYN.Y);
 
@@ -99,6 +100,7 @@ public class UsersManager {
 
 	public User getUserByEmailAndPassword(String email, char[] cleartextPassword) {
 
+		//FIXME namedquery?
 		TypedQuery<User> query = em.createQuery("from User where email = :email and active = :true", User.class)
 				.setParameter("email", email).setParameter("true", true);
 
@@ -116,10 +118,7 @@ public class UsersManager {
 
 	public User getUserByEmail(String email) {
 
-		TypedQuery<User> query = em.createQuery("from User where email = :email ", User.class)
-				.setParameter("email", email);
-
-		List<User> users = query.getResultList();
+		List<User> users = genericManager.findByProperty(User.class, "email", email);
 
 		for (User u : users) {
 			return u;
@@ -186,6 +185,7 @@ public class UsersManager {
 	public Menu filterMenuForUser(Menu menu, User user) {
 
 		// FIXME this is slow
+		// should use some kind of View
 
 		if (menu == null)
 			return null;

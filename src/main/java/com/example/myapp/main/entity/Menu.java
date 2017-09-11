@@ -5,6 +5,7 @@
 */
 package com.example.myapp.main.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -28,10 +29,12 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "APP_MENU")
 @XmlRootElement
-public class Menu {
+public class Menu implements Serializable {
+
+	private static final long serialVersionUID = -8243231626953359682L;
 
 	private Long id;
-	private String description; // FIXME what about i18n?
+	private String description;
 	private Integer ordering;
 	private Menu parentMenu;
 	private String icon;

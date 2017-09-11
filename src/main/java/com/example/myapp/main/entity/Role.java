@@ -5,6 +5,8 @@
 */
 package com.example.myapp.main.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,7 +18,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "APP_ROLE")
 @XmlRootElement
-public class Role {
+public class Role implements Serializable {
+
+	private static final long serialVersionUID = -1688293920379485224L;
 
 	private Long id;
 	private String description;

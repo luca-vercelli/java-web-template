@@ -29,7 +29,7 @@ import com.example.myapp.main.util.WebFilterExclude;
  * @author luca vercelli
  *
  */
-@WebFilter(value = "authFilter", urlPatterns = { "*.html", "*.htm", "*.xhtml", "*.jsp", "/rest" })
+@WebFilter(urlPatterns = { "*.html", "*.htm", "*.xhtml", "*.jsp", "/rest" })
 public class AuthorizationFilter extends AbstractRequestFilter {
 
 	@Inject
@@ -45,6 +45,7 @@ public class AuthorizationFilter extends AbstractRequestFilter {
 
 	@Override
 	public boolean filterRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
 		boolean authorizationRequired = !webFilterExclude
 				.excludeUrl(appProps.getProperty("login.not.required.uris").split(","), request);
 
@@ -64,7 +65,7 @@ public class AuthorizationFilter extends AbstractRequestFilter {
 			List<Page> lp = genericManager.findByProperty(Page.class, "url", uri);
 			if (lp == null || lp.isEmpty()) {
 
-				LOG.warn("No Page item found for uri " + uri);
+				LOG.warn("No Page item found for uri " + uri + ", so it is allowed");
 				authorizationRequired = false;
 
 			} else {

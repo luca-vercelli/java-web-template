@@ -5,6 +5,7 @@
 */
 package com.example.myapp.main.entity;
 
+import java.io.Serializable;
 import java.security.Principal;
 import java.util.Date;
 import java.util.HashSet;
@@ -43,8 +44,10 @@ import com.example.myapp.main.enums.BooleanYN;
 	@NamedQuery(name = "findByEmail", query = "from User where name = :name and active = :true")
 }) //cannot fix error
 */
-public class User implements Principal {
+public class User implements Principal, Serializable {
 
+	private static final long serialVersionUID = 6226690496815744449L;
+	
 	private Long id;
 	private String username;
 	private String email;

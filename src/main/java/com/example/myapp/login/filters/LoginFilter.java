@@ -41,6 +41,7 @@ public class LoginFilter extends AbstractRequestFilter {
 
 	@Override
 	public boolean filterRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
 		boolean loginRequired = true;
 		boolean loginSuccess = false;
 

@@ -15,13 +15,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.slf4j.Logger;
+
 import com.example.myapp.login.helpers.UsersManager;
 import com.example.myapp.main.entity.User;
 import com.example.myapp.main.util.SessionBean;
 import com.sun.messaging.jmq.io.Status;
 
 /**
- * Perform authentication.
+ * Perform authentication. Currently not used.
  * 
  */
 @Path("/doLogin")
@@ -31,6 +33,8 @@ public class AuthenticationEndpoint {
 	SessionBean sessionBean;
 	@Inject
 	UsersManager usersHelper;
+	@Inject
+	Logger LOG;
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -38,9 +42,8 @@ public class AuthenticationEndpoint {
 	public Response authenticateUser(@FormParam("userId") String userId, @FormParam("pwd") String pwd) {
 
 		try {
-			sessionBean.setLoginContext(null);
 			sessionBean.setUser(null);
-
+			
 			User user = null;
 
 			if (userId == null || userId.equals("")) {
@@ -53,7 +56,6 @@ public class AuthenticationEndpoint {
 
 			LoginContext lc = usersHelper.authenticate(userId, pwd.toCharArray());
 
-			sessionBean.setLoginContext(lc);
 			if (lc != null && !lc.getSubject().getPrincipals().isEmpty()) {
 				user = (User) lc.getSubject().getPrincipals().iterator().next();
 				sessionBean.setUser(user);

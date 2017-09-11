@@ -1,9 +1,13 @@
+/*
+* WebTemplate 1.0
+* Luca Vercelli 2017
+* Released under GPLv3 
+*/
 package com.example.myapp.login.actions;
 
 import java.io.IOException;
 
 import javax.inject.Inject;
-import javax.security.auth.login.LoginException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,7 +25,7 @@ import com.example.myapp.main.util.SessionBean;
  * @author Luca Vercelli
  *
  */
-@WebServlet(name = "logoutServlet", urlPatterns = { "/ui/doLogout" })
+@WebServlet("/ui/doLogout")
 public class doLogout extends HttpServlet {
 
 	private static final long serialVersionUID = 651051473002562658L;
@@ -38,6 +42,7 @@ public class doLogout extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		/* FIXME logincontext is not serializable, should we save it in session? how to get it?
 		if (sessionBean != null && sessionBean.getLoginContext() != null) {
 			try {
 				sessionBean.getLoginContext().logout();
@@ -45,8 +50,9 @@ public class doLogout extends HttpServlet {
 				LOG.error("Exception while logging out", e);
 			}
 		}
+		*/
 
-		sessionManager.clearSession();
+		sessionManager.clearSession(sessionBean);
 
 		response.sendRedirect(request.getContextPath() + appProps.getProperty("login.uri"));
 

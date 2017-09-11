@@ -61,9 +61,6 @@ public class I18nFilter extends AbstractRequestFilter {
 	@Override
 	public boolean filterRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		LOG.info("Entering I18nFilter. Filter=" + this.hashCode() + ". SessionBean=" + sessionBean.hashCode()
-				+ ". user=" + sessionBean.getUser());
-
 		String lang = null;
 
 		// guess language
@@ -91,9 +88,6 @@ public class I18nFilter extends AbstractRequestFilter {
 		sessionBean.setLanguage(lang);
 		response.addCookie(new Cookie(COOKIE_NAME, lang));
 		request.setAttribute(ATTR_REQ_NAME, getLabelsMap(lang));
-
-		LOG.info("Exiting I18nFilter. Filter=" + this.hashCode() + ". SessionBean=" + sessionBean.hashCode() + ". user="
-				+ sessionBean.getUser());
 
 		return true;
 	}

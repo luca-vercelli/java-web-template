@@ -109,9 +109,7 @@ public class GridManager {
 
 		// guess there is a better solution
 		EntityType<?> et = getEntity(entity);
-		Set<?> attrs = et.getAttributes(); // FIXME should be
-											// Set<Attribute<?,?>> but gives
-											// error
+		Set<?> attrs = et.getAttributes();
 		int colnum = 0;
 		for (Object x : attrs) {
 			if (x instanceof Attribute) {

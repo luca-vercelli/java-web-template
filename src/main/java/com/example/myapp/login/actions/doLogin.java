@@ -1,3 +1,8 @@
+/*
+* WebTemplate 1.0
+* Luca Vercelli 2017
+* Released under GPLv3 
+*/
 package com.example.myapp.login.actions;
 
 import java.io.File;
@@ -24,7 +29,7 @@ import com.example.myapp.main.util.SessionBean;
  * @author Luca Vercelli
  *
  */
-@WebServlet(name = "loginServlet", urlPatterns = { "/ui/doLogin" })
+@WebServlet("/ui/doLogin")
 public class doLogin extends HttpServlet {
 
 	private static final long serialVersionUID = 651051473002232658L;
@@ -44,7 +49,7 @@ public class doLogin extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		try {
-			sessionManager.clearSession();
+			sessionManager.clearSession(sessionBean);
 
 			// FIXME this could be performed just once, but where?
 			System.setProperty("java.security.auth.login.config",
@@ -65,11 +70,10 @@ public class doLogin extends HttpServlet {
 
 			LoginContext lc = usersManager.authenticate(userId, pwd);
 
-			sessionBean.setLoginContext(lc);
 			if (lc != null && !lc.getSubject().getPrincipals().isEmpty()) {
 				user = (User) lc.getSubject().getPrincipals().iterator().next();
 
-				sessionManager.fillDataInSessionBean(user, request.getParameter("language"));
+				sessionManager.fillDataInSessionBean(sessionBean, user);
 			}
 
 			if (user == null) {
@@ -79,7 +83,7 @@ public class doLogin extends HttpServlet {
 			}
 
 			// At last, user is authenticated
-			LOG.info("User authenticated:" + user);
+			LOG.info("User authenticated: " + user);
 			response.sendRedirect(request.getContextPath());
 
 		} catch (Exception e) {
