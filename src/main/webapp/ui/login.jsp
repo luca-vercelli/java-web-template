@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 
-<c:set var="language" value="${not empty param.language ? fn:substring(param.language,0,2) : not empty language ? fn:substring(language,0,2) : fn:substring(pageContext.request.locale,0,2)}" scope="session" />
+<c:set var="language" value="${not empty sessionBean.language ? sessionBean.language : fn:substring(pageContext.request.locale,0,2)}" scope="session" />
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="global" />
 <fmt:message key="login.password.lost" var="login_password_lost" />
@@ -77,7 +77,7 @@
             
               <!-- i18n -->
               <form>
-	            <select id="language" name="language" onchange="submit()" >
+	            <select id="languageSelect" onchange="changeLang();" >
                 	<option value="en" ${language == 'en' ? 'selected' : ''}>English</option>
                 	<option value="it" ${language == 'it' ? 'selected' : ''}>Italiano</option>
             	</select>
@@ -123,5 +123,14 @@
 
       </div>
     </div>
+
+	<script>
+    function changeLang() {
+    	var lang = document.getElementById("languageSelect").value;
+    	document.cookie = "lang=" + lang;
+    	location.reload();
+    }
+    
+    </script>
   </body>
 </html>
