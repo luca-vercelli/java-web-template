@@ -45,5 +45,20 @@
 
 		</div>
 	</div>
+	
+	<script>
+	<%-- some server-side variables may be here --%>
+	var language = '${sessionBean.language}';
+	var userName = '${sessionBean.user.name}';
+	</script>
+	
+	<script> //websockets
+	
+	var wsocketUrl = ((window.location.protocol == "https:") ? "wss:" : "ws:")
+		+ "//" + window.location.host
+		+ "/myapp/wsocks";
+	var wsocket = new WebSocket(wsocketUrl);
+	
+	</script>
 </body>
 </html>
