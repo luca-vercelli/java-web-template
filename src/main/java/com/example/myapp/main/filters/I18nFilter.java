@@ -76,7 +76,8 @@ public class I18nFilter extends AbstractRequestFilter {
 			lang = Locale.getDefault().getCountry();
 		}
 		if (lang == null) {
-			lang = "en";
+			lang = "en"; // whatever you want. But please don't use server
+							// default !
 		}
 
 		lang = lang.toLowerCase();
