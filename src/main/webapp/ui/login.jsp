@@ -55,7 +55,7 @@
               </div>
               <div>
                 <input type="submit" class="btn btn-default submit" value="Log in"/> 
-                <a class="reset_pass" href="#">${login_password_lost}</a>
+                <a class="reset_pass" href="login_password_recover.jsp">${login_password_lost}</a>
               </div>
 
               <div class="clearfix"></div>
