@@ -17,7 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 
+import org.slf4j.Logger;
+
 import com.example.myapp.main.util.AbstractRequestFilter;
+import com.example.myapp.main.util.ResourceBundleMap;
 import com.example.myapp.main.util.SessionBean;
 
 /**
@@ -39,18 +42,17 @@ public class I18nFilter extends AbstractRequestFilter {
 
 	@Inject
 	SessionBean sessionBean;
+	@Inject
+	Logger LOG;
 
 	private Map<String, String> getLabelsMap(String lang) {
 		if (!langMap.containsKey(lang)) {
-			Map<String, String> newMap = new HashMap<String, String>();
 
 			// No fallback. Who cares about server's language?!
 			ResourceBundle bundle = ResourceBundle.getBundle("global", Locale.forLanguageTag(lang),
 					ResourceBundle.Control.getNoFallbackControl(ResourceBundle.Control.FORMAT_PROPERTIES));
 
-			for (String key : bundle.keySet()) {
-				newMap.put(key, bundle.getString(key));
-			}
+			Map<String, String> newMap = new ResourceBundleMap(bundle);
 			langMap.put(lang, newMap);
 		}
 		return langMap.get(lang);
@@ -58,6 +60,9 @@ public class I18nFilter extends AbstractRequestFilter {
 
 	@Override
 	public boolean filterRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		LOG.info("Entering I18nFilter. Filter=" + this.hashCode() + ". SessionBean=" + sessionBean.hashCode()
+				+ ". user=" + sessionBean.getUser());
 
 		String lang = null;
 
@@ -86,6 +91,9 @@ public class I18nFilter extends AbstractRequestFilter {
 		sessionBean.setLanguage(lang);
 		response.addCookie(new Cookie(COOKIE_NAME, lang));
 		request.setAttribute(ATTR_REQ_NAME, getLabelsMap(lang));
+
+		LOG.info("Exiting I18nFilter. Filter=" + this.hashCode() + ". SessionBean=" + sessionBean.hashCode() + ". user="
+				+ sessionBean.getUser());
 
 		return true;
 	}
