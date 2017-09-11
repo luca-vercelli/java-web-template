@@ -23,10 +23,10 @@ import com.example.myapp.main.util.SessionBean;
  * @author Luca Vercelli
  *
  */
-@WebServlet("/ui/doPasswordRecovery")
-public class doPasswordRecovery extends HttpServlet {
+@WebServlet("/ui/confirmPasswordRecovery")
+public class confirmPasswordRecovery extends HttpServlet {
 
-	private static final long serialVersionUID = -1853319438734405659L;
+	private static final long serialVersionUID = -6310872623683319986L;
 
 	@Inject
 	ApplicationProperties appProps;
@@ -44,34 +44,20 @@ public class doPasswordRecovery extends HttpServlet {
 
 		try {
 
-			String address = request.getParameter("address"); // request's data
-																// not reliable
+			String pwdRecCode = request.getParameter("code");
 
-			String email = request.getParameter("email");
-			if (email.isEmpty()) {
-				request.setAttribute("error.message", "err.missing.email");
-				response.sendRedirect(request.getContextPath() + appProps.getProperty("password.recovery.uri"));
-				return;
-				// response.sendRedirect(request.getContextPath());
-			}
-
-			User user = usersManager.getUserByEmail(email);
+			User user = usersManager.getUserByPasswordRecoveryCode(pwdRecCode);
 			if (user == null) {
-				request.setAttribute("error.message", "err.unknown.email");
+				request.setAttribute("error.message", "err.wrong.code");
 				response.sendRedirect(request.getContextPath() + appProps.getProperty("password.recovery.uri"));
 				return;
 				// response.sendRedirect(request.getContextPath());
 			}
 
-			String pwdRecCode = usersManager.createPasswordRecoveryCode(user);
+			String newPassword = usersManager.newPassword(user);
 
-			// TODO some more clever text
-			mailManager.sendSimpleTextMail(email, "Password reset",
-					"You have requested to reset " + address + " login password.\r\n"
-							+ "If you really want to proceed, follow this link:\r\n" + address
-							+ "/ui/confirmPasswordRecovery?code=" + pwdRecCode + "\r\n");
-
-			request.setAttribute("error.message", "email.recovery.sent");
+			LOG.info("User changed password:" + user);
+			request.setAttribute("newPassword", newPassword);
 			response.sendRedirect(request.getContextPath() + appProps.getProperty("password.recovery.uri"));
 
 		} catch (Exception e) {

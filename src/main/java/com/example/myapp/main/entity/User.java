@@ -56,6 +56,7 @@ public class User implements Principal, Serializable {
 	private String personSurname;
 	private Date birthdate;
 	private BooleanYN active = BooleanYN.Y;
+	private String passwordRecoveryCode;
 
 	private Set<Role> roles = new HashSet<Role>();
 
@@ -152,6 +153,15 @@ public class User implements Principal, Serializable {
 
 	public void setBirthdate(Date birthdate) {
 		this.birthdate = birthdate;
+	}
+
+	@Column(name = "PWD_RECOVERY_CODE")
+	public String getPasswordRecoveryCode() {
+		return passwordRecoveryCode;
+	}
+
+	public void setPasswordRecoveryCode(String passwordRecoveryCode) {
+		this.passwordRecoveryCode = passwordRecoveryCode;
 	}
 
 	@OneToMany

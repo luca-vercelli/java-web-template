@@ -6,6 +6,7 @@
 package com.example.myapp.login.helpers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -25,6 +26,7 @@ import com.example.myapp.main.entity.Role;
 import com.example.myapp.main.entity.User;
 import com.example.myapp.main.enums.BooleanYN;
 import com.example.myapp.main.util.ApplicationProperties;
+import com.sun.messaging.jmq.util.MD5;
 
 @Stateless
 public class UsersManager {
@@ -82,7 +84,7 @@ public class UsersManager {
 
 	public User getUserByNameAndPassword(String name, char[] password) {
 
-		//FIXME namedquery?
+		// FIXME namedquery?
 		TypedQuery<User> query = em.createQuery("from User where name = :name and active = :true", User.class)
 				.setParameter("name", name).setParameter("true", BooleanYN.Y);
 
@@ -100,7 +102,7 @@ public class UsersManager {
 
 	public User getUserByEmailAndPassword(String email, char[] cleartextPassword) {
 
-		//FIXME namedquery?
+		// FIXME namedquery?
 		TypedQuery<User> query = em.createQuery("from User where email = :email and active = :true", User.class)
 				.setParameter("email", email).setParameter("true", true);
 
@@ -175,9 +177,9 @@ public class UsersManager {
 	}
 
 	/**
-	 * Return a <b>detached</b> instance of given Menu whose submenus and subpages are all and
-	 * only the ones that the user is allowed to. Return null if user is not
-	 * allowed at all. Please do not save this instance!!!
+	 * Return a <b>detached</b> instance of given Menu whose submenus and
+	 * subpages are all and only the ones that the user is allowed to. Return
+	 * null if user is not allowed at all. Please do not save this instance!!!
 	 * 
 	 * @param user
 	 * @return
@@ -283,4 +285,50 @@ public class UsersManager {
 		return pages;
 	}
 
+	/**
+	 * Create and return a password recovery code. The code is stored encrypted.
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public String createPasswordRecoveryCode(User user) {
+		String code = MD5.getHashString("" + Math.random() + new Date());
+		user.setPasswordRecoveryCode(MD5.getHashString(code));
+		return code;
+	}
+
+	public User getUserByPasswordRecoveryCode(String pwdRecCode) {
+		pwdRecCode = MD5.getHashString(pwdRecCode);
+		List<User> users = genericManager.findByProperty(User.class, "passwordRecoveryCode", pwdRecCode);
+
+		if (users.isEmpty())
+			return null;
+		else if (users.size() > 1)
+			throw new IllegalStateException("2 users with same authentication code!");
+		else
+			return users.get(0);
+	}
+
+	/**
+	 * Create, set and return a new 10-characters-long random password,
+	 * containing only letters and digits.
+	 * 
+	 * @param user
+	 */
+	public String newPassword(User user) {
+		String pwd = randomString().substring(10);
+		setPassword(user, pwd.toCharArray());
+		return pwd;
+	}
+
+	/**
+	 * Return a random 32-characters-long string, containing only letters and
+	 * digits.
+	 * 
+	 * @param len
+	 * @return
+	 */
+	private String randomString() {
+		return MD5.getHashString("" + Math.random() + new Date());
+	}
 }
