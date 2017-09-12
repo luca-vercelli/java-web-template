@@ -71,8 +71,8 @@ public class Main {
 				// ${com.sun.aas.instanceRoot} everywhere in domanin.xml
 				// That way you can use e.g. FileSync plugin to update html's
 
-				System.out.println("Listen url: http://localhost:8080/myapp");
-				// FIXME this should not be static....
+				System.out.println("Listen url: http://localhost:8080/" + CONTEXT_ROOT);
+				System.out.println("Listen url SHOULD BE ALSO: https://localhost:8181/" + CONTEXT_ROOT); //FIXME
 
 				// FIXME let branding stuff work!
 				// see also fixBrandingStuff()
