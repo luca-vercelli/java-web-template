@@ -19,7 +19,7 @@ import javax.ws.rs.core.HttpHeaders;
 
 import org.slf4j.Logger;
 
-import com.example.myapp.main.util.AbstractRequestFilter;
+import com.example.myapp.main.util.AbstractResponseFilter;
 import com.example.myapp.main.util.ResourceBundleMap;
 import com.example.myapp.main.util.SessionBean;
 
@@ -33,11 +33,11 @@ import com.example.myapp.main.util.SessionBean;
  *
  */
 @WebFilter(urlPatterns = { "*.html", "*.htm", "*.xhtml", "*.jsp" })
-public class I18nFilter extends AbstractRequestFilter {
+public class I18nFilter extends AbstractResponseFilter {
 
 	static Map<String, Map<String, String>> langMap = new HashMap<String, Map<String, String>>();
 
-	public static String COOKIE_NAME = "lang";
+	public static String COOKIE_NAME = "JLANG";
 	public static String ATTR_REQ_NAME = "labels";
 
 	@Inject
@@ -59,7 +59,7 @@ public class I18nFilter extends AbstractRequestFilter {
 	}
 
 	@Override
-	public boolean filterRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public void filterResponse(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		String lang = null;
 
@@ -82,14 +82,21 @@ public class I18nFilter extends AbstractRequestFilter {
 							// default !
 		}
 
-		lang = lang.toLowerCase();
+		if (lang.indexOf(',') > 0)
+			lang = lang.substring(0, lang.indexOf(','));
+		if (lang.indexOf('"') > 0)
+			lang = lang.replaceAll("\"", "");
 
-		// set cookie and session data
+		// set cookie
 		sessionBean.setLanguage(lang);
-		response.addCookie(new Cookie(COOKIE_NAME, lang));
+		Cookie cookie = new Cookie(COOKIE_NAME, lang);
+		cookie.setHttpOnly(true);
+		cookie.setPath("/"); // FIXME /myapp
+		response.addCookie(cookie); // FIXME
+
+		// set labels for JSP
 		request.setAttribute(ATTR_REQ_NAME, getLabelsMap(lang));
 
-		return true;
 	}
 
 }
