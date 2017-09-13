@@ -16,7 +16,7 @@ For development, a good webserver and a good database should not require any con
 We like EE technologies such as JTA, EJB, Injection, JAX-RS, so we cannot support Tomcat and Jetty. You can consider using TomEE. JetSet is not ready jet. We avoid Managed Beans, in favor of more general frameworks CDI and EJB. 
 
 Technologies:
-* java 8
+* java 7
 * java EE 7, so in particular:
   * Servlet 3.1
   * JSTL 1.2 (needed?)
