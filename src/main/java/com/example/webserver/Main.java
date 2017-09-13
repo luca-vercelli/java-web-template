@@ -5,10 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import static java.nio.file.Files.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import org.glassfish.embeddable.Deployer;
 import org.glassfish.embeddable.GlassFish;
 import org.glassfish.embeddable.GlassFishException;
@@ -41,6 +37,9 @@ public class Main {
 			// Start webserver
 
 			try {
+
+				fixBrandingStuff();
+
 				GlassFishProperties properties = new GlassFishProperties();
 				properties.setConfigFileURI(CONFIG_FILE.toURI().toString());
 				glassfish = GlassFishRuntime.bootstrap().newGlassFish(properties);
@@ -57,12 +56,8 @@ public class Main {
 				deployer = glassfish.getDeployer();
 				ScatteredArchive archive = getScatteredArchive();
 				appName = deployer.deploy(archive.toURI(), "--contextroot=" + CONTEXT_ROOT);
-
-				// deployer.deploy(war, "--name=simple", "--contextroot=simple",
-				// "--force=true");
-				// deployer.deploy(war) can be invoked instead. Other parameters
-				// are
-				// optional.
+				// for other parameters see
+				// https://docs.oracle.com/cd/E19798-01/821-1758/deploy-1/index.html
 
 				System.out.println("Install root: " + System.getProperty("com.sun.aas.installRoot"));
 
@@ -72,13 +67,7 @@ public class Main {
 				// That way you can use e.g. FileSync plugin to update html's
 
 				System.out.println("Listen url: http://localhost:8080/" + CONTEXT_ROOT);
-				System.out.println("Listen url SHOULD BE ALSO: https://localhost:8181/" + CONTEXT_ROOT); //FIXME
-
-				// FIXME let branding stuff work!
-				// see also fixBrandingStuff()
-				// com.sun.appserv.server.util.Version reads the file when it
-				// does not exist yet
-				// see https://github.com/javaee/glassfish/issues/21101
+				System.out.println("Listen url SHOULD BE ALSO: https://localhost:8181/" + CONTEXT_ROOT); // FIXME
 
 			} catch (GlassFishException e) {
 				e.printStackTrace();
@@ -124,21 +113,25 @@ public class Main {
 		}
 	}
 
-	// FIXME currently useless.
-	protected static void fixBrandingStuff() throws IOException {
-		String installRoot = System.getProperty("com.sun.aas.installRoot");
-		if (installRoot != null && !installRoot.trim().equals("")) {
-			Path p1 = Paths.get("config", "branding", "glassfish-version.properties");
-			Path p2 = Paths.get(installRoot, "config", "branding", "glassfish-version.properties");
-
-			if (p1.toFile().exists()) {
-				p2.getParent().toFile().mkdirs();
-				copy(p1, p2);
-			}
-		}
-
+	/**
+	 * Workaround to load branding file.
+	 * 
+	 * @see https://github.com/javaee/glassfish/issues/21101
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	private static void fixBrandingStuff() throws IOException, ClassNotFoundException {
+		System.setProperty("com.sun.aas.installRoot", new File(".").getAbsolutePath());
+		Class.forName("com.sun.appserv.server.util.Version");
+		System.clearProperty("com.sun.aas.installRoot");
 	}
 
+	/**
+	 * Create Glassfish' scattered archive (i.e. WAR file) for the application.
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
 	public static ScatteredArchive getScatteredArchive() throws IOException {
 
 		File webapp = new File("src" + File.separator + "main" + File.separator + "webapp");
