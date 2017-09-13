@@ -2,7 +2,16 @@
 Template for real-world Java Web project.
 
 Goal of this project: set up a new real-world Jave Web project in minutes, without waste of time.
+We want pre-configure all possible technologies.
 Moreover we want to use "best practice"'s wherever possible.
+
+## How to use this project
+This is not a framework. This is a webapp prototype. You can/must modify all classes and JSP's you need.
+
+## How to run this project
+* Download, either with Git or with Eclipse (eGit plugin)
+* Compile, either with Maven or Eclipse (m2e plugin)
+* Run class *com.example.webserver.Main*, either with Eclipse or command line.
 
 ## DISCLAIMER
 Modern applications should be plain HTML, with data loaded asincronously via Ajax. RESt, OData, JSON technologies should be used.
@@ -15,9 +24,9 @@ For development, a good webserver and a good database should not require any con
 
 We like EE technologies such as JTA, EJB, Injection, JAX-RS, so we cannot support Tomcat and Jetty. You can consider using TomEE. JetSet is not ready jet. We avoid Managed Beans, in favor of more general frameworks CDI and EJB. 
 
-Technologies:
-* java 7
-* java EE 7, so in particular:
+###Technologies:
+* Java 7
+* Java EE 7, so in particular:
   * Servlet 3.1
   * JSTL 1.2 (needed?)
   * JAX-RS 2.0
@@ -26,43 +35,36 @@ Technologies:
   * CDI 1.0
   * JMS 2.0
   * JavaMail 1.5
-* maven 3
+  * WebSockets 1.0
+* Maven 3
 * Embedded Glassfish as WAS
 * Embedded Derby as database, configured as JTA datasource
 * REST: JAX-RS
-* MVC: jstl (needed?)
+* MVC: none. JSTL just for something. Really needed?
 * persistence: JPA + hibernate 5 + annotations
 * transactions: JTA + EJB
-* connection pool: commons DBCP? C3PO?
-* logging: sl4j + log4j
-* Gentelella 1.4 frontend (jquery 3 + bootstrap 3)
-* Crud: "free datatables editor alternative" from http://kingkode.com/free-datatables-editor-alternative/
-* testing: junit 4
-* javax.emails
+* logging: sl4j + log4j + custom CDI Producer
+* Gentelella 1.4 frontend (jquery 3 + bootstrap 3). This could be replaced by tenths of other templates. Modified for use with JSP.
+* CRUD module: "free datatables editor alternative" from http://kingkode.com/free-datatables-editor-alternative/
+* Testing: junit 4. Jacoco?
+* javax.emails + custom EJB
 * JAAS ? Java EE security? (up to Java EE 8 that's bad)
-* session-based instead of token-based security, as we have both REST services and web pages
+* session-based instead of token-based security, as we have both REST services and web pages. Anyway we include an example of token-based authentication endpoint+filter.
 
-Suggested tools:
+###Suggested tools:
 * Eclipse EE
 * m2e plugin
 * FileSync plugin
 
-Features:
+###Features:
 * JSP templating
 * CRUD (via RESTful services)
 * login page
 * accounts management
-* domain login
-* authorizations
-* all features as /modules/ so that they can be freely used or not
+* domain login (TODO)
+* authorizations (TODO)
 * translations: text-file-based JSTL translations. We think this is very ugly, anyway, it's quite standard.
 * first run install. We don't like JPA's sql-load-script-source feature, as it is not portable across databases.
 * a custom I18nFilter, that in our opinion is easier to use than JSTL' fmt feature.
 
 Modules and interface should be independent: standalone Swing, or AngularJS frontends should work as well.
-
-## How to use this project
-* Download, either with Git or with Eclipse (eGit plugin)
-* Compile, either with Maven or Eclipse (m2e plugin)
-* Run class com.example.webserver.Main, either with Eclipse or command line.
-
