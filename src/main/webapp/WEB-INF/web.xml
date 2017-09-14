@@ -8,11 +8,7 @@
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
 
-<!-- 
-	<error-page>
-		<location>/general-error.html</location>
-	</error-page>
-	 -->
+	<!-- <error-page> <location>/general-error.html</location> </error-page> -->
 	<error-page>
 		<!-- Forbidden directory listing -->
 		<error-code>403</error-code>
@@ -28,23 +24,41 @@
 		<error-code>500</error-code>
 		<location>/ui/page_500.jsp</location>
 	</error-page>
-	
+
 	<!-- Glassfish does not support json by default. Other webservers may do. -->
-    <mime-mapping>
-        <extension>json</extension>
-        <mime-type>application/json</mime-type>
-    </mime-mapping>
-    
-    <!--
-    I don't think users should be managed by container. I can be wrong of course. 
-    <login-config>
-    	<auth-method>FORM</auth-method>
-		<realm-name>file-realm</realm-name>
+	<mime-mapping>
+		<extension>json</extension>
+		<mime-type>application/json</mime-type>
+	</mime-mapping>
+
+	<!-- Security stuff -->
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Secure pages</web-resource-name>
+			<url-pattern>/ui/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>standard</role-name>
+			<role-name>admin</role-name>
+		</auth-constraint>
+	</security-constraint>
+
+	<security-role>
+		<role-name>standard</role-name>
+	</security-role>
+
+	<security-role>
+		<role-name>admin</role-name>
+	</security-role>
+
+	<!-- Large applications may prefer container-managed principals -->
+	<login-config>
+		<auth-method>FORM</auth-method>
+		<realm-name>jdbcRealm</realm-name>
 		<form-login-config>
 			<form-login-page>/ui/login2.jsp</form-login-page>
-			<form-error-page>/ui/login2.jsp</form-error-page>   
+			<form-error-page>/ui/login2.jsp</form-error-page>
 		</form-login-config>
 	</login-config>
-	-->
 
 </web-app>
