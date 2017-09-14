@@ -35,6 +35,8 @@
         <mime-type>application/json</mime-type>
     </mime-mapping>
     
+    <!--
+    I don't think users should be managed by container. I can be wrong of course. 
     <login-config>
     	<auth-method>FORM</auth-method>
 		<realm-name>file-realm</realm-name>
@@ -42,6 +44,7 @@
 			<form-login-page>/ui/login2.jsp</form-login-page>
 			<form-error-page>/ui/login2.jsp</form-error-page>   
 		</form-login-config>
-</login-config>
+	</login-config>
+	-->
 
 </web-app>
