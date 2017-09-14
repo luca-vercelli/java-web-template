@@ -7,7 +7,7 @@ See PR #337
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 
-<c:set var="language" value="${not empty param.language ? fn:substring(param.language,0,2) : not empty language ? fn:substring(language,0,2) : fn:substring(pageContext.request.locale,0,2)}" scope="session" />
+<c:set var="language" value="${fn:substring(sessionBean.language,0,2)}" scope="session" />
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="global" />
 <fmt:message key="login.password.lost" var="login_password_lost" />

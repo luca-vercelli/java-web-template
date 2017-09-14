@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 
-<c:set var="language" value="${not empty request.language ? request.language : fn:substring(pageContext.request.locale,0,2)}" scope="session" />
+<c:set var="language" value="${fn:substring(sessionBean.language,0,2)}" scope="session" />
 <fmt:setLocale value="${language}" />
 <fmt:setBundle basename="global" />
 <fmt:message key="login.password.lost" var="login_password_lost" />
@@ -55,7 +55,7 @@
               </div>
               <div>
                 <input type="submit" class="btn btn-default submit" value="Log in"/> 
-                <a class="reset_pass" href="login_password_recover.jsp">${login_password_lost}</a>
+                <a class="reset_pass" href="login_password_recover.jsp">${labels.login_password_lost}</a>
               </div>
 
               <div class="clearfix"></div>
