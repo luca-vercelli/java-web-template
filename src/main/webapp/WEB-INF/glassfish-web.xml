@@ -1,0 +1,14 @@
+<glassfish-web-app>
+	<!-- Glassfish specific deployment descriptor. -->
+
+	<!-- Silly association roles/groups. -->
+	<!-- AFAIK, each webserver has its own (silly) way to do this. -->
+	<security-role-mapping>
+		<role-name>standard</role-name>
+		<group-name>standard</group-name>
+	</security-role-mapping>
+	<security-role-mapping>
+		<role-name>admin</role-name>
+		<group-name>admin</group-name>
+	</security-role-mapping>
+</glassfish-web-app>

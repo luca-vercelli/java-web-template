@@ -82,6 +82,7 @@
 			object-type="system-all" jndi-name="concurrent/__defaultManagedScheduledExecutorService"></managed-scheduled-executor-service>
 		<managed-thread-factory object-type="system-all"
 			jndi-name="concurrent/__defaultManagedThreadFactory"></managed-thread-factory>
+		<!-- WebTemplate: main data source (underlying connection pool) -->
 		<jdbc-connection-pool datasource-classname="org.apache.derby.jdbc.EmbeddedDataSource"
 			name="mainDataSource" res-type="javax.sql.DataSource">
 			<property name="AttributesAsPassword" value="false"></property>
@@ -89,7 +90,9 @@
 			<property name="DatabaseName" value="main.db"></property>
 			<property name="connectionAttributes" value=";create=true"></property>
 		</jdbc-connection-pool>
+		<!-- WebTemplate: main data source -->
 		<jdbc-resource pool-name="mainDataSource" jndi-name="jdbc/mainDataSource"></jdbc-resource>
+		<!-- WebTemplate: mail transport resource -->
 		<mail-resource host="smtp.gmail.com" from="java.web.template@gmail.com" user="java.web.template@gmail.com" jndi-name="mainMailSession">
       		<property name="mail-smtp-auth" value="true"></property>
       		<property name="mail-smtp-starttls-enable" value="true"></property>
@@ -100,6 +103,7 @@
 	<servers>
 		<server config-ref="server-config" name="server">
 			<application-ref ref="__admingui" virtual-servers="__asadmin"></application-ref>
+			<!-- WebTemplate: webapp is commented, as it is loaded through .deploy() -->
 			<!-- <application-ref ref="myapp" virtual-servers="server"></application-ref> -->
 			<resource-ref ref="jdbc/__TimerPool"></resource-ref>
 			<resource-ref ref="jdbc/__default"></resource-ref>
@@ -190,6 +194,21 @@
 				<auth-realm
 					classname="com.sun.enterprise.security.auth.realm.certificate.CertificateRealm"
 					name="certificate"></auth-realm>
+				<!-- WebTemplate: JDBC authentication/authorization realm -->
+				<auth-realm classname="com.sun.enterprise.security.auth.realm.jdbc.JDBCRealm"
+					name="jdbcRealm">
+					<property name="jaas-context" value="jdbcRealm"></property>
+<!-- 					<property name="datasource-jndi" value="jdbc/mainDataSource"></property> -->
+					<param name="jdbc.resource.name" value="jdbc/mainDataSource" />
+					<param name="jdbc.realm.name" value="jdbcRealm" />
+					<param name="user.table.name" value="APP_USER" />
+					<param name="user.name.column" value="USERNAME" />
+					<param name="password.column" value="PASSWD" />
+					<param name="group.table" value="APP_ROLE" />
+					<param name="group.name.column" value="DESCRIPTION" />
+					<param name="assign.groups" value="standard,admin" />
+					<param name="digest.algorithm" value="MD5" />
+				</auth-realm>
 				<jacc-provider policy-provider="com.sun.enterprise.security.provider.PolicyWrapper"
 					name="default"
 					policy-configuration-factory-provider="com.sun.enterprise.security.provider.PolicyConfigurationFactoryImpl">
