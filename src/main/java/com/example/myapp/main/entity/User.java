@@ -20,7 +20,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -32,22 +32,30 @@ import com.example.myapp.main.enums.BooleanYN;
 
 /**
  * A login user. This class implements Principal, so it can be integrated with
- * JAAS. The key is *not* the email, instead it is a username.
+ * JAAS. The key is <b>not</b> the email, instead it is a username. Uniqueness
+ * is required on email and username.
  *
  */
 @Entity
 @Table(name = "APP_USER")
 @XmlRootElement
-/*@NamedQueries( {
-	@NamedQuery(name = "findByUsernamePassword", query = "from User where name = :name and active = :true"),
-	@NamedQuery(name = "findByEmailPassword", query = "from User where name = :name and active = :true"),
-	@NamedQuery(name = "findByEmail", query = "from User where name = :name and active = :true")
-}) //cannot fix error
-*/
+/*
+ * @NamedQueries({
+ * 
+ * @NamedQuery(name = "findByUsernamePassword", query =
+ * "from User where name = :name and active = :true"),
+ * 
+ * @NamedQuery(name = "findByEmailPassword", query =
+ * "from User where name = :name and active = :true"),
+ * 
+ * @NamedQuery(name = "findByEmail", query =
+ * "from User where name = :name and active = :true") }) // cannot // fix //
+ * error
+ */
 public class User implements Principal, Serializable {
 
 	private static final long serialVersionUID = 6226690496815744449L;
-	
+
 	private Long id;
 	private String username;
 	private String email;
@@ -88,7 +96,7 @@ public class User implements Principal, Serializable {
 	 * This is JAAS username.
 	 */
 	@Override
-	@Column(name = "USERNAME", unique = true)
+	@Column(name = "USERNAME", unique = true, nullable = false)
 	public String getName() {
 		return username;
 	}
@@ -106,7 +114,7 @@ public class User implements Principal, Serializable {
 		this.email = email;
 	}
 
-	@Column(name = "ACTIVE")
+	@Column(name = "ACTIVE", nullable = false)
 	@Enumerated(EnumType.ORDINAL)
 	public BooleanYN getActive() {
 		return active;
@@ -126,7 +134,6 @@ public class User implements Principal, Serializable {
 		this.encryptedPassword = encryptedPassword;
 	}
 
-	// === OTHER FIELDS ===============================
 	@Column(name = "NAME")
 	public String getPersonName() {
 		return personName;
@@ -164,7 +171,7 @@ public class User implements Principal, Serializable {
 		this.passwordRecoveryCode = passwordRecoveryCode;
 	}
 
-	@OneToMany
+	@ManyToMany
 	@JoinTable(name = "APP_USER_ROLES", joinColumns = @JoinColumn(name = "USER_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
 	@XmlTransient
 	public Set<Role> getRoles() {
@@ -175,7 +182,7 @@ public class User implements Principal, Serializable {
 		this.roles = roles;
 	}
 
-	/**
+	/*
 	 * I need to override this method, due to Javassist's current limitations.
 	 * 
 	 * @see java.security.Principal#implies(javax.security.auth.Subject)

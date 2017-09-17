@@ -44,7 +44,7 @@ public class FirstRun {
 		LOG.info("Populating database...");
 
 		// "ADMIN" ROLE AND USER
-		Role roleAdmin = new Role("admin");
+		Role roleAdmin = new Role("admin", "Webapp administrator");
 		em.persist(roleAdmin);
 
 		User u = new User("admin", "admin@example.com", "Admin", ".", BooleanYN.Y, null);
@@ -55,15 +55,15 @@ public class FirstRun {
 
 		em.persist(u);
 
-		// "USER" ROLE AND USER
-		Role roleUser = new Role("user");
-		em.persist(roleUser);
+		// "STANDARD" ROLE AND "USER" USER
+		Role roleStandard = new Role("standard", "Standard user");
+		em.persist(roleStandard);
 
 		u = new User("user", "user@example.com", "User", ".", BooleanYN.Y, null);
 		usersManager.setPassword(u, "user".toCharArray());
 		em.persist(u);
 
-		u.getRoles().add(roleUser);
+		u.getRoles().add(roleStandard);
 
 		em.persist(u);
 
