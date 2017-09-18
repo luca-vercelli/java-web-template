@@ -15,6 +15,7 @@ import org.glassfish.embeddable.archive.ScatteredArchive;
 public class Main {
 
 	public static final File CONFIG_FILE = new File("config", "domain.xml");
+	public static final File JAAS_FILE = new File("config", "login.conf");
 	public static final String CONTEXT_ROOT = "myapp";
 
 	/**
@@ -37,6 +38,8 @@ public class Main {
 			// Start webserver
 
 			try {
+
+				System.setProperty("java.security.auth.login.config", JAAS_FILE.getPath());
 
 				fixBrandingStuff();
 

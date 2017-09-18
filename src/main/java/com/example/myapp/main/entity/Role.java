@@ -23,12 +23,14 @@ public class Role implements Serializable {
 	private static final long serialVersionUID = -1688293920379485224L;
 
 	private Long id;
+	private String roleName;
 	private String description;
 
 	public Role() {
 	}
 
-	public Role(String description) {
+	public Role(String roleName, String description) {
+		this.roleName = roleName;
 		this.description = description;
 	}
 
@@ -41,6 +43,15 @@ public class Role implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	@Column(name = "ROLE_NAME", nullable = false)
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
 	}
 
 	@Column(name = "DESCRIPTION")
