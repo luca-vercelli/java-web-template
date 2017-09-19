@@ -20,22 +20,22 @@
 		<class>com.example.myapp.crud.entity.GridColumn</class>
 
 		<properties>
-			<!-- Non abbiamo user e pwd per accedere al db <property name="javax.persistence.jdbc.user" 
-				value="user" /> <property name="javax.persistence.jdbc.password" value="user" 
-				/> <property name="hibernate.hbm2ddl.auto" value="create-drop" /> -->
+			<!-- if needed -->
+			<!-- <property name="javax.persistence.jdbc.user" value="user" /> -->
+			<!-- <property name="javax.persistence.jdbc.password" value="user" /> -->
 
-			<!-- aggiunta per prevenire l'errore: Unable to build Hibernate SessionFactory 
-				at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl. persistenceException(EntityManagerFactoryBuilderImpl.java:967) -->
 
+			<!-- Prevent error: Unable to build Hibernate SessionFactory at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl. 
+				persistenceException(EntityManagerFactoryBuilderImpl.java:967) -->
 			<property name="hibernate.transaction.jta.platform"
 				value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform" />
 
 			<!-- If your DBA allows that, use CREATE the first time in order to create 
-				all tables. This won't populate tables.  -->
+				all tables. This won't populate tables. -->
 			<property name="javax.persistence.schema-generation.database.action"
 				value="drop-and-create" />
-			<!-- property name="javax.persistence.sql-load-script-source"
-				value="FIRST-RUN.SQL" /-->
+			<!-- <property name="javax.persistence.sql-load-script-source" value="FIRST-RUN.SQL" 
+				/> -->
 
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.DerbyTenSevenDialect" />
