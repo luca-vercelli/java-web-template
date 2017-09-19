@@ -18,8 +18,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
+import javax.persistence.Index;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -37,7 +36,9 @@ import com.example.myapp.main.enums.BooleanYN;
  *
  */
 @Entity
-@Table(name = "APP_USER")
+@Table(name = "APP_USER", indexes = { @Index(name = "idx_user_username", columnList = "USERNAME", unique = true),
+		@Index(name = "idx_user_userpwd", columnList = "USERNAME, PASSWD", unique = true),
+		@Index(name = "idx_user_email", columnList = "EMAIL", unique = true) })
 @XmlRootElement
 /*
  * @NamedQueries({
@@ -171,8 +172,7 @@ public class User implements Principal, Serializable {
 		this.passwordRecoveryCode = passwordRecoveryCode;
 	}
 
-	@ManyToMany
-	@JoinTable(name = "APP_USER_ROLES", joinColumns = @JoinColumn(name = "USER_ID"), inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+	@ManyToMany(mappedBy = "users")
 	@XmlTransient
 	public Set<Role> getRoles() {
 		return roles;

@@ -6,12 +6,17 @@
 package com.example.myapp.main.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -25,6 +30,7 @@ public class Role implements Serializable {
 	private Long id;
 	private String roleName;
 	private String description;
+	private Set<User> users = new HashSet<User>();
 
 	public Role() {
 	}
@@ -45,7 +51,7 @@ public class Role implements Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "ROLE_NAME", nullable = false)
+	@Column(name = "ROLE_NAME", nullable = false, unique = true)
 	public String getRoleName() {
 		return roleName;
 	}
@@ -61,6 +67,20 @@ public class Role implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/*
+	 * Map using ROLE_NAME and USERNAME, not ID. This is for jdbcRealm
+	 * compatibility.
+	 */
+	@ManyToMany
+	@JoinTable(name = "APP_USER_ROLE", joinColumns = @JoinColumn(name = "ROLE_NAME", referencedColumnName = "ROLE_NAME"), inverseJoinColumns = @JoinColumn(name = "USERNAME", referencedColumnName = "USERNAME"))
+	public Set<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<User> users) {
+		this.users = users;
 	}
 
 	@Override

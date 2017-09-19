@@ -48,24 +48,26 @@ public class FirstRun {
 		em.persist(roleAdmin);
 
 		User u = new User("admin", "admin@example.com", "Admin", ".", BooleanYN.Y, null);
-		usersManager.setPassword(u, "admin".toCharArray());
+		u.setEncryptedPassword("d033e22ae348aeb5660fc2140aec35850c4da997");
+		// FIXME jdbcRealm compatibility
+		// usersManager.setPassword(u, "admin".toCharArray());
 		em.persist(u);
 
-		u.getRoles().add(roleAdmin);
-
-		em.persist(u);
+		roleAdmin.getUsers().add(u);
+		em.persist(roleAdmin);
 
 		// "STANDARD" ROLE AND "USER" USER
 		Role roleStandard = new Role("standard", "Standard user");
 		em.persist(roleStandard);
 
 		u = new User("user", "user@example.com", "User", ".", BooleanYN.Y, null);
-		usersManager.setPassword(u, "user".toCharArray());
+		u.setEncryptedPassword("12dea96fec20593566ab75692c9949596833adc9");
+		// FIXME jdbcRealm compatibility
+		// usersManager.setPassword(u, "user".toCharArray());
 		em.persist(u);
 
-		u.getRoles().add(roleStandard);
-
-		em.persist(u);
+		roleStandard.getUsers().add(u);
+		em.persist(roleStandard);
 
 		// SETTINGS record
 		Settings s = new Settings();

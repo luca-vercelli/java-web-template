@@ -51,7 +51,7 @@
 		<role-name>admin</role-name>
 	</security-role>
 
-	<!-- Large applications may prefer container-managed principals -->
+	<!-- AFAIK, JASPIC does not support FORM auth-method -->
 	<login-config>
 		<auth-method>FORM</auth-method>
 		<realm-name>jdbcRealm</realm-name>

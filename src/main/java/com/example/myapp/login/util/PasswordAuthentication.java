@@ -23,6 +23,8 @@ import javax.enterprise.context.ApplicationScoped;
  * 
  * Instances of this class can be used concurrently by multiple threads.
  * 
+ * This approach is not compatible with jdbcRealm, I think.
+ * 
  * @author erickson
  * @see <a href="http://stackoverflow.com/a/2861125/3474">StackOverflow</a>
  */
