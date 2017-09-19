@@ -31,7 +31,7 @@ import com.example.myapp.main.util.WebFilterExclude;
  * This should execute *before* any filter that use database. How to?
  *
  */
-@WebFilter(urlPatterns = { "*.html", "*.htm", "*.xhtml", "*.jsp" })
+@WebFilter(filterName="firstRunFilter", urlPatterns = { "*.html", "*.htm", "*.xhtml", "*.jsp" })
 public class FirstRunFilter extends AbstractRequestFilter {
 
 	@Inject

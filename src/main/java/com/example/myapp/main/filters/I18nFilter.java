@@ -32,7 +32,7 @@ import com.example.myapp.main.util.SessionBean;
  * kind of EL replacement.
  *
  */
-@WebFilter(urlPatterns = { "*.html", "*.htm", "*.xhtml", "*.jsp" })
+@WebFilter(filterName = "i18nFilter", urlPatterns = { "*.html", "*.htm", "*.xhtml", "*.jsp" })
 public class I18nFilter extends AbstractResponseFilter {
 
 	static Map<String, Map<String, String>> langMap = new HashMap<String, Map<String, String>>();

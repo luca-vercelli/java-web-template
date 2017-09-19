@@ -20,7 +20,7 @@ import com.example.myapp.main.util.AbstractRequestFilter;
  * 
  * @see https://stackoverflow.com/questions/26777083
  */
-@WebFilter("/secured/*")
+@WebFilter(filterName = "tokenFilter", value ="/secured/*")
 public class TokenFilter
 		extends AbstractRequestFilter /* may use ContainerRequestFilter ? */ {
 

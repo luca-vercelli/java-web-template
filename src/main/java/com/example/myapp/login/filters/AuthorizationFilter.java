@@ -29,7 +29,7 @@ import com.example.myapp.main.util.WebFilterExclude;
  * @author luca vercelli
  *
  */
-@WebFilter(urlPatterns = { "*.html", "*.htm", "*.xhtml", "*.jsp", "/rest" })
+@WebFilter(filterName = "authFilter", urlPatterns = { "*.html", "*.htm", "*.xhtml", "*.jsp", "/rest" })
 public class AuthorizationFilter extends AbstractRequestFilter {
 
 	@Inject
