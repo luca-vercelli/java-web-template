@@ -11,6 +11,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.security.auth.login.LoginContext;
@@ -82,6 +83,15 @@ public class UsersManager {
 			array[i] = 0;
 	}
 
+	/**
+	 * Authenticates user. This is useless using EE security. This method should
+	 * get the same result of jdbcRealm authentication.
+	 * 
+	 * @param email
+	 * @param cleartextPassword
+	 * @return
+	 */
+	// FIXME jdbcRealm does not check if active = true
 	public User getUserByNameAndPassword(String name, char[] password) {
 
 		// FIXME namedquery?
@@ -100,6 +110,13 @@ public class UsersManager {
 
 	}
 
+	/**
+	 * Authenticates user using email.
+	 * 
+	 * @param email
+	 * @param cleartextPassword
+	 * @return
+	 */
 	public User getUserByEmailAndPassword(String email, char[] cleartextPassword) {
 
 		// FIXME namedquery?
@@ -119,16 +136,19 @@ public class UsersManager {
 	}
 
 	public User getUserByEmail(String email) {
-
-		List<User> users = genericManager.findByProperty(User.class, "email", email);
-
-		for (User u : users) {
-			return u;
-			// FIXME what if more than 1?
+		try {
+			return genericManager.findByPropertySingleResult(User.class, "email", email);
+		} catch (NoResultException e) {
+			return null;
 		}
+	}
 
-		return null;
-
+	public User getUserByUsername(String name) {
+		try {
+			return genericManager.findByPropertySingleResult(User.class, "name", name);
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 
 	/**
@@ -331,4 +351,5 @@ public class UsersManager {
 	private String randomString() {
 		return MD5.getHashString("" + Math.random() + new Date());
 	}
+
 }

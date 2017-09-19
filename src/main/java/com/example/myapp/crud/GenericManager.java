@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.metamodel.EntityType;
@@ -187,6 +188,23 @@ public class GenericManager {
 		} else {
 			return em.createQuery("from " + entity.getName() + " where " + propertyName + " is null", entity)
 					.getResultList();
+		}
+	}
+
+	/**
+	 * Load that object of given entity, such that property=value (null
+	 * supported).
+	 * 
+	 * @throws NoResultException
+	 * @throws NonUniqueResultException
+	 */
+	public <T> T findByPropertySingleResult(Class<T> entity, String propertyName, Object value) {
+		if (value != null) {
+			return em.createQuery("from " + entity.getName() + " where " + propertyName + " = :param", entity)
+					.setParameter("param", value).getSingleResult();
+		} else {
+			return em.createQuery("from " + entity.getName() + " where " + propertyName + " is null", entity)
+					.getSingleResult();
 		}
 	}
 

@@ -34,9 +34,7 @@ public class SessionManager {
 	public void fillDataInSessionBean(SessionBean sessionBean, User user) {
 
 		sessionBean.setUser(user);
-
 		sessionBean.setMenus(usersManager.getMenusForUser(user));
-
 		sessionBean.setRoles(user.getRoles());
 	}
 }

@@ -70,8 +70,8 @@
 		<auth-method>FORM</auth-method>
 		<realm-name>jdbcRealm</realm-name>
 		<form-login-config>
-			<form-login-page>/ui/login2.jsp</form-login-page>
-			<form-error-page>/ui/login2.jsp</form-error-page>
+			<form-login-page>/ui/login.jsp</form-login-page>
+			<form-error-page>/ui/login.jsp</form-error-page>
 		</form-login-config>
 	</login-config>
 

@@ -6,12 +6,16 @@
 package com.example.myapp.login.filters;
 
 import java.io.IOException;
+import java.security.Principal;
 
 import javax.inject.Inject;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.example.myapp.login.actions.SessionManager;
+import com.example.myapp.login.helpers.UsersManager;
+import com.example.myapp.main.entity.User;
 import com.example.myapp.main.util.AbstractRequestFilter;
 import com.example.myapp.main.util.ApplicationProperties;
 import com.example.myapp.main.util.SessionBean;
@@ -25,6 +29,10 @@ import org.slf4j.Logger;
  * This filter must <b>not</b> apply to login-related pages. Unluckily,
  * WebFilter's do not allow to exclude paths. So we must implement an ad-hoc
  * (quite ugly) solution.
+ * 
+ * As we are using EE Security, this is <b>not</b> meant to check if user is
+ * logged in or not. User <b>is</b> logged in. We just need to populate
+ * sessionBean.
  *
  */
 @WebFilter(value = "loginFilter", urlPatterns = { "*.html", "*.htm", "*.xhtml", "*.jsp" })
@@ -38,28 +46,25 @@ public class LoginFilter extends AbstractRequestFilter {
 	SessionBean sessionBean;
 	@Inject
 	WebFilterExclude webFilterExclude;
+	@Inject
+	UsersManager usersManager;
+	@Inject
+	SessionManager sessionManager;
 
 	@Override
 	public boolean filterRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		boolean loginRequired = true;
-		boolean loginSuccess = false;
+		if (!webFilterExclude.excludeUrl(appProps.getProperty("login.not.required.uris").split(","), request)) {
 
-		String contextPath = request.getContextPath();
-
-		loginRequired = !webFilterExclude.excludeUrl(appProps.getProperty("login.not.required.uris").split(","),
-				request);
-
-		if (sessionBean != null && loginRequired) {
-			loginSuccess = (sessionBean.getUser() != null);
+			Principal principal = request.getUserPrincipal();
+			if (principal != null) {
+				User user = usersManager.getUserByUsername(principal.getName());
+				if (user != null) {
+					sessionManager.fillDataInSessionBean(sessionBean, user);
+				}
+			}
 		}
-
-		if (!loginRequired || loginSuccess) {
-			return true;
-		} else {
-			LOG.info("Redirecting to login page");
-			response.sendRedirect(contextPath + appProps.getProperty("login.uri"));
-			return false;
-		}
+		
+		return true;
 	}
 }

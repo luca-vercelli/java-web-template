@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 
-import com.example.myapp.main.util.ApplicationProperties;
 import com.example.myapp.main.util.SessionBean;
 
 /**
@@ -31,8 +30,6 @@ public class doLogout extends HttpServlet {
 	private static final long serialVersionUID = 651051473002562658L;
 
 	@Inject
-	ApplicationProperties appProps;
-	@Inject
 	SessionBean sessionBean;
 	@Inject
 	SessionManager sessionManager;
@@ -42,19 +39,11 @@ public class doLogout extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		/* FIXME logincontext is not serializable, should we save it in session? how to get it?
-		if (sessionBean != null && sessionBean.getLoginContext() != null) {
-			try {
-				sessionBean.getLoginContext().logout();
-			} catch (LoginException e) {
-				LOG.error("Exception while logging out", e);
-			}
-		}
-		*/
-
 		sessionManager.clearSession(sessionBean);
 
-		response.sendRedirect(request.getContextPath() + appProps.getProperty("login.uri"));
+		request.logout();
+
+		response.sendRedirect(request.getContextPath());
 
 	}
 

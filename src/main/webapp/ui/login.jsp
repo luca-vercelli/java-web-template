@@ -41,21 +41,21 @@
       <div class="login_wrapper">
         <div class="animate form login_form">
           <section class="login_content">
-            <form action="doLogin" method="post">
+            <form action="j_security_check" method="post">
             
             <input type="hidden" name="language" value="${language}"/>
             
               <h1>Login Form</h1>
         
               <div>
-                <input type="text" class="form-control" placeholder="Username" required name="userId" />
+                <input type="text" class="form-control" placeholder="Username" required name="j_username" />
               </div>
               <div>
-                <input type="password" class="form-control" placeholder="Password" required name="pwd" />
+                <input type="password" class="form-control" placeholder="Password" required name="j_password" />
               </div>
               <div>
                 <input type="submit" class="btn btn-default submit" value="Log in"/> 
-                <a class="reset_pass" href="login_password_recover.jsp">${labels.login_password_lost}</a>
+                <a class="reset_pass" href="login_password_recover.jsp">${login_password_lost}</a>
               </div>
 
               <div class="clearfix"></div>

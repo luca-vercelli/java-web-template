@@ -48,7 +48,7 @@ We like EE technologies such as JTA, EJB, Injection, JAX-RS, so we cannot suppor
 * CRUD module: "free datatables editor alternative" from http://kingkode.com/free-datatables-editor-alternative/
 * Testing: junit 4. Jacoco?
 * javax.emails + custom EJB
-* JAAS ? Java EE security? (up to Java EE 8 that's bad)
+* Java EE security + jdbcRealm
 * session-based instead of token-based security, as we have both REST services and web pages. Anyway we include an example of token-based authentication endpoint+filter.
 
 ###Suggested tools:
