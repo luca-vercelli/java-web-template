@@ -198,11 +198,12 @@
 					<property name="jaas-context" value="jdbcRealm"></property>
 					<property name="datasource-jndi" value="jdbc/mainDataSource"></property>
 					<property name="user-table" value="APP_USER"></property>
-					<property name="digestrealm-password-enc-algorithm" value="SHA1"></property>
+					<property name="user-name-column" value="USERNAME"></property>
+					<property name="digest-algorithm" value="SHA1"></property>
 					<property name="password-column" value="PASSWD"></property>
 					<property name="group-table" value="APP_USER_ROLE"></property>
-					<property name="user-name-column" value="USERNAME"></property>
 					<property name="group-name-column" value="ROLE_NAME"></property>
+					<property name="group-table-user-name-column" value="USERNAME"></property>
 					<property name="assign-groups" value="standard,admin"></property>
 				</auth-realm>
 				<jacc-provider policy-provider="com.sun.enterprise.security.provider.PolicyWrapper"
