@@ -13,8 +13,6 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-
 import com.example.myapp.firstrun.helpers.FirstRun;
 import com.example.myapp.main.util.AbstractRequestFilter;
 import com.example.myapp.main.util.ApplicationProperties;
@@ -34,8 +32,6 @@ import com.example.myapp.main.util.WebFilterExclude;
 @WebFilter(filterName="firstRunFilter", urlPatterns = { "*.html", "*.htm", "*.xhtml", "*.jsp" })
 public class FirstRunFilter extends AbstractRequestFilter {
 
-	@Inject
-	Logger LOG;
 	@PersistenceContext
 	EntityManager em;
 	@Inject

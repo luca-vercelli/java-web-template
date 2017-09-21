@@ -11,7 +11,6 @@ import javax.inject.Inject;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
 
 import com.example.myapp.crud.GenericManager;
 import com.example.myapp.main.entity.Page;
@@ -32,8 +31,6 @@ import com.example.myapp.main.util.WebFilterExclude;
 @WebFilter(filterName = "authFilter", urlPatterns = { "*.html", "*.htm", "*.xhtml", "*.jsp", "/rest" })
 public class AuthorizationFilter extends AbstractRequestFilter {
 
-	@Inject
-	Logger LOG;
 	@Inject
 	ApplicationProperties appProps;
 	@Inject

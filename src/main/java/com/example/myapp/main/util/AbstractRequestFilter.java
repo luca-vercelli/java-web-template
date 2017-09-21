@@ -2,6 +2,7 @@ package com.example.myapp.main.util;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -11,10 +12,15 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+
 /**
  * Do you prefer using Filter or ContainerRequestFilter?
  */
 public abstract class AbstractRequestFilter implements Filter {
+
+	@Inject
+	protected Logger LOG;
 
 	@Override
 	public final void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
@@ -25,6 +31,9 @@ public abstract class AbstractRequestFilter implements Filter {
 			HttpServletResponse response = (HttpServletResponse) resp;
 
 			try {
+
+				LOG.info("Entering filter " + this.getClass().getName());
+
 				if (filterRequest(request, response))
 					chain.doFilter(req, resp); // continue chain
 			} catch (IOException e) {

@@ -17,8 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 
-import org.slf4j.Logger;
-
 import com.example.myapp.main.util.AbstractResponseFilter;
 import com.example.myapp.main.util.ResourceBundleMap;
 import com.example.myapp.main.util.SessionBean;
@@ -42,8 +40,6 @@ public class I18nFilter extends AbstractResponseFilter {
 
 	@Inject
 	SessionBean sessionBean;
-	@Inject
-	Logger LOG;
 
 	private Map<String, String> getLabelsMap(String lang) {
 		if (!langMap.containsKey(lang)) {
