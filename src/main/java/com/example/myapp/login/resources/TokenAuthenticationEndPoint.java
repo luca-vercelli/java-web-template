@@ -24,8 +24,8 @@ import com.example.myapp.login.helpers.UsersManager;
 import com.example.myapp.main.entity.User;
 
 /**
- * Authentication endpoint for token-based (JWT) security. Currently we do not use
- * such authentication.
+ * Authentication endpoint for token-based (JWT) security. Currently we do not
+ * use such authentication.
  * 
  * @author Luca Vercelli
  *
@@ -86,6 +86,7 @@ public class TokenAuthenticationEndPoint {
 
 	/**
 	 * Common code
+	 * 
 	 * @param credentials
 	 * @return
 	 */
@@ -100,7 +101,8 @@ public class TokenAuthenticationEndPoint {
 			return resp;
 		}
 
-		LoginContext lc = usersManager.authenticate(credentials.userId, credentials.pwd.toCharArray());
+		// TODO integrate with Java EE Security
+		LoginContext lc = usersManager.authenticate(credentials.userId, credentials.pwd.toCharArray(), "MainApp");
 
 		if (lc != null && !lc.getSubject().getPrincipals().isEmpty()) {
 			user = (User) lc.getSubject().getPrincipals().iterator().next();
@@ -133,7 +135,7 @@ public class TokenAuthenticationEndPoint {
 	}
 
 	public static class JSONResponse {
-		Integer errorCode = Status.OK.ordinal(); //200
+		Integer errorCode = Status.OK.ordinal(); // 200
 		String errorMessage;
 		String token;
 	}

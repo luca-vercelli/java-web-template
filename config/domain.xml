@@ -199,7 +199,7 @@
 					<property name="datasource-jndi" value="jdbc/mainDataSource"></property>
 					<property name="user-table" value="APP_USER"></property>
 					<property name="user-name-column" value="USERNAME"></property>
-					<property name="digest-algorithm" value="SHA1"></property>
+					<property name="digest-algorithm" value="SHA-256"></property>
 					<property name="password-column" value="PASSWD"></property>
 					<property name="group-table" value="APP_USER_ROLE"></property>
 					<property name="group-name-column" value="ROLE_NAME"></property>

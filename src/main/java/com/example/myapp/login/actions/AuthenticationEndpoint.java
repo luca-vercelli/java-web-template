@@ -32,10 +32,10 @@ public class AuthenticationEndpoint {
 	@Inject
 	SessionBean sessionBean;
 	@Inject
-	UsersManager usersHelper;
+	UsersManager usersManager;
 	@Inject
 	Logger LOG;
-	
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -43,7 +43,7 @@ public class AuthenticationEndpoint {
 
 		try {
 			sessionBean.setUser(null);
-			
+
 			User user = null;
 
 			if (userId == null || userId.equals("")) {
@@ -54,7 +54,8 @@ public class AuthenticationEndpoint {
 				return Response.ok(Status.BAD_REQUEST).build();
 			}
 
-			LoginContext lc = usersHelper.authenticate(userId, pwd.toCharArray());
+			// TODO integrate with Java EE Security
+			LoginContext lc = usersManager.authenticate(userId, pwd.toCharArray(), "MainApp");
 
 			if (lc != null && !lc.getSubject().getPrincipals().isEmpty()) {
 				user = (User) lc.getSubject().getPrincipals().iterator().next();
