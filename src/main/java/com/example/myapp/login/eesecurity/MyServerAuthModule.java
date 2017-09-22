@@ -26,12 +26,13 @@ import javax.servlet.http.HttpServletResponse;
 import static javax.security.auth.message.AuthStatus.*;
 
 /**
- * Java EE Security login module, for JASPIC (i.e. custom) login. The actual
- * Server Authentication Module AKA SAM.
+ * Java EE Security login module, for JASPIC (i.e. custom) login. This is the actual
+ * Server Authentication Module AKA SAM. Currently not used.
  * 
  * @see https://dzone.com/refcardz/getting-started-java-ee,
  *      http://arjan-tijms.omnifaces.org/2012/11/implementing-container-authentication.html,
  *      https://github.com/javaee/security-examples
+ *      https://blogs.oracle.com/enterprisetechtips/adding-authentication-mechanisms-to-the-glassfish-servlet-container
  *
  */
 public class MyServerAuthModule implements ServerAuthModule {
