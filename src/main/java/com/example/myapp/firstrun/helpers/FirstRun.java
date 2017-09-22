@@ -48,9 +48,9 @@ public class FirstRun {
 		em.persist(roleAdmin);
 
 		User u = new User("admin", "admin@example.com", "Admin", ".", BooleanYN.Y, null);
-		u.setEncryptedPassword("d033e22ae348aeb5660fc2140aec35850c4da997");
-		// FIXME jdbcRealm compatibility
-		// usersManager.setPassword(u, "admin".toCharArray());
+		u.setEncryptedPassword("8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918");
+		//u.setEncryptedPassword("d033e22ae348aeb5660fc2140aec35850c4da997");
+		//usersManager.setPassword(u, "admin".toCharArray());
 		em.persist(u);
 
 		roleAdmin.getUsers().add(u);
@@ -61,9 +61,9 @@ public class FirstRun {
 		em.persist(roleStandard);
 
 		u = new User("user", "user@example.com", "User", ".", BooleanYN.Y, null);
-		u.setEncryptedPassword("12dea96fec20593566ab75692c9949596833adc9");
-		// FIXME jdbcRealm compatibility
-		// usersManager.setPassword(u, "user".toCharArray());
+		u.setEncryptedPassword("04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb");
+		//u.setEncryptedPassword("12dea96fec20593566ab75692c9949596833adc9");
+		//usersManager.setPassword(u, "user".toCharArray());
 		em.persist(u);
 
 		roleStandard.getUsers().add(u);

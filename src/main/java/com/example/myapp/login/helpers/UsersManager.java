@@ -5,11 +5,18 @@
 */
 package com.example.myapp.login.helpers;
 
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.xml.bind.DatatypeConverter;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -20,15 +27,14 @@ import javax.security.auth.login.LoginException;
 import org.slf4j.Logger;
 
 import com.example.myapp.crud.GenericManager;
-import com.example.myapp.login.util.PasswordAuthentication;
 import com.example.myapp.main.entity.Menu;
 import com.example.myapp.main.entity.Page;
 import com.example.myapp.main.entity.Role;
 import com.example.myapp.main.entity.User;
 import com.example.myapp.main.enums.BooleanYN;
 import com.example.myapp.main.util.ApplicationProperties;
-import com.sun.messaging.jmq.util.MD5;
 
+//TODO may split encrypt-related stuff
 @Stateless
 public class UsersManager {
 
@@ -37,50 +43,17 @@ public class UsersManager {
 	@Inject
 	Logger LOG;
 	@Inject
-	PasswordAuthentication PAinstance;
-	@Inject
 	ApplicationProperties appProps;
 	@Inject
 	GenericManager genericManager;
 
+	public final String ALGORITHM = "SHA-256";
+
 	public UsersManager() {
 	}
 
-	/**
-	 * Return a hash for given password.
-	 * 
-	 * @param pwd
-	 * @return
-	 */
-	public String encryptPassword(char[] cleartextPassword) {
-		return PAinstance.hash(cleartextPassword); // FIXME how to get char[] ?
-	}
-
-	/**
-	 * Set user password
-	 * 
-	 * @param u
-	 * @param unencryptedPassword
-	 */
-	public void setPassword(User u, char[] cleartextPassword) {
-		u.setEncryptedPassword(encryptPassword(cleartextPassword));
-	}
-
-	/**
-	 * Test user password
-	 */
-	public boolean testPassword(User u, char[] cleartextPassword) {
-		return PAinstance.authenticate(cleartextPassword, u.getEncryptedPassword());
-	}
-
-	/**
-	 * Fill array with zeroes
-	 * 
-	 * @param array
-	 */
-	public void clearArray(char[] array) {
-		for (int i = 0; i < array.length; ++i)
-			array[i] = 0;
+	public User getUserByNameAndPassword(String name, String cleartextPassword) {
+		return getUserByNameAndPassword(name, cleartextPassword.toCharArray());
 	}
 
 	/**
@@ -92,7 +65,7 @@ public class UsersManager {
 	 * @return
 	 */
 	// FIXME jdbcRealm does not check if active = true
-	public User getUserByNameAndPassword(String name, char[] password) {
+	public User getUserByNameAndPassword(String name, char[] cleartextPassword) {
 
 		// FIXME namedquery?
 		TypedQuery<User> query = em.createQuery("from User where name = :name and active = :true", User.class)
@@ -101,7 +74,7 @@ public class UsersManager {
 		List<User> users = query.getResultList();
 
 		for (User u : users) {
-			if (testPassword(u, password))
+			if (testPassword(u, cleartextPassword))
 				return u;
 			// FIXME what if more than 1?
 		}
@@ -151,16 +124,130 @@ public class UsersManager {
 		}
 	}
 
+	public User getUserByPasswordRecoveryCode(String pwdRecCode) {
+		pwdRecCode = encrypt(pwdRecCode, "MD5");
+		List<User> users = genericManager.findByProperty(User.class, "passwordRecoveryCode", pwdRecCode);
+
+		if (users.isEmpty())
+			return null;
+		else if (users.size() > 1)
+			throw new IllegalStateException("2 users with same authentication code!");
+		else
+			return users.get(0);
+	}
+
 	/**
-	 * Authenticate given username and password through JAAS.
+	 * Generic multi-purpose hashing routine. Clear array.
+	 * 
+	 * @param cleartextMessage
+	 * @param algorithm
+	 * @return
+	 */
+	public String encrypt(byte[] cleartextMessageBytes, String algorithm) {
+
+		MessageDigest md;
+		try {
+			md = MessageDigest.getInstance(algorithm);
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
+		md.update(cleartextMessageBytes);
+		byte[] digestBytes = md.digest();
+		Arrays.fill(cleartextMessageBytes, (byte) 0);
+		return DatatypeConverter.printHexBinary(digestBytes);
+	}
+
+	/**
+	 * Generic multi-purpose hashing routine. Clear array.
+	 * 
+	 * @param cleartextMessage
+	 * @param algorithm
+	 * @return
+	 */
+	public String encrypt(char[] cleartextMessage, String algorithm) {
+
+		byte[] cleartextMessageBytes = char2byte(cleartextMessage);
+		Arrays.fill(cleartextMessage, '\u0000');
+		return encrypt(cleartextMessageBytes, algorithm);
+	}
+
+	/**
+	 * Generic multi-purpose hashing routine. Cannot clear String's array.
+	 * 
+	 * @param cleartextMessage
+	 * @param algorithm
+	 * @return null if cleartextMessage is null
+	 */
+	public String encrypt(String cleartextMessage, String algorithm) {
+		if (cleartextMessage == null)
+			return null;
+		return encrypt(cleartextMessage.getBytes(), algorithm);
+	}
+
+	/**
+	 * Return a hash for given password, then clear array.
+	 * 
+	 * @param pwd
+	 * @return
+	 */
+	public String encryptPassword(char[] cleartextPassword) {
+
+		return encrypt(cleartextPassword, ALGORITHM);
+	}
+
+	/**
+	 * Return a hash for given password.
+	 * 
+	 * @param pwd
+	 * @return
+	 */
+	public String encryptPassword(String cleartextPassword) {
+
+		return encrypt(cleartextPassword, ALGORITHM);
+	}
+
+	/**
+	 * Set user password
+	 * 
+	 * @param u
+	 * @param unencryptedPassword
+	 */
+	public void setPassword(User u, char[] cleartextPassword) {
+		u.setEncryptedPassword(encryptPassword(cleartextPassword));
+	}
+
+	/**
+	 * Set user password. We consider null equal to "".
+	 * 
+	 * @param u
+	 * @param unencryptedPassword
+	 */
+	public void setPassword(User u, String cleartextPassword) {
+		setPassword(u, encryptPassword(cleartextPassword));
+	}
+
+	/**
+	 * Test user password, then clear array
+	 */
+	public boolean testPassword(User u, char[] cleartextPassword) {
+
+		// FIXME currently naive
+		return cleartextPassword != null && encryptPassword(cleartextPassword).equals(u.getEncryptedPassword());
+	}
+
+	/**
+	 * Authenticate given username and password through JAAS (instead of Java EE
+	 * Security).
 	 * 
 	 * @param user,
 	 *            or null
 	 * @param password
 	 *            cleartext password. After authentication will be cleared.
+	 * @param realm
+	 *            JAAS realm name
 	 * @return
 	 */
-	public LoginContext authenticate(String user, char[] password) {
+	public LoginContext authenticate(String user, char[] password, String realm) {
 
 		// consider modules: Krb5LoginModule, LdapLoginModule, NTLoginModule,
 		// JndiLoginModule
@@ -170,7 +257,7 @@ public class UsersManager {
 
 		LoginContext lc;
 		try {
-			lc = new LoginContext("MainApp", cbh); // referenced in jaas.conf
+			lc = new LoginContext(realm, cbh); // referenced in jaas.conf
 
 		} catch (LoginException e) {
 			LOG.error("Exception during new LoginContext()", e);
@@ -189,10 +276,9 @@ public class UsersManager {
 			LOG.error("Exception while loggin-in", e);
 			return null;
 		} finally {
-			PAinstance.clearPassword(password);
+			Arrays.fill(password, '\u0000');
 		}
 
-		// This should be not null...
 		return lc;
 	}
 
@@ -312,21 +398,9 @@ public class UsersManager {
 	 * @return
 	 */
 	public String createPasswordRecoveryCode(User user) {
-		String code = MD5.getHashString("" + Math.random() + new Date());
-		user.setPasswordRecoveryCode(MD5.getHashString(code));
+		String code = randomString();
+		user.setPasswordRecoveryCode(encrypt(code, "MD5"));
 		return code;
-	}
-
-	public User getUserByPasswordRecoveryCode(String pwdRecCode) {
-		pwdRecCode = MD5.getHashString(pwdRecCode);
-		List<User> users = genericManager.findByProperty(User.class, "passwordRecoveryCode", pwdRecCode);
-
-		if (users.isEmpty())
-			return null;
-		else if (users.size() > 1)
-			throw new IllegalStateException("2 users with same authentication code!");
-		else
-			return users.get(0);
 	}
 
 	/**
@@ -337,7 +411,7 @@ public class UsersManager {
 	 */
 	public String newPassword(User user) {
 		String pwd = randomString().substring(10);
-		setPassword(user, pwd.toCharArray());
+		setPassword(user, pwd);
 		return pwd;
 	}
 
@@ -348,8 +422,25 @@ public class UsersManager {
 	 * @param len
 	 * @return
 	 */
-	private String randomString() {
-		return MD5.getHashString("" + Math.random() + new Date());
+	public String randomString() {
+
+		return encrypt("" + Math.random() + new Date(), "MD5");
+	}
+
+	/**
+	 * Convert char[] to byte[] without creating any String.
+	 * 
+	 * @see https://stackoverflow.com/questions/5513144
+	 * @param x
+	 * @return
+	 */
+	public byte[] char2byte(char[] chars) {
+		CharBuffer charBuffer = CharBuffer.wrap(chars);
+		ByteBuffer byteBuffer = Charset.forName("UTF-8").encode(charBuffer);
+		byte[] bytes = Arrays.copyOfRange(byteBuffer.array(), byteBuffer.position(), byteBuffer.limit());
+		Arrays.fill(charBuffer.array(), '\u0000'); // clear sensitive data
+		Arrays.fill(byteBuffer.array(), (byte) 0); // clear sensitive data
+		return bytes;
 	}
 
 }
