@@ -1,5 +1,11 @@
+Known issues:
+* jdbcRealm is Glasfish-specific
+* jdbcRealm is not compatible with PBKDF2WithHmacSHA1 & PasswordAuthentication
+* i18nFilter is not called before login -> missing labels!
+* FirstRunFilter is called only by /myapp/ not by /myapp/ui/
+* HTTPS does not work
+
 crud editor
-https
 Roles annotations
 (and authorizations filter?)
 glassfish tests
@@ -9,5 +15,4 @@ validation
 gentelella:
 - favicon
 - reset password page
-- handlebar js
 - why 'search' everywhere?

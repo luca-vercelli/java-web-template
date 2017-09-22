@@ -68,3 +68,12 @@ We like EE technologies such as JTA, EJB, Injection, JAX-RS, so we cannot suppor
 * a custom I18nFilter, that in our opinion is easier to use than JSTL' fmt feature.
 
 Modules and interface should be independent: standalone Swing, or AngularJS frontends should work as well.
+
+###Talking about Security
+We have tried several methods, and we still haven't find the "best practice".
+* We don't like BASIC authentication, it's far from user's feelings. We want a custom login page.
+* Java EE security's FORM authentication is better. The container provides login information, and this is quite ok,
+the problem here is that every container has its own login methods, and they're not always good. For example, Glassfish' jdbcRealm is nice, however it supports a limited number of encryption algorithms.
+* JASPIC is a solution, but it's not so easy, you need to modify the container itself. 
+* We also tried to use an old JAAS LoginModule directly, however we do not recommend this.
+
