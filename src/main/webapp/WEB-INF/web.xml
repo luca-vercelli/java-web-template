@@ -48,6 +48,24 @@
 	<!-- Security stuff -->
 	<security-constraint>
 		<web-resource-collection>
+			<web-resource-name>Login page</web-resource-name>
+			<url-pattern>/ui/login.jsp</url-pattern>
+		</web-resource-collection>
+	</security-constraint>
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>CSS resources</web-resource-name>
+			<url-pattern>/ui/css/*</url-pattern>
+		</web-resource-collection>
+	</security-constraint>
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Images</web-resource-name>
+			<url-pattern>/ui/images/*</url-pattern>
+		</web-resource-collection>
+	</security-constraint>
+	<security-constraint>
+		<web-resource-collection>
 			<web-resource-name>Secure pages</web-resource-name>
 			<url-pattern>/ui/*</url-pattern>
 		</web-resource-collection>
@@ -70,8 +88,8 @@
 		<auth-method>FORM</auth-method>
 		<realm-name>jdbcRealm</realm-name>
 		<form-login-config>
-			<form-login-page>/ui/login.jsp</form-login-page>
-			<form-error-page>/ui/login.jsp</form-error-page>
+			<form-login-page>/redirect-login.jsp</form-login-page>
+			<form-error-page>/redirect-login.jsp</form-error-page>
 		</form-login-config>
 	</login-config>
 
