@@ -91,7 +91,7 @@
 		<jdbc-resource pool-name="mainDataSource" jndi-name="jdbc/mainDataSource"></jdbc-resource>
 		<!-- WebTemplate: mail transport resource -->
 		<mail-resource host="smtp.gmail.com" from="java.web.template@gmail.com"
-			user="java.web.template@gmail.com" jndi-name="mainMailSession">
+			user="java.web.template@gmail.com" jndi-name="mail/mainMailSession">
 			<property name="mail-smtp-auth" value="true"></property>
 			<property name="mail-smtp-starttls-enable" value="true"></property>
 			<property name="mail-smtp-port" value="465"></property>

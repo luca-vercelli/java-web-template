@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 
@@ -24,7 +25,7 @@ import com.example.myapp.main.util.SessionBean;
  *
  */
 @WebServlet("/ui/doPasswordRecovery")
-public class doPasswordRecovery extends HttpServlet {
+public class DoPasswordRecovery extends HttpServlet {
 
 	private static final long serialVersionUID = -1853319438734405659L;
 
@@ -39,9 +40,13 @@ public class doPasswordRecovery extends HttpServlet {
 	@Inject
 	MailManager mailManager;
 
+	public final static String ERROR_MESSAGE = "error_message";
+
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		HttpSession session = request.getSession();
+		session.removeAttribute(ERROR_MESSAGE);
 		try {
 
 			String address = request.getParameter("address"); // request's data
@@ -49,7 +54,10 @@ public class doPasswordRecovery extends HttpServlet {
 
 			String email = request.getParameter("email");
 			if (email.isEmpty()) {
-				request.setAttribute("error_message", "err.missing.email"); //FIXME won't be seen
+				session.setAttribute(ERROR_MESSAGE, "err.missing.email"); // FIXME
+																			// won't
+																			// be
+																			// seen
 				response.sendRedirect(request.getContextPath() + appProps.getProperty("password.recovery.uri"));
 				return;
 				// response.sendRedirect(request.getContextPath());
@@ -57,7 +65,10 @@ public class doPasswordRecovery extends HttpServlet {
 
 			User user = usersManager.getUserByEmail(email);
 			if (user == null) {
-				request.setAttribute("error_message", "err.unknown.email");//FIXME won't be seen
+				session.setAttribute(ERROR_MESSAGE, "err.unknown.email");// FIXME
+																			// won't
+																			// be
+																			// seen
 				response.sendRedirect(request.getContextPath() + appProps.getProperty("password.recovery.uri"));
 				return;
 				// response.sendRedirect(request.getContextPath());
@@ -71,13 +82,14 @@ public class doPasswordRecovery extends HttpServlet {
 							+ "If you really want to proceed, follow this link:\r\n" + address
 							+ "/ui/confirmPasswordRecovery?code=" + pwdRecCode + "\r\n");
 
-			request.setAttribute("error.message", "email.recovery.sent");
+			session.setAttribute(ERROR_MESSAGE, "email.recovery.sent");
 			response.sendRedirect(request.getContextPath() + appProps.getProperty("password.recovery.uri"));
 
 		} catch (Exception e) {
 			LOG.error("Exception while performing login", e);
 
 			// FIXME Should send back some message? internal error
+			session.setAttribute(ERROR_MESSAGE, "email.recovery.sent");
 			response.sendRedirect(request.getContextPath() + appProps.getProperty("login.uri"));
 		}
 

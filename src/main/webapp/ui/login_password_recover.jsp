@@ -54,8 +54,9 @@ See PR #337
                   <i class="fa fa-envelope-o text-muted"></i>
                 </div>
                 <div>
-                	<c:if test="${error_message != null }">
-						<fmt:message key="${error_message}" />
+                	<c:if test="${sessionScope.error_message != null }">
+						<fmt:message key="${sessionScope.error_message}" />
+						<c:set var="error_message" scope="session" value="" />
 					</c:if>
                 </div>
               </div>

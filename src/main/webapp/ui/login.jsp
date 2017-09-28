@@ -50,6 +50,12 @@
               <div>
                 <input type="text" class="form-control" placeholder="Username" required name="j_username" />
               </div>
+              <div class="clearfix">
+                    <c:if test="${sessionScope.error_message != null }">
+						<fmt:message key="${sessionScope.error_message}" />
+						<c:set var="error_message" scope="session" value="" />
+					</c:if>
+			  </div>
               <div>
                 <input type="password" class="form-control" placeholder="Password" required name="j_password" />
               </div>
@@ -57,7 +63,6 @@
                 <input type="submit" class="btn btn-default submit" value="Log in"/> 
                 <a class="reset_pass" href="login_password_recover.jsp">${login_password_lost}</a>
               </div>
-
               <div class="clearfix"></div>
 
               <div class="separator">
