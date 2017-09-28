@@ -193,18 +193,21 @@ public class GenericManager {
 
 	/**
 	 * Load that object of given entity, such that property=value (null
-	 * supported).
+	 * supported), or null if none.
 	 * 
-	 * @throws NoResultException
 	 * @throws NonUniqueResultException
 	 */
 	public <T> T findByPropertySingleResult(Class<T> entity, String propertyName, Object value) {
-		if (value != null) {
-			return em.createQuery("from " + entity.getName() + " where " + propertyName + " = :param", entity)
-					.setParameter("param", value).getSingleResult();
-		} else {
-			return em.createQuery("from " + entity.getName() + " where " + propertyName + " is null", entity)
-					.getSingleResult();
+		try {
+			if (value != null) {
+				return em.createQuery("from " + entity.getName() + " where " + propertyName + " = :param", entity)
+						.setParameter("param", value).getSingleResult();
+			} else {
+				return em.createQuery("from " + entity.getName() + " where " + propertyName + " is null", entity)
+						.getSingleResult();
+			}
+		} catch (NoResultException exc) {
+			return null;
 		}
 	}
 

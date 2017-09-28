@@ -49,7 +49,7 @@ public class doPasswordRecovery extends HttpServlet {
 
 			String email = request.getParameter("email");
 			if (email.isEmpty()) {
-				request.setAttribute("error.message", "err.missing.email");
+				request.setAttribute("error_message", "err.missing.email"); //FIXME won't be seen
 				response.sendRedirect(request.getContextPath() + appProps.getProperty("password.recovery.uri"));
 				return;
 				// response.sendRedirect(request.getContextPath());
@@ -57,7 +57,7 @@ public class doPasswordRecovery extends HttpServlet {
 
 			User user = usersManager.getUserByEmail(email);
 			if (user == null) {
-				request.setAttribute("error.message", "err.unknown.email");
+				request.setAttribute("error_message", "err.unknown.email");//FIXME won't be seen
 				response.sendRedirect(request.getContextPath() + appProps.getProperty("password.recovery.uri"));
 				return;
 				// response.sendRedirect(request.getContextPath());

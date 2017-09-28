@@ -53,6 +53,11 @@ See PR #337
                 <div class="form-control-feedback">
                   <i class="fa fa-envelope-o text-muted"></i>
                 </div>
+                <div>
+                	<c:if test="${error_message != null }">
+						<fmt:message key="${error_message}" />
+					</c:if>
+                </div>
               </div>
               <button type="submit" class="btn bg-blue btn-block">Reset password <i class="fa fa-arrow-right position-right"></i></button>
                 <div class="clearfix"></div>
