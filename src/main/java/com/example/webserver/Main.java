@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.glassfish.embeddable.CommandResult;
 import org.glassfish.embeddable.Deployer;
 import org.glassfish.embeddable.GlassFish;
 import org.glassfish.embeddable.GlassFishException;
@@ -147,4 +148,17 @@ public class Main {
 
 	}
 
+	private static void createMailResource(GlassFish glassfish) throws GlassFishException {
+		final String COMMAND = "create-javamail-resource";
+		final String ARGS = "--mailhost=smtp.gmail.com --mailuser=java.web.template@gmail.com --fromaddress=java.web.template@gmail.com mail/mainMailSession";
+		run(glassfish, COMMAND, ARGS);
+	}
+
+	private static CommandResult run(GlassFish glassfish, String command, String args) throws GlassFishException {
+		CommandResult cr = glassfish.getCommandRunner().run(command, args.split(" "));
+		System.out.println("CommandResult: " + cr.getClass().getName());
+		//com.sun.enterprise.admin.cli.embeddable.CommandExecutorImpl$1
+		System.out.println("Command output: " + cr.getOutput());
+		return cr;
+	}
 }
