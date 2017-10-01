@@ -110,7 +110,9 @@
 			<resource-ref ref="concurrent/__defaultManagedExecutorService"></resource-ref>
 			<resource-ref ref="concurrent/__defaultManagedScheduledExecutorService"></resource-ref>
 			<resource-ref ref="concurrent/__defaultManagedThreadFactory"></resource-ref>
+			<!-- WebTemplate: resource-ref -->
 			<resource-ref ref="jdbc/mainDataSource"></resource-ref>
+			<resource-ref ref="mail/mainMailSession"></resource-ref>
 		</server>
 	</servers>
 	<nodes>
