@@ -4,11 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.logging.Logger;
-
-import org.glassfish.api.admin.ParameterMap;
 import org.glassfish.embeddable.CommandResult;
-import org.glassfish.embeddable.CommandRunner;
 import org.glassfish.embeddable.Deployer;
 import org.glassfish.embeddable.GlassFish;
 import org.glassfish.embeddable.GlassFishException;
@@ -56,7 +52,7 @@ public class Main {
 				glassfish.start();
 
 				if (ENABLE_HTTPS)
-					fixHttpsStuff(glassfish, HTTPS_PORT);
+					createHttpListener(glassfish, HTTPS_PORT);
 
 			} catch (GlassFishException e) {
 				e.printStackTrace();
@@ -167,18 +163,56 @@ public class Main {
 	 * 
 	 * @see https://stackoverflow.com/questions/2401341
 	 */
-	private static void fixHttpsStuff(GlassFish glassfish, Integer port) throws GlassFishException {
+	private static void createHttpListener(GlassFish glassfish, Integer port) throws GlassFishException {
 
 		System.out.println("Calling: asadmin create-http-listener");
-		// this is org.glassfish.embeddable.CommandRunner,
-		// not org.glassfish.api.admin.CommandRunner
-		CommandRunner runner = glassfish.getCommandRunner();
-		CommandResult result = runner.run("create-http-listener", "--listeneraddress=0.0.0.0",
-				"--listenerport=" + port.toString(), "--defaultvs=server", "--securityenabled=true", "--enabled=true",
-				"http-listener3");
-		System.out.println("Command output: " + result.getOutput());
-		if (result.getFailureCause() != null)
-			result.getFailureCause().printStackTrace();
+		run(glassfish, "create-http-listener", "--listeneraddress=0.0.0.0", "--listenerport=" + port.toString(),
+				"--defaultvs=server", "--securityenabled=true", "--enabled=true", "http-listener3");
+	}
 
+	/**
+	 * Create email resource.
+	 * 
+	 * @param glassfish
+	 * @throws GlassFishException
+	 */
+	private static void createMailResource(GlassFish glassfish) throws GlassFishException {
+		final String COMMAND = "create-javamail-resource";
+		final String ARGS = "--mailhost=smtp.gmail.com --mailuser=java.web.template@gmail.com --fromaddress=java.web.template@gmail.com mail/mainMailSession";
+		run(glassfish, COMMAND, ARGS);
+	}
+
+	/**
+	 * Facility: split arguments, execute asadmin command, print output.
+	 * Algorithm for splitting args is naive, just search for spaces.
+	 * 
+	 * @param glassfish
+	 * @param command
+	 * @param args
+	 * @return
+	 * @throws GlassFishException
+	 */
+	private static CommandResult run(GlassFish glassfish, String command, String args) throws GlassFishException {
+		return run(glassfish, command, args.split(" "));
+	}
+
+	/**
+	 * Facility: execute asadmin command, print output.
+	 * 
+	 * @param glassfish
+	 * @param command
+	 * @param args
+	 * @return
+	 * @throws GlassFishException
+	 */
+	private static CommandResult run(GlassFish glassfish, String command, String... args) throws GlassFishException {
+		CommandResult cr = glassfish.getCommandRunner().run(command, args);
+		System.out.println("Calling asadmin " + command);
+		// CommandResult is
+		// com.sun.enterprise.admin.cli.embeddable.CommandExecutorImpl$1
+		System.out.println("Command output: " + cr.getOutput());
+		if (cr.getFailureCause() != null)
+			cr.getFailureCause().printStackTrace();
+		return cr;
 	}
 }

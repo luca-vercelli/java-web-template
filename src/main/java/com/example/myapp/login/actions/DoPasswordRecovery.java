@@ -86,10 +86,10 @@ public class DoPasswordRecovery extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + appProps.getProperty("password.recovery.uri"));
 
 		} catch (Exception e) {
-			LOG.error("Exception while performing login", e);
+			LOG.error("Exception while sending email", e);
 
 			// FIXME Should send back some message? internal error
-			session.setAttribute(ERROR_MESSAGE, "email.recovery.sent");
+			session.setAttribute(ERROR_MESSAGE, "err.cannot.send.email");
 			response.sendRedirect(request.getContextPath() + appProps.getProperty("login.uri"));
 		}
 
