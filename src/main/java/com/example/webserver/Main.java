@@ -4,7 +4,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.logging.Logger;
 
+import org.glassfish.api.admin.ParameterMap;
+import org.glassfish.embeddable.CommandResult;
+import org.glassfish.embeddable.CommandRunner;
 import org.glassfish.embeddable.Deployer;
 import org.glassfish.embeddable.GlassFish;
 import org.glassfish.embeddable.GlassFishException;
@@ -17,6 +21,9 @@ public class Main {
 	public static final File CONFIG_FILE = new File("config", "domain.xml");
 	public static final File JAAS_FILE = new File("config", "login.conf");
 	public static final String CONTEXT_ROOT = "myapp";
+	public static final Boolean ENABLE_HTTPS = false;
+	public static final Integer HTTPS_PORT = 8083; // should be 8081, used by
+													// domain.xml
 
 	/**
 	 * Run application with embedded Glassfish Server. You don't need to install
@@ -48,6 +55,9 @@ public class Main {
 				glassfish = GlassFishRuntime.bootstrap().newGlassFish(properties);
 				glassfish.start();
 
+				if (ENABLE_HTTPS)
+					fixHttpsStuff(glassfish, HTTPS_PORT);
+
 			} catch (GlassFishException e) {
 				e.printStackTrace();
 				return;
@@ -69,8 +79,10 @@ public class Main {
 				// ${com.sun.aas.instanceRoot} everywhere in domanin.xml
 				// That way you can use e.g. FileSync plugin to update html's
 
-				System.out.println("Listen url: http://localhost:8080/" + CONTEXT_ROOT);
-				System.out.println("Listen url SHOULD BE ALSO: https://localhost:8181/" + CONTEXT_ROOT); // FIXME
+				if (ENABLE_HTTPS)
+					System.out.println("Listen url HTTPS: https://localhost:" + HTTPS_PORT + "/" + CONTEXT_ROOT);
+				else
+					System.out.println("Listen url HTTP: http://localhost:8080/" + CONTEXT_ROOT);
 
 			} catch (GlassFishException e) {
 				e.printStackTrace();
@@ -147,4 +159,26 @@ public class Main {
 
 	}
 
+	/**
+	 * Configure HTTPS. Glassfish Embedded currently ignores domain.xml
+	 * settings.
+	 * 
+	 * @throws GlassFishException
+	 * 
+	 * @see https://stackoverflow.com/questions/2401341
+	 */
+	private static void fixHttpsStuff(GlassFish glassfish, Integer port) throws GlassFishException {
+
+		System.out.println("Calling: asadmin create-http-listener");
+		// this is org.glassfish.embeddable.CommandRunner,
+		// not org.glassfish.api.admin.CommandRunner
+		CommandRunner runner = glassfish.getCommandRunner();
+		CommandResult result = runner.run("create-http-listener", "--listeneraddress=0.0.0.0",
+				"--listenerport=" + port.toString(), "--defaultvs=server", "--securityenabled=true", "--enabled=true",
+				"http-listener3");
+		System.out.println("Command output: " + result.getOutput());
+		if (result.getFailureCause() != null)
+			result.getFailureCause().printStackTrace();
+
+	}
 }
