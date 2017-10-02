@@ -102,6 +102,20 @@
 			<version>4.1.2</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- see https://stackoverflow.com/questions/36912097 -->
+		<!-- and https://stackoverflow.com/questions/37258938 -->
+		<dependency>
+			<groupId>org.glassfish.grizzly</groupId>
+			<artifactId>grizzly-http2</artifactId>
+			<version>2.3.29</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.grizzly</groupId>
+			<artifactId>grizzly-npn-bootstrap</artifactId>
+			<version>1.7</version>
+			<scope>provided</scope>
+		</dependency>
 
 		<!-- JUnit -->
 		<dependency>
