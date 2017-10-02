@@ -12,6 +12,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- FIXME not included in Gentelella (PR ) -->
+    <link rel="icon" href="images/favicon.ico" type="image/ico" />
 
     <title><fmt:message key="application.title" /></title>
 
@@ -26,7 +29,5 @@
     <link href="../build/css/custom.min.css" rel="stylesheet">
     
     
-    <!-- FIXME not included in Gentelella -->
-    <link rel="icon" href="images/favicon.ico" type="image/ico" />
 
     <jsp:invoke fragment="head_area"/>
