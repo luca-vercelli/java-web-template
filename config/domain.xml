@@ -333,6 +333,7 @@
 							<file-cache></file-cache>
 						</http>
 					</protocol>
+					<!-- WebTemplate: SSL not working in embedded Glassfish ?!? -->
 					<protocol name="http-listener-2" security-enabled="true">
 						<http max-connections="250" default-virtual-server="server">
 							<file-cache></file-cache>

@@ -15,11 +15,9 @@ import org.glassfish.embeddable.archive.ScatteredArchive;
 public class Main {
 
 	public static final File CONFIG_FILE = new File("config", "domain.xml");
-	public static final File JAAS_FILE = new File("config", "login.conf");
 	public static final String CONTEXT_ROOT = "myapp";
-	public static final Boolean ENABLE_HTTPS = false;
-	public static final Integer HTTPS_PORT = 8083; // should be 8081, used by
-													// domain.xml
+	//public static final Boolean ENABLE_HTTPS = true;
+	//public static final Integer HTTPS_PORT = 8083;
 
 	/**
 	 * Run application with embedded Glassfish Server. You don't need to install
@@ -28,9 +26,11 @@ public class Main {
 	 * 
 	 * java com.example.webserver.Main
 	 * 
+	 * @throws Exception
+	 * 
 	 * @throws IOException
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 
 		GlassFish glassfish = null;
 		Deployer deployer = null;
@@ -42,8 +42,6 @@ public class Main {
 
 			try {
 
-				System.setProperty("java.security.auth.login.config", JAAS_FILE.getPath());
-
 				fixBrandingStuff();
 
 				GlassFishProperties properties = new GlassFishProperties();
@@ -51,8 +49,8 @@ public class Main {
 				glassfish = GlassFishRuntime.bootstrap().newGlassFish(properties);
 				glassfish.start();
 
-				if (ENABLE_HTTPS)
-					createHttpListener(glassfish, HTTPS_PORT);
+				//if (ENABLE_HTTPS)
+				//	createHttpListener(glassfish, HTTPS_PORT);
 
 			} catch (GlassFishException e) {
 				e.printStackTrace();
@@ -75,11 +73,11 @@ public class Main {
 				// ${com.sun.aas.instanceRoot} everywhere in domanin.xml
 				// That way you can use e.g. FileSync plugin to update html's
 
-				if (ENABLE_HTTPS)
-					System.out.println("Listen url HTTPS: https://localhost:" + HTTPS_PORT + "/" + CONTEXT_ROOT);
-				else
-					System.out.println("Listen url HTTP: http://localhost:8080/" + CONTEXT_ROOT);
+				fixLoginConf();
 
+				System.out.println("Listen url: http://localhost:8080/" + CONTEXT_ROOT);
+				System.out.println("SHOULD BE ALSO: https://localhost:8181/" + CONTEXT_ROOT);
+				
 			} catch (GlassFishException e) {
 				e.printStackTrace();
 			}
@@ -125,6 +123,21 @@ public class Main {
 	}
 
 	/**
+	 * Set up path for login.conf. If you want use custom login.conf, you must
+	 * modify this.
+	 */
+	private static void fixLoginConf() {
+
+		System.setProperty("java.security.auth.login.config",
+				System.getProperty("com.sun.aas.installRoot") + "/config/login.conf");
+
+		// If you want use custom login.conf:
+		// System.setProperty("java.security.auth.login.config",
+		// "./config/login.conf);
+
+	}
+
+	/**
 	 * Workaround to load branding file.
 	 * 
 	 * @see https://github.com/javaee/glassfish/issues/21101
@@ -165,9 +178,9 @@ public class Main {
 	 */
 	private static void createHttpListener(GlassFish glassfish, Integer port) throws GlassFishException {
 
-		System.out.println("Calling: asadmin create-http-listener");
 		run(glassfish, "create-http-listener", "--listeneraddress=0.0.0.0", "--listenerport=" + port.toString(),
 				"--defaultvs=server", "--securityenabled=true", "--enabled=true", "http-listener3");
+		run(glassfish, "create-ssl", "--type=http-listener", "--certname=s1as", "http-listener3");
 	}
 
 	/**
