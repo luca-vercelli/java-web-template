@@ -1,5 +1,5 @@
 /**
- * WebTemplate 1.0 Luca Vercelli 2017 Released under GPLv3
+ * WebTemplate 1.0 Luca Vercelli 2017 Released under MIT license
  */
 
 // the global var 'entity' must have been set in main page

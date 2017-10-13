@@ -1,7 +1,7 @@
 /*
 * WebTemplate 1.0
 * Luca Vercelli 2017
-* Released under GPLv3 
+* Released under MIT license 
 */
 package com.example.myapp.main.entity;
 
