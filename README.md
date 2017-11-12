@@ -24,7 +24,7 @@ For development, a good webserver and a good database should not require any con
 
 We like EE technologies such as JTA, EJB, Injection, JAX-RS, so we cannot support Tomcat and Jetty. You can consider using TomEE. JetSet is not ready jet. We avoid Managed Beans, in favor of more general frameworks CDI and EJB. 
 
-###Technologies:
+### Technologies:
 * Java 7
 * Java EE 7, so in particular:
   * Servlet 3.1
@@ -51,12 +51,12 @@ We like EE technologies such as JTA, EJB, Injection, JAX-RS, so we cannot suppor
 * Java EE security + jdbcRealm
 * session-based instead of token-based security, as we have both REST services and web pages. Anyway we include an example of token-based authentication endpoint+filter.
 
-###Suggested tools:
+### Suggested tools:
 * Eclipse EE
 * m2e plugin
 * FileSync plugin
 
-###Features:
+### Features:
 * JSP templating
 * CRUD (via RESTful services)
 * login page
@@ -69,7 +69,7 @@ We like EE technologies such as JTA, EJB, Injection, JAX-RS, so we cannot suppor
 
 Modules and interface should be independent: standalone Swing, or AngularJS frontends should work as well.
 
-###Talking about Security
+### Talking about Security
 We have tried several methods, and we still haven't find the "best practice".
 * We don't like BASIC authentication, it's far from user's feelings. We want a custom login page.
 * Java EE security's FORM authentication is better. The only problem is that no Filter is executed before login page, so
