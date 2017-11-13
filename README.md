@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/luca-vercelli/java-web-template.svg?branch=master)](https://travis-ci.org/luca-vercelli/java-web-template)
+
 # java-web-template
 Template for real-world Java Web project.
 
