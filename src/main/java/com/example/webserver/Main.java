@@ -11,13 +11,15 @@ import org.glassfish.embeddable.GlassFishException;
 import org.glassfish.embeddable.GlassFishProperties;
 import org.glassfish.embeddable.GlassFishRuntime;
 import org.glassfish.embeddable.archive.ScatteredArchive;
+import org.glassfish.embeddable.archive.ScatteredEnterpriseArchive;
 
 public class Main {
 
 	public static final File CONFIG_FILE = new File("config", "domain.xml");
 	public static final String CONTEXT_ROOT = "myapp";
-	//public static final Boolean ENABLE_HTTPS = true;
-	//public static final Integer HTTPS_PORT = 8083;
+	public static final String APP_NAME = "myapp";
+	// public static final Boolean ENABLE_HTTPS = true;
+	// public static final Integer HTTPS_PORT = 8083;
 
 	/**
 	 * Run application with embedded Glassfish Server. You don't need to install
@@ -49,8 +51,8 @@ public class Main {
 				glassfish = GlassFishRuntime.bootstrap().newGlassFish(properties);
 				glassfish.start();
 
-				//if (ENABLE_HTTPS)
-				//	createHttpListener(glassfish, HTTPS_PORT);
+				// if (ENABLE_HTTPS)
+				// createHttpListener(glassfish, HTTPS_PORT);
 
 			} catch (GlassFishException e) {
 				e.printStackTrace();
@@ -61,8 +63,8 @@ public class Main {
 			try {
 
 				deployer = glassfish.getDeployer();
-				ScatteredArchive archive = getScatteredArchive();
-				appName = deployer.deploy(archive.toURI(), "--contextroot=" + CONTEXT_ROOT);
+				ScatteredEnterpriseArchive archive = getScatteredEAR();
+				appName = deployer.deploy(archive.toURI());
 				// for other parameters see
 				// https://docs.oracle.com/cd/E19798-01/821-1758/deploy-1/index.html
 
@@ -77,7 +79,7 @@ public class Main {
 
 				System.out.println("Listen url: http://localhost:8080/" + CONTEXT_ROOT);
 				System.out.println("SHOULD BE ALSO: https://localhost:8181/" + CONTEXT_ROOT);
-				
+
 			} catch (GlassFishException e) {
 				e.printStackTrace();
 			}
@@ -164,6 +166,20 @@ public class Main {
 		ScatteredArchive archive = new ScatteredArchive(CONTEXT_ROOT, ScatteredArchive.Type.WAR, webapp);
 		archive.addClassPath(classes);
 
+		return archive;
+
+	}
+
+	/**
+	 * Create Glassfish' scattered EAR archive for the application (it must
+	 * include all required WAR's)
+	 * 
+	 */
+	public static ScatteredEnterpriseArchive getScatteredEAR() throws IOException {
+
+		ScatteredEnterpriseArchive archive = new ScatteredEnterpriseArchive(APP_NAME);
+		archive.addMetadata(new File("src", "application.xml")); // FIXME
+		archive.addArchive(getScatteredArchive().toURI(), "scattered.war");
 		return archive;
 
 	}
