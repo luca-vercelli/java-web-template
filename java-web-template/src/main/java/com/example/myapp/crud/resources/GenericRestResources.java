@@ -25,9 +25,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import com.example.myapp.crud.GenericManager;
-import com.sun.messaging.jmq.io.Status;
 
 /**
  * This REST WS handles not just one entity, but all possible entities. Entites

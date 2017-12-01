@@ -16,13 +16,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import org.slf4j.Logger;
 
 import com.example.myapp.crud.GenericManager;
 import com.example.myapp.crud.GridManager;
 import com.example.myapp.crud.entity.Grid;
 import com.example.myapp.crud.entity.GridColumn;
-import com.sun.messaging.jmq.io.Status;
 
 @Stateless
 @Path("/")
