@@ -1,4 +1,4 @@
-package com.example.templates.glassfish_launcher;
+package com.example.launcher;
 
 import java.io.BufferedReader;
 import java.io.File;

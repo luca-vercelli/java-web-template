@@ -10,10 +10,11 @@ Moreover we want to use "best practice"'s wherever possible.
 ## How to use this project
 This is not a framework. This is a webapp prototype. You can/must modify all classes and JSP's you need.
 
-## How to run this project
-* Download, either with Git or with Eclipse (eGit plugin)
-* Compile, either with Maven or Eclipse (m2e plugin)
-* Run class *com.example.webserver.Main*, either with Eclipse or command line.
+## How to run this project (with Eclipse)
+* Download all included projects, either with Git or with eGit plugin
+* Let Eclipse compile all (using m2e plugin)
+* Run Java application *com.example.launcher.App*
+
 
 ## DISCLAIMER
 Modern applications should be plain HTML, with data loaded asincronously via Ajax. RESt, OData, JSON technologies should be used.

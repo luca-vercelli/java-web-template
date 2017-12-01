@@ -1,4 +1,4 @@
-package com.example.templates.glassfish_launcher;
+package com.example.launcher;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
