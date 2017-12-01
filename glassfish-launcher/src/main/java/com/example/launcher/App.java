@@ -14,13 +14,16 @@ import org.glassfish.embeddable.archive.ScatteredArchive;
 import org.glassfish.embeddable.archive.ScatteredEnterpriseArchive;
 
 /**
- * Launcher for Embedded Glassfish + all required projects 
+ * Launcher for Embedded Glassfish + all required projects
  */
 public class App {
 
 	public static final File CONFIG_FILE = new File("config", "domain.xml");
 	public static final String CONTEXT_ROOT = "myapp";
 	public static final String APP_NAME = "myapp";
+	public static final String APPLICATION_XML = ".../java-ear-template/target/META-INF/application.xml";
+	public static final String[] WARS = { "../java-web-template/src/main/java" };
+
 	// public static final Boolean ENABLE_HTTPS = true;
 	// public static final Integer HTTPS_PORT = 8083;
 
@@ -162,9 +165,19 @@ public class App {
 	 * @throws IOException
 	 */
 	public static ScatteredArchive getScatteredArchive() throws IOException {
+		return getScatteredArchive(".");
+	}
 
-		File webapp = new File("src" + File.separator + "main" + File.separator + "webapp");
-		File classes = new File("target" + File.separator + "classes");
+	/**
+	 * Create Glassfish' scattered archive (i.e. WAR file) for the application.
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	public static ScatteredArchive getScatteredArchive(String root) throws IOException {
+
+		File webapp = new File(root + "src" + File.separator + "main" + File.separator + "webapp");
+		File classes = new File(root + "target" + File.separator + "classes");
 
 		ScatteredArchive archive = new ScatteredArchive(CONTEXT_ROOT, ScatteredArchive.Type.WAR, webapp);
 		archive.addClassPath(classes);
@@ -181,8 +194,10 @@ public class App {
 	public static ScatteredEnterpriseArchive getScatteredEAR() throws IOException {
 
 		ScatteredEnterpriseArchive archive = new ScatteredEnterpriseArchive(APP_NAME);
-		archive.addMetadata(new File("src", "application.xml")); // FIXME
-		archive.addArchive(getScatteredArchive().toURI(), "scattered.war");
+		System.out.println("DEBUG .=" + (new File(".").getAbsolutePath()).toString());// DEBUG
+		archive.addMetadata(new File(APPLICATION_XML));
+		for (String warRoot : WARS)
+			archive.addArchive(getScatteredArchive(warRoot).toURI(), "scattered.war");
 		return archive;
 
 	}

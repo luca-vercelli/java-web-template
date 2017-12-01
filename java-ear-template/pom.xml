@@ -35,7 +35,7 @@
 							<groupId>com.example.templates</groupId>
 							<artifactId>web-template</artifactId>
 							<bundleFileName>web-template.war</bundleFileName>
-							<contextRoot>/web</contextRoot>
+							<contextRoot>/myapp</contextRoot>
 						</webModule>
 						<!-- EJB's here -->
 					</modules>
