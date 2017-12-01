@@ -1,11 +1,11 @@
 language: java
-jdk: openjdk7
+jdk: openjdk8
 #should work with 8 and 9 too
 
 #### Multi project management ####
 env:
-  - PROJECT=glassfish-launcher
   - PROJECT=java-web-template
   - PROJECT=java-ear-template
+  - PROJECT=glassfish-launcher
 
 before_install: cd $PROJECT
