@@ -8,4 +8,4 @@ env:
   - PROJECT=java-web-template
   - PROJECT=java-ear-template
 
-  before_install: cd $PROJECT
+before_install: cd $PROJECT
