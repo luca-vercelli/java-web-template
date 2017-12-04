@@ -10,7 +10,7 @@
 	<artifactId>ear-template</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>ear</packaging>
-	<name>EEAR Web template</name>
+	<name>EAR Web template</name>
 	<description>A minimal template for developing an intranet webapp (EAR version)</description>
 
 	<dependencies>
@@ -19,6 +19,12 @@
 			<artifactId>web-template</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>com.example.templates</groupId>
+			<artifactId>ws-template</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
 		</dependency>
 	</dependencies>
 
@@ -34,8 +40,14 @@
 						<webModule>
 							<groupId>com.example.templates</groupId>
 							<artifactId>web-template</artifactId>
-							<bundleFileName>web-template.war</bundleFileName>
+							<bundleFileName>java-web-template.war</bundleFileName>
 							<contextRoot>/myapp</contextRoot>
+						</webModule>
+						<webModule>
+							<groupId>com.example.templates</groupId>
+							<artifactId>web-template</artifactId>
+							<bundleFileName>java-ws-template.jar</bundleFileName>
+							<contextRoot>/ws</contextRoot>
 						</webModule>
 						<!-- EJB's here -->
 					</modules>

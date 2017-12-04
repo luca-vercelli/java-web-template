@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.example.templates</groupId>
-	<artifactId>java-ws-template</artifactId>
+	<artifactId>ws-template</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Web template</name>
+	<name>Web template - Webservice components</name>
 	<description>A minimal template for developing an intranet webapp</description>
 
 	<dependencies>

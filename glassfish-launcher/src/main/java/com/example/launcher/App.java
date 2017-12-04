@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
+
 import org.glassfish.embeddable.CommandResult;
 import org.glassfish.embeddable.Deployer;
 import org.glassfish.embeddable.GlassFish;
@@ -19,10 +21,9 @@ import org.glassfish.embeddable.archive.ScatteredEnterpriseArchive;
 public class App {
 
 	public static final File CONFIG_FILE = new File("config", "domain.xml");
-	public static final String CONTEXT_ROOT = "myapp";
-	public static final String APP_NAME = "myapp";
-	public static final String APPLICATION_XML = ".../java-ear-template/target/META-INF/application.xml";
-	public static final String[] WARS = { "../java-web-template/src/main/java" };
+	public static final String[] PROJECTS = { "java-web-template", "java-ws-template" };
+	public static final String APP_NAME = "myapp"; // EAR Application name
+	public static final String APPLICATION_XML = "../java-ear-template/target/application.xml";
 
 	// public static final Boolean ENABLE_HTTPS = true;
 	// public static final Integer HTTPS_PORT = 8083;
@@ -69,7 +70,7 @@ public class App {
 			try {
 
 				deployer = glassfish.getDeployer();
-				ScatteredEnterpriseArchive archive = getScatteredEAR();
+				ScatteredEnterpriseArchive archive = getScatteredEAR(PROJECTS);
 				appName = deployer.deploy(archive.toURI());
 				// for other parameters see
 				// https://docs.oracle.com/cd/E19798-01/821-1758/deploy-1/index.html
@@ -83,8 +84,9 @@ public class App {
 
 				fixLoginConf();
 
-				System.out.println("Listen url: http://localhost:8080/" + CONTEXT_ROOT);
-				System.out.println("SHOULD BE ALSO: https://localhost:8181/" + CONTEXT_ROOT);
+				// First app should be the main one...
+				System.out.println("Listen url: http://localhost:8080/" + PROJECTS[0]);
+				System.out.println("SHOULD BE ALSO: https://localhost:8181/" + PROJECTS[0]);
 
 			} catch (GlassFishException e) {
 				e.printStackTrace();
@@ -159,45 +161,57 @@ public class App {
 	}
 
 	/**
-	 * Create Glassfish' scattered archive (i.e. WAR file) for the application.
+	 * Create Glassfish' scattered archive (i.e. WAR or JAR file) for the
+	 * application.
+	 * 
+	 * JAR must follow canonical Maven directory structure.
+	 * 
+	 * WAR must follow canonical Maven webapp directory structure.
 	 * 
 	 * @return
 	 * @throws IOException
 	 */
-	public static ScatteredArchive getScatteredArchive() throws IOException {
-		return getScatteredArchive(".");
-	}
+	public static ScatteredArchive getScatteredArchive(String projectName) throws IOException {
 
-	/**
-	 * Create Glassfish' scattered archive (i.e. WAR file) for the application.
-	 * 
-	 * @return
-	 * @throws IOException
-	 */
-	public static ScatteredArchive getScatteredArchive(String root) throws IOException {
+		String root = "../" + projectName + "/";
 
 		File webapp = new File(root + "src" + File.separator + "main" + File.separator + "webapp");
 		File classes = new File(root + "target" + File.separator + "classes");
 
-		ScatteredArchive archive = new ScatteredArchive(CONTEXT_ROOT, ScatteredArchive.Type.WAR, webapp);
-		archive.addClassPath(classes);
+		if (webapp.exists() && webapp.isDirectory()) {
 
-		return archive;
+			ScatteredArchive archive = new ScatteredArchive(projectName, ScatteredArchive.Type.WAR, webapp);
+			archive.addClassPath(classes);
+			return archive;
+
+		} else {
+
+			ScatteredArchive archive = new ScatteredArchive(projectName, ScatteredArchive.Type.JAR);
+			archive.addClassPath(classes);
+			return archive;
+
+		}
 
 	}
 
 	/**
 	 * Create Glassfish' scattered EAR archive for the application (it must
-	 * include all required WAR's)
+	 * include all required WAR's).
+	 * 
+	 * We assume that the app name in application.xml is equal to the project
+	 * name plus the file extension.
 	 * 
 	 */
-	public static ScatteredEnterpriseArchive getScatteredEAR() throws IOException {
+	public static ScatteredEnterpriseArchive getScatteredEAR(String[] projectNames) throws IOException {
 
 		ScatteredEnterpriseArchive archive = new ScatteredEnterpriseArchive(APP_NAME);
-		System.out.println("DEBUG .=" + (new File(".").getAbsolutePath()).toString());// DEBUG
 		archive.addMetadata(new File(APPLICATION_XML));
-		for (String warRoot : WARS)
-			archive.addArchive(getScatteredArchive(warRoot).toURI(), "scattered.war");
+		for (String projectName : projectNames) {
+			ScatteredArchive archiveModule = getScatteredArchive(projectName);
+			URI uri = archiveModule.toURI();
+			String archiveModuleFileName = uri.getPath().substring(uri.getPath().lastIndexOf('/'));
+			archive.addArchive(uri, archiveModuleFileName);
+		}
 		return archive;
 
 	}
