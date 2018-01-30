@@ -16,7 +16,15 @@ import org.glassfish.embeddable.archive.ScatteredArchive;
 import org.glassfish.embeddable.archive.ScatteredEnterpriseArchive;
 
 /**
- * Launcher for Embedded Glassfish + all required projects
+ * Launcher for Embedded Glassfish + all required projects.
+ * 
+ * We deploy WAR's, not EAR, nor JAR. You must configure this project with the
+ * same values you normally would put in EAR. Glassfish create a WAR for each
+ * project, without any JAR inside: all JAR's must be passed as dependency to
+ * this project. For example, you can tell Eclipse this project
+ * (glassfish-launcher) depends on the others (JAR's and WAR's).
+ * 
+ * Side effect: all WAR's will share the same libraries!
  */
 public class App {
 
@@ -35,7 +43,7 @@ public class App {
 	 * Glassfish, just run this class, i.e. if you use Eclipse just click "Run
 	 * as application..." or if you prefer command line run:
 	 * 
-	 * java com.example.webserver.Main
+	 * java com.example.launcher.App
 	 * 
 	 * @throws Exception
 	 * 
