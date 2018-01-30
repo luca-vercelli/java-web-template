@@ -96,8 +96,8 @@ public class App {
 				fixLoginConf();
 
 				// First app should be the main one...
-				System.out.println("Listen url: http://localhost:8080/" + PROJECTS[0]);
-				System.out.println("SHOULD BE ALSO: https://localhost:8181/" + PROJECTS[0]);
+				System.out.println("Listen url: http://localhost:8080/" + PROJECTS[0][1]);
+				System.out.println("SHOULD BE ALSO: https://localhost:8181/" + PROJECTS[0][1]);
 
 			} catch (GlassFishException e) {
 				e.printStackTrace();
