@@ -21,7 +21,9 @@ import org.glassfish.embeddable.archive.ScatteredEnterpriseArchive;
 public class App {
 
 	public static final File CONFIG_FILE = new File("config", "domain.xml");
-	public static final String[] PROJECTS = { "java-web-template", "java-ws-template" };
+	public static final String[][] PROJECTS = { { "java-web-template", "myapp" }, { "java-ws-template", "ws" } };
+	// in
+	// application.xml
 	public static final String APP_NAME = "myapp"; // EAR Application name
 	public static final String APPLICATION_XML = "../java-ear-template/target/application.xml";
 
@@ -70,10 +72,19 @@ public class App {
 			try {
 
 				deployer = glassfish.getDeployer();
-				ScatteredEnterpriseArchive archive = getScatteredEAR(PROJECTS);
-				appName = deployer.deploy(archive.toURI());
+				// ScatteredEnterpriseArchive archive =
+				// getScatteredEAR(PROJECTS);
+				// appName = deployer.deploy(archive.toURI());
 				// for other parameters see
 				// https://docs.oracle.com/cd/E19798-01/821-1758/deploy-1/index.html
+
+				for (String[] project : PROJECTS) {
+					ScatteredArchive archiveModule = getScatteredArchive(project[0]);
+					URI uri = archiveModule.toURI(); // This will actually
+														// create the .war
+					String thisaAppName = deployer.deploy(new File(uri), "--contextroot=" + project[1]);
+					System.out.println("just deployed: " + thisaAppName);
+				}
 
 				System.out.println("Install root: " + System.getProperty("com.sun.aas.installRoot"));
 
@@ -161,7 +172,7 @@ public class App {
 	}
 
 	/**
-	 * Create Glassfish' scattered archive (i.e. WAR or JAR file) for the
+	 * Create Glassfish' scattered archive (i.e. WAR file, not JAR) for the
 	 * application.
 	 * 
 	 * JAR must follow canonical Maven directory structure.
@@ -178,19 +189,9 @@ public class App {
 		File webapp = new File(root + "src" + File.separator + "main" + File.separator + "webapp");
 		File classes = new File(root + "target" + File.separator + "classes");
 
-		if (webapp.exists() && webapp.isDirectory()) {
-
-			ScatteredArchive archive = new ScatteredArchive(projectName, ScatteredArchive.Type.WAR, webapp);
-			archive.addClassPath(classes);
-			return archive;
-
-		} else {
-
-			ScatteredArchive archive = new ScatteredArchive(projectName, ScatteredArchive.Type.JAR);
-			archive.addClassPath(classes);
-			return archive;
-
-		}
+		ScatteredArchive archive = new ScatteredArchive(projectName, ScatteredArchive.Type.WAR, webapp);
+		archive.addClassPath(classes);
+		return archive;
 
 	}
 
