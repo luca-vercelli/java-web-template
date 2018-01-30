@@ -24,7 +24,7 @@
 			<groupId>com.example.templates</groupId>
 			<artifactId>ws-template</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-			<type>jar</type>
+			<type>war</type>
 		</dependency>
 	</dependencies>
 
@@ -46,7 +46,7 @@
 						<webModule>
 							<groupId>com.example.templates</groupId>
 							<artifactId>web-template</artifactId>
-							<bundleFileName>java-ws-template.jar</bundleFileName>
+							<bundleFileName>java-ws-template.war</bundleFileName>
 							<contextRoot>/ws</contextRoot>
 						</webModule>
 						<!-- EJB's here -->
