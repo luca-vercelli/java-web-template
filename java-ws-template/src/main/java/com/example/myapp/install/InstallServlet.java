@@ -3,14 +3,19 @@
 * Luca Vercelli 2017
 * Released under MIT license 
 */
-package com.example.myapp.firstrun.helpers;
+package com.example.myapp.install;
 
+import java.io.IOException;
 import java.util.List;
 
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 
@@ -27,8 +32,10 @@ import com.example.myapp.main.enums.BooleanYN;
 /**
  * This is the point where database is really populated for the first time.
  */
-@Stateless
-public class FirstRun {
+@WebServlet(name = "/install")
+public class InstallServlet extends HttpServlet {
+
+	private static final long serialVersionUID = -2284681713126471835L;
 
 	@Inject
 	Logger LOG;
@@ -39,18 +46,70 @@ public class FirstRun {
 	@Inject
 	UsersManager usersManager;
 
-	public void populateDatabase() {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		LOG.info("Populating database...");
+		response.getWriter().write("Populating database...");
 
+		if (em == null) {
+			// Can even happen?
+			response.getWriter().write("Cannot connect to database. Nothing done.");
+			return;
+		}
+
+		if (!checkIfDbExists()) {
+			response.getWriter().write("Cannot connect to database, or tables not created. Nothing done.");
+			return;
+		}
+
+		if (checkIfDbPopulated()) {
+			response.getWriter().write("Database was not empty. Nothing done.");
+			return;
+		}
+
+		populateDatabase();
+	}
+
+	private boolean checkIfDbExists() {
+
+		// is transaction required?
+		try {
+			TypedQuery<Long> query = em.createQuery("SELECT COUNT(*) FROM Settings", Long.class);
+			query.getSingleResult();
+			return true;
+
+		} catch (Exception exc) {
+
+			LOG.error("Error during /install", exc);
+
+			return false;
+		}
+	}
+
+	protected boolean checkIfDbPopulated() {
+
+		// is transaction required?
+		try {
+			TypedQuery<Long> query = em.createQuery("SELECT COUNT(*) FROM Settings", Long.class);
+			Long n = query.getSingleResult();
+			return n > 0;
+
+		} catch (Exception exc) {
+
+			LOG.error("Error during /install", exc);
+
+			return false;
+		}
+	}
+
+	protected void populateDatabase() {
 		// "ADMIN" ROLE AND USER
 		Role roleAdmin = new Role("admin", "Webapp administrator");
 		em.persist(roleAdmin);
 
 		User u = new User("admin", "admin@example.com", "Admin", ".", BooleanYN.Y, null);
 		u.setEncryptedPassword("8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918");
-		//u.setEncryptedPassword("d033e22ae348aeb5660fc2140aec35850c4da997");
-		//usersManager.setPassword(u, "admin".toCharArray());
+		// u.setEncryptedPassword("d033e22ae348aeb5660fc2140aec35850c4da997");
+		// usersManager.setPassword(u, "admin".toCharArray());
 		em.persist(u);
 
 		roleAdmin.getUsers().add(u);
@@ -62,8 +121,8 @@ public class FirstRun {
 
 		u = new User("user", "user@example.com", "User", ".", BooleanYN.Y, null);
 		u.setEncryptedPassword("04f8996da763b7a969b1028ee3007569eaf3a635486ddab211d512c85b9df8fb");
-		//u.setEncryptedPassword("12dea96fec20593566ab75692c9949596833adc9");
-		//usersManager.setPassword(u, "user".toCharArray());
+		// u.setEncryptedPassword("12dea96fec20593566ab75692c9949596833adc9");
+		// usersManager.setPassword(u, "user".toCharArray());
 		em.persist(u);
 
 		roleStandard.getUsers().add(u);
@@ -72,8 +131,6 @@ public class FirstRun {
 		// SETTINGS record
 		Settings s = new Settings();
 		em.persist(s);
-
-		LOG.info("Done.");
 
 		// PAGES
 		Menu menuGeneral = new Menu("menu.section_general", 10, null, null);
