@@ -6,10 +6,6 @@
 
 	<!-- Filters order cannot be defined through annotations -->
 	<filter-mapping>
-		<filter-name>firstRunFilter</filter-name>
-		<url-pattern />
-	</filter-mapping>
-	<filter-mapping>
 		<filter-name>i18nFilter</filter-name>
 		<url-pattern />
 	</filter-mapping>
