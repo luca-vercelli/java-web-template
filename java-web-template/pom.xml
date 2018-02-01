@@ -10,6 +10,12 @@
 	<description>A minimal template for developing an intranet webapp</description>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.example.templates</groupId>
+			<artifactId>jar-template</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
 		<!-- Java EE servlet stuff (only needed at compile time) -->
 		<dependency>
 			<groupId>javax</groupId>

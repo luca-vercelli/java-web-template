@@ -29,7 +29,9 @@ import org.glassfish.embeddable.archive.ScatteredEnterpriseArchive;
 public class App {
 
 	public static final File CONFIG_FILE = new File("config", "domain.xml");
-	public static final String[][] PROJECTS = { { "java-web-template", "myapp" }, { "java-ws-template", "ws" } };
+	public static final String[][] PROJECTS = { { "java-web-template", "myapp" }
+			,{ "java-ws-template", "ws" }
+			};
 	// in
 	// application.xml
 	public static final String APP_NAME = "myapp"; // EAR Application name
@@ -87,7 +89,9 @@ public class App {
 				// https://docs.oracle.com/cd/E19798-01/821-1758/deploy-1/index.html
 
 				for (String[] project : PROJECTS) {
-					ScatteredArchive archiveModule = getScatteredArchive(project[0]);
+					ScatteredArchive archiveModule = getScatteredArchive(project[0]
+							, "java-jar-template"
+							);
 					URI uri = archiveModule.toURI(); // This will actually
 														// create the .war
 					String thisaAppName = deployer.deploy(new File(uri), "--contextroot=" + project[1]);
@@ -190,7 +194,7 @@ public class App {
 	 * @return
 	 * @throws IOException
 	 */
-	public static ScatteredArchive getScatteredArchive(String projectName) throws IOException {
+	public static ScatteredArchive getScatteredArchive(String projectName, String... jarProjects) throws IOException {
 
 		String root = "../" + projectName + "/";
 
@@ -199,6 +203,11 @@ public class App {
 
 		ScatteredArchive archive = new ScatteredArchive(projectName, ScatteredArchive.Type.WAR, webapp);
 		archive.addClassPath(classes);
+		for (String otherProject: jarProjects){
+			String otherRoot = "../" + otherProject + "/";
+			File otherClasses = new File(otherRoot + "target" + File.separator + "classes");
+			archive.addClassPath(otherClasses);
+		}
 		return archive;
 
 	}

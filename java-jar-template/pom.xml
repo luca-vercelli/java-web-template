@@ -2,19 +2,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.example.templates</groupId>
-	<artifactId>ws-template</artifactId>
+	<artifactId>jar-template</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
-	<name>Web template - Webservice components</name>
+	<name>Web template - Common components</name>
 	<description>A minimal template for developing an intranet webapp</description>
 
 	<dependencies>
-		<dependency>
-			<groupId>com.example.templates</groupId>
-			<artifactId>jar-template</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-
 		<!-- Java EE servlet stuff (only needed at compile time) -->
 		<dependency>
 			<groupId>javax</groupId>
@@ -112,14 +105,6 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>3.2.0</version>
-				<configuration>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>
 		</plugins>

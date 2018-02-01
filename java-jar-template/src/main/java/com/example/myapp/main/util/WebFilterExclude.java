@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  */
 @Stateless
+@Deprecated
 public class WebFilterExclude {
 
 	/**
