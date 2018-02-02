@@ -32,8 +32,8 @@
 
 			<!-- If your DBA allows that, use CREATE the first time in order to create 
 				all tables. This won't populate tables. -->
-			<property name="javax.persistence.schema-generation.database.action"
-				value="drop-and-create" />
+<!-- 			<property name="javax.persistence.schema-generation.database.action" -->
+<!-- 				value="drop-and-create" /> -->
 			<!-- <property name="javax.persistence.sql-load-script-source" value="FIRST-RUN.SQL" 
 				/> -->
 

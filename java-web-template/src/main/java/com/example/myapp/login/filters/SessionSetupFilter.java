@@ -24,9 +24,8 @@ import com.example.myapp.main.util.SessionBean;
  * WebFilter's do not allow to exclude paths. So we must implement an ad-hoc
  * (quite ugly) solution.
  * 
- * As we are using EE Security, this is <b>not</b> meant to check if user is
- * logged in or not. User <b>is</b> logged in. We just need to populate
- * sessionBean.
+ * This is <b>not</b> meant to check if user is logged in or not. User <b>is</b>
+ * logged in. We just need to populate sessionBean.
  *
  */
 @WebFilter(value = "sessionSetupFilter", urlPatterns = { "*.html", "*.htm", "*.xhtml", "*.jsp" })
