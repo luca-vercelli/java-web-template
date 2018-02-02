@@ -21,21 +21,17 @@ import org.glassfish.embeddable.archive.ScatteredEnterpriseArchive;
  * We deploy WAR's, not EAR, nor JAR. You must configure this project with the
  * same values you normally would put in EAR. Glassfish create a WAR for each
  * project, without any JAR inside: all JAR's must be passed as dependency to
- * this project. For example, you can tell Eclipse this project
- * (glassfish-launcher) depends on the others (JAR's and WAR's).
+ * this project. EJB JAR's must be expanded hereFor example, you can tell
+ * Eclipse this project (glassfish-launcher) depends on the others (JAR's and
+ * WAR's).
  * 
  * Side effect: all WAR's will share the same libraries!
  */
 public class App {
 
 	public static final File CONFIG_FILE = new File("config", "domain.xml");
-	public static final String[][] PROJECTS = { { "java-web-template", "myapp" }
-			,{ "java-ws-template", "ws" }
-			};
-	// in
-	// application.xml
-	public static final String APP_NAME = "myapp"; // EAR Application name
-	public static final String APPLICATION_XML = "../java-ear-template/target/application.xml";
+	public static final Project[] PROJECTS = { new Project("java-web-template", "myapp", "java-jar-template"),
+			new Project("java-ws-template", "ws", "java-jar-template") };
 
 	// public static final Boolean ENABLE_HTTPS = true;
 	// public static final Integer HTTPS_PORT = 8083;
@@ -88,13 +84,11 @@ public class App {
 				// for other parameters see
 				// https://docs.oracle.com/cd/E19798-01/821-1758/deploy-1/index.html
 
-				for (String[] project : PROJECTS) {
-					ScatteredArchive archiveModule = getScatteredArchive(project[0]
-							, "java-jar-template"
-							);
+				for (Project project : PROJECTS) {
+					ScatteredArchive archiveModule = getScatteredArchive(project.name, project.jars);
 					URI uri = archiveModule.toURI(); // This will actually
 														// create the .war
-					String thisaAppName = deployer.deploy(new File(uri), "--contextroot=" + project[1]);
+					String thisaAppName = deployer.deploy(new File(uri), "--contextroot=" + project.contextroot);
 					System.out.println("just deployed: " + thisaAppName);
 				}
 
@@ -108,8 +102,8 @@ public class App {
 				fixLoginConf();
 
 				// First app should be the main one...
-				System.out.println("Listen url: http://localhost:8080/" + PROJECTS[0][1]);
-				System.out.println("SHOULD BE ALSO: https://localhost:8181/" + PROJECTS[0][1]);
+				System.out.println("Listen url: http://localhost:8080/" + PROJECTS[0].contextroot);
+				System.out.println("SHOULD BE ALSO: https://localhost:8181/" + PROJECTS[0].contextroot);
 
 			} catch (GlassFishException e) {
 				e.printStackTrace();
@@ -203,7 +197,7 @@ public class App {
 
 		ScatteredArchive archive = new ScatteredArchive(projectName, ScatteredArchive.Type.WAR, webapp);
 		archive.addClassPath(classes);
-		for (String otherProject: jarProjects){
+		for (String otherProject : jarProjects) {
 			String otherRoot = "../" + otherProject + "/";
 			File otherClasses = new File(otherRoot + "target" + File.separator + "classes");
 			archive.addClassPath(otherClasses);
@@ -221,6 +215,9 @@ public class App {
 	 * 
 	 */
 	public static ScatteredEnterpriseArchive getScatteredEAR(String[] projectNames) throws IOException {
+
+		final String APP_NAME = "myapp"; // EAR Application name
+		final String APPLICATION_XML = "../java-ear-template/target/application.xml";
 
 		ScatteredEnterpriseArchive archive = new ScatteredEnterpriseArchive(APP_NAME);
 		archive.addMetadata(new File(APPLICATION_XML));
@@ -293,5 +290,17 @@ public class App {
 		if (cr.getFailureCause() != null)
 			cr.getFailureCause().printStackTrace();
 		return cr;
+	}
+
+	public static class Project {
+		public String name;
+		public String contextroot;
+		public String[] jars;
+
+		public Project(String name, String contextroot, String... jars) {
+			this.name = name;
+			this.contextroot = contextroot;
+			this.jars = jars;
+		}
 	}
 }
