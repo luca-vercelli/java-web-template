@@ -7,6 +7,7 @@
 // Editor extension is not free. We must guess something.
 
 var pageData = null;
+var  WS_URL = "../../ws/rest/";
 
 $(document).ready(function(){
 	
@@ -72,7 +73,7 @@ function PageData(entity, tableSelector, modalDialogSelector) {
 	    this.datatable = $(this.tableSelector).DataTable( {
 			// order: [[ 0, "desc" ]],
 	        ajax: {
-				url: "../rest/" + this.entity,
+	            url: WS_URL + this.entity,
 				dataSrc: ""
 			},
 			columns: this._columns,
@@ -121,7 +122,7 @@ function PageData(entity, tableSelector, modalDialogSelector) {
 		var myself = this;
 		
 		$.ajax({
-			url: "../rest/" + entity + "/gridMetadata",
+			url: WS_URL + entity + "/gridMetadata",
 			type: "GET",
 			dataType : "json",
 			success: function(data) {
@@ -135,7 +136,7 @@ function PageData(entity, tableSelector, modalDialogSelector) {
 	};
 
 	this.exportXls = function() {
-		window.open("../rest/" + entity + "/gridXLSX");
+		window.open(WS_URL + entity + "/gridXLSX");
 	};
 }
 
