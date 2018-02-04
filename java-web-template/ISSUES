@@ -1,4 +1,5 @@
 * in shutdown, there are exceptions
 * REST services are not working
 * REST authentication?
-
+* HTTPS support
+* create a second frontend with Angular (2, 4, or whatever)
