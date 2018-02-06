@@ -56,7 +56,7 @@
 	
 	var wsocketUrl = ((window.location.protocol == "https:") ? "wss:" : "ws:")
 		+ "//" + window.location.host
-		+ "/myapp/wsocks";
+		+ "/ws/wsocks";
 	var wsocket = new WebSocket(wsocketUrl);
 	
 	</script>
