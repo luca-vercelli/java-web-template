@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "APP_ROLE")
@@ -75,6 +76,7 @@ public class Role implements Serializable {
 	 */
 	@ManyToMany
 	@JoinTable(name = "APP_USER_ROLE", joinColumns = @JoinColumn(name = "ROLE_NAME", referencedColumnName = "ROLE_NAME"), inverseJoinColumns = @JoinColumn(name = "USERNAME", referencedColumnName = "USERNAME"))
+	@XmlTransient
 	public Set<User> getUsers() {
 		return users;
 	}
