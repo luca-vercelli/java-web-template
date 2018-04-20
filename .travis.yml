@@ -6,8 +6,9 @@ jdk: openjdk8
 # We want that projects are build in specified order, and that
 # We could also use Maven modules, however they are not easy to handle with Eclipse
 script:
-  - cd java-jar-template && mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn test -B && cd .. || cd ..
-  - cd java-ws-template && mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn test -B && cd .. || cd ..
-  - cd java-web-template && mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn test -B && cd .. || cd ..
-  - cd java-ear-template && mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn test -B && cd .. || cd ..
-  - cd glassfish-launcher && mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn test -B && cd .. || cd ..
+  - cd java-jar-template && mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn test -B && cd ..
+  - cd java-ws-template && mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn test -B && cd ..
+  - cd java-web-template && mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn test -B && cd ..
+  - cd java-ear-template && mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn test -B && cd ..
+  - cd glassfish-launcher && mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn test -B && cd ..
+
