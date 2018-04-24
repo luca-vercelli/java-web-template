@@ -8,6 +8,7 @@ package com.example.myapp.login.filters;
 import java.io.IOException;
 import javax.inject.Inject;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -41,14 +42,24 @@ public class SessionSetupFilter extends AbstractRequestFilter {
 	@Override
 	public boolean filterRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+		Cookie [] cookies = request.getCookies();
+		String language = null;
+		for (Cookie cookie : cookies) {
+		     if ("JLANG".equals(cookie.getName())) {
+		         language = cookie.getValue();
+		     }
+		}
+		if(language == null)
+			language = "en";
+		
 		String username = request.getRemoteUser();
 		if (username != null) {
 			User user = usersManager.getUserByUsername(username);
 			if (user != null) {
-				sessionManager.fillDataInSessionBean(sessionBean, user);
+				sessionManager.fillDataInSessionBean(sessionBean, user, language);
 			}
 		}
-
+		System.out.println(sessionBean.toString());
 		return true;
 	}
 }

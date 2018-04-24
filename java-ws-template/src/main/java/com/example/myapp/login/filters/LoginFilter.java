@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -41,13 +42,12 @@ public class LoginFilter extends AbstractRequestFilter {
 	@Override
 	public boolean filterRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		if (!webFilterExclude.excludeUrl(appProps.getProperty("login.not.required.uris").split(","), request)) {
-
+		if (!webFilterExclude.excludeUrl(appProps.getProperty("login.not.required.uris").split(","), request)) {		
 			String username = request.getRemoteUser();
 			if (username != null) {
 				User user = usersManager.getUserByUsername(username);
 				if (user != null) {
-					sessionManager.fillDataInSessionBean(sessionBean, user);
+					sessionManager.fillDataInSessionBean(sessionBean, user,"en");
 				}
 			}
 		}

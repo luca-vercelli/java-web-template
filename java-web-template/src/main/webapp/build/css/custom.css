@@ -11,6 +11,68 @@ html , body{
  
  }
  
+ 
+ .languagepicker {
+    background-color: transparent;
+    display: inline-block;
+    padding: 0;
+    position: absolute;
+    height: 57px;
+    overflow: hidden;
+    transition: all .3s ease;
+    margin: 0px;
+      width: 140px;
+    vertical-align: top;
+    float: right;
+}
+
+.languagepicker:hover {
+    height: auto;
+    background-color: #c9c8c8;
+    z-index: 10;
+}
+
+.languagepicker a{
+    color: #000;
+    text-decoration: none;
+    float: left;
+    width: 100%;
+    border-top:1px solid #fff;
+}
+
+.languagepicker li {
+    display: block;
+    padding: 0px 20px;
+    line-height: 57px;
+}
+
+.languagepicker li:hover{
+	background-color: #EEE;
+}
+
+.languagepicker a:first-child li {
+	border: none;
+	background: transparent;
+}
+
+.languagepicker li img {
+	margin-right: 5px;
+}
+
+.roundborders {
+	border-radius: 5px;
+}
+
+.large:hover {
+	/* 
+	don't forget the 1px border!
+	The first language is 40px heigh, 
+	the others are 41px
+	*/
+	height: 245px;
+}
+ 
+ 
 .full-height{
  height:100%;
  }
@@ -3407,12 +3469,22 @@ a.hiddenanchor {
     max-width: 350px;
     position: relative
 }
+.resetpsw_form,
 .registration_form,
 .login_form {
     position: absolute;
     top: 0px;
     width: 100%
 }
+.animazione_out{
+	animation-name: fadeOutLeft;
+}
+.animazione_in{
+    z-index: 22;
+    animation-name: fadeInLeft;
+    animation-delay: .1s
+}
+.resetpsw_form,
 .registration_form {
     z-index: 21;
     opacity: 0;
@@ -3427,6 +3499,8 @@ a.hiddenanchor {
     animation-name: fadeInLeft;
     animation-delay: .1s
 }
+#signin:target ~ .login_wrapper .resetpsw_form,
+#signup:target ~ .login_wrapper .resetpsw_form,
 #signup:target ~ .login_wrapper .login_form,
 #signin:target ~ .login_wrapper .registration_form {
     animation-name: fadeOutLeft

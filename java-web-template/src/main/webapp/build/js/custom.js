@@ -5066,4 +5066,7 @@ if (typeof NProgress != 'undefined') {
 				
 	});	
 	
-
+	$(document).on("click",".languagepicker a",function(){
+		document.cookie = "JLANG=" + $(this).attr("data-lang");
+		location.reload();
+	});

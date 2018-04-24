@@ -30,16 +30,18 @@
     <link href="../vendors/animate.css/animate.min.css" rel="stylesheet">
 
     <!-- Custom Theme Style -->
-    <link href="../build/css/custom.min.css" rel="stylesheet">
+    <link href="../build/css/custom.css" rel="stylesheet">
   </head>
 
   <body class="login">
     <div>
       <a class="hiddenanchor" id="signup"></a>
       <a class="hiddenanchor" id="signin"></a>
+      <a class="hiddenanchor" id="rstpsw"></a>
 
       <div class="login_wrapper">
-        <div class="animate form login_form">
+      
+        <div class="animate form login_form" id="login_form">
           <section class="login_content">
             <form action="j_security_check" method="post">
             
@@ -61,7 +63,10 @@
               </div>
               <div>
                 <input type="submit" class="btn btn-default submit" value="Log in"/> 
-                <a class="reset_pass" href="login_password_recover.jsp">${login_password_lost}</a>
+                <p class="change_link">
+                  <a href="#rstpsw" class="to_register" id="btn_psw">${login_password_lost}</a>
+                </p>
+                <!-- <a class="reset_pass" href="#rstpsw">${login_password_lost}</a> -->
               </div>
               <div class="clearfix"></div>
 
@@ -125,17 +130,60 @@
             </form>
           </section>
         </div>
+        <div id="resetpsw" class="animate form resetpsw_form">
+        <section class="login_content">
+          	<!-- /password recovery -->
+            <form action="doPasswordRecovery">
+              <h1>Password Reset</h1>
+              <div class="form-group has-feedback">
+                <input type="email" class="form-control" name="email" placeholder="Your email" />
+                <input type="hidden" name="address" id="address"/>
+                <div class="form-control-feedback">
+                  <i class="fa fa-envelope-o text-muted"></i>
+                </div>
+                <div>
+                	<c:if test="${sessionScope.error_message != null }">
+						<fmt:message key="${sessionScope.error_message}" />
+						<c:set var="error_message" scope="session" value="" />
+					</c:if>
+                </div>
+              </div>
+              <button type="submit" class="btn bg-blue btn-block">Reset password <i class="fa fa-arrow-right position-right"></i></button>
+                <div class="clearfix"></div>
 
+              <div class="separator">
+                <p class="change_link">New to site?
+                  <a href="#signup" class="to_register"> Create Account </a>                  
+                </p>
+
+                <div class="clearfix"></div>
+                <br />
+
+                <div>
+                  <h1><i class="fa fa-paw"></i> Gentelella Alela!</h1>
+                  <p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
+                </div>
+              </div>
+              </form>
+            <!-- Password recovery -->
+          </section>
+		</div>
       </div>
     </div>
-
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script>
     function changeLang() {
     	var lang = document.getElementById("languageSelect").value;
     	document.cookie = "JLANG=" + lang;
     	location.reload();
     }
-    
+    $(document).ready(function(){
+	    $("#btn_psw").click(function(){
+	    	$("#resetpsw").addClass("animazione_in");
+	    	$("#login_form").addClass("animazione_out");
+	    	$("#register").addClass("animazione_out");
+	    });
+    });
     </script>
   </body>
 </html>

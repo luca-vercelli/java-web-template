@@ -8,8 +8,22 @@
               <div class="nav toggle">
                 <a id="menu_toggle"><i class="fa fa-bars"></i></a>
               </div>
-
+			  <ul class="languagepicker">
+				  <c:if test = "${sessionBean.language == 'en'}">
+			      	<a href="javascript:void(0);" data-lang="en"><li><img src="http://i64.tinypic.com/fd60km.png"/>English</li></a>
+			      	<a href="javascript:void(0);" data-lang="it"><li><img src="http://i65.tinypic.com/2d0kyno.png"/>Italiano</li></a>
+				  </c:if>
+				  <c:if test = "${sessionBean.language == 'it'}">
+				  	<a href="javascript:void(0);" data-lang="it"><li><img src="http://i65.tinypic.com/2d0kyno.png"/>Italiano</li></a>
+				  	<a href="javascript:void(0);" data-lang="en"><li><img src="http://i64.tinypic.com/fd60km.png"/>English</li></a>
+				  </c:if>
+				  <c:if test = "${sessionBean.language == ''}">
+				 	<a href="javascript:void(0);" data-lang="en"><li><img src="http://i64.tinypic.com/fd60km.png"/>English</li></a>
+				  	<a href="javascript:void(0);" data-lang="it"><li><img src="http://i65.tinypic.com/2d0kyno.png"/>Italiano</li></a>
+				  </c:if>
+			  </ul>
               <ul class="nav navbar-nav navbar-right">
+              
                 <li class="">
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                     <img src="images/img.jpg" alt="">${sessionBean.user.personName} ${sessionBean.user.personSurname}

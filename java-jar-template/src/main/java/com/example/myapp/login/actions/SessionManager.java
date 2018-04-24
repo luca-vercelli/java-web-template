@@ -31,10 +31,11 @@ public class SessionManager {
 		// language is *not* cleared
 	}
 
-	public void fillDataInSessionBean(SessionBean sessionBean, User user) {
+	public void fillDataInSessionBean(SessionBean sessionBean, User user,String language) {
 
 		sessionBean.setUser(user);
 		sessionBean.setMenus(usersManager.getMenusForUser(user));
 		sessionBean.setRoles(user.getRoles());
+		sessionBean.setLanguage(language);
 	}
 }
