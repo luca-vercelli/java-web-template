@@ -32,22 +32,27 @@ public class InstallServlet extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		response.getWriter().write("Preliminary checks...");
+		response.setHeader("Content-Type", "text/html");
+		
+		response.getWriter().write("<html><head><title>Install page</title></head>");
+		response.getWriter().write("<body>Preliminary checks...</br/>");
 
 		if (!ejb.checkIfDbExists()) {
-			response.getWriter().write("Cannot connect to database, or tables not created. Nothing done.");
+			response.getWriter().write("Cannot connect to database, or tables not created. Nothing done.</br/></body></html>");
 			return;
 		}
 
 		if (ejb.checkIfDbPopulated()) {
-			response.getWriter().write("Database was not empty. Nothing done.");
+			response.getWriter().write("Database was not empty. Nothing done.</br/></body></html>");
 			return;
 		}
 
-		response.getWriter().write("Populating database...");
+		response.getWriter().write("Populating database...<br/>");
 
 		ejb.populateDatabase();
 
-		response.getWriter().write("Done.");
+		response.getWriter().write("Done.</br/>");
+		response.getWriter().write("<button onclick='window.history.back()'>Back</button><br/>");
+		response.getWriter().write("</body></html>");
 	}
 }
