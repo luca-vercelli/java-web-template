@@ -2,7 +2,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
-<html lang="${sessionBean.language}">
+
+<c:set var="lang" scope="session">
+   <c:out value="${cookie['JLANG'].value}" default="en_US"/>
+</c:set>
+<fmt:setLocale value="${lang}" />
+<fmt:setBundle basename="global" />
+
+<html lang="${lang}">
 
 <%@ attribute name="head_area" fragment="true"%>
 <%@ attribute name="body_area" fragment="true" required="true"%>
@@ -48,7 +55,7 @@
 	
 	<script>
 	<%-- some server-side variables may be here --%>
-	var language = '${sessionBean.language}';
+	var language = '${lang}';
 	var userName = '${sessionBean.user.name}';
 	</script>
 	

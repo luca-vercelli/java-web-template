@@ -1,7 +1,11 @@
 <%@ tag description="WebApp Template - page menu"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:setLocale value="${sessionBean.language}" />
+
+<c:set var="lang" scope="session">
+   <c:out value="${cookie['JLANG'].value}" default="en_US"/>
+</c:set>
+<fmt:setLocale value="${lang}" />
 <fmt:setBundle basename="global" />
 
         <div class="col-md-3 left_col">

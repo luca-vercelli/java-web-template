@@ -2,9 +2,14 @@
 <%@ page contentType="text/html"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<c:set var="lang" scope="session">
+   <c:out value="${cookie['JLANG'].value}" default="en_US"/>
+</c:set>
+<fmt:setLocale value="${lang}" />
 <fmt:setBundle basename="global" />
-<fmt:setLocale value="${sessionBean.language}" />
-<html lang="${sessionBean.language}">
+
+<html lang="${lang}">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->

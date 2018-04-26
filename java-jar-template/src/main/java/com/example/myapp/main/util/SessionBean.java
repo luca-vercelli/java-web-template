@@ -33,7 +33,8 @@ public class SessionBean implements Serializable {
 	private User user;
 	private Set<Role> roles = new HashSet<Role>();
 	private List<Menu> menus = new ArrayList<Menu>();
-	private String language;
+	
+	// private String language; language is stored in ad-hoc cookie
 
 	public User getUser() {
 		return user;
@@ -57,13 +58,5 @@ public class SessionBean implements Serializable {
 
 	public void setMenus(List<Menu> menus) {
 		this.menus = menus;
-	}
-
-	public String getLanguage() {
-		return language;
-	}
-
-	public void setLanguage(String language) {
-		this.language = language;
 	}
 }

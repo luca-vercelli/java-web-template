@@ -28,14 +28,12 @@ public class SessionManager {
 		sessionBean.setUser(null);
 		sessionBean.getMenus().clear();
 		sessionBean.getRoles().clear();
-		// language is *not* cleared
 	}
 
-	public void fillDataInSessionBean(SessionBean sessionBean, User user,String language) {
+	public void fillDataInSessionBean(SessionBean sessionBean, User user) {
 
 		sessionBean.setUser(user);
 		sessionBean.setMenus(usersManager.getMenusForUser(user));
 		sessionBean.setRoles(user.getRoles());
-		sessionBean.setLanguage(language);
 	}
 }

@@ -9,7 +9,6 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -47,7 +46,7 @@ public class LoginFilter extends AbstractRequestFilter {
 			if (username != null) {
 				User user = usersManager.getUserByUsername(username);
 				if (user != null) {
-					sessionManager.fillDataInSessionBean(sessionBean, user,"en");
+					sessionManager.fillDataInSessionBean(sessionBean, user);
 				}
 			}
 		}

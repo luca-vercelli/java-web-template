@@ -6,11 +6,14 @@
 package com.example.myapp.login.filters;
 
 import java.io.IOException;
+import java.util.Locale;
+
 import javax.inject.Inject;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.HttpHeaders;
 
 import com.example.myapp.login.actions.SessionManager;
 import com.example.myapp.login.helpers.UsersManager;
@@ -39,24 +42,49 @@ public class SessionSetupFilter extends AbstractRequestFilter {
 	@Inject
 	SessionManager sessionManager;
 
+	public static String COOKIE_NAME = "JLANG";
+	
 	@Override
 	public boolean filterRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		Cookie [] cookies = request.getCookies();
-		String language = null;
-		for (Cookie cookie : cookies) {
-		     if ("JLANG".equals(cookie.getName())) {
-		         language = cookie.getValue();
-		     }
+		String lang = null;
+
+		// guess language
+		// cfr. I18nFilter.java
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null)
+			for (Cookie c : cookies)
+				if (c.getName().equals(COOKIE_NAME)) {
+					lang = c.getValue();
+					break;
+				}
+		if (lang == null) {
+			lang = request.getHeader(HttpHeaders.ACCEPT_LANGUAGE);
 		}
-		if(language == null)
-			language = "en";
+		if (lang == null) {
+			lang = Locale.getDefault().getCountry();
+		}
+		if (lang == null) {
+			lang = "en"; // whatever you want. But please don't use server
+							// default !
+		}
+
+		if (lang.indexOf(',') > 0)
+			lang = lang.substring(0, lang.indexOf(','));
+		if (lang.indexOf('"') > 0)
+			lang = lang.replaceAll("\"", "");
+		
+		// set cookie
+		Cookie cookie = new Cookie(COOKIE_NAME, lang);
+		cookie.setHttpOnly(true);
+		cookie.setPath("/"); // FIXME /myapp
+		response.addCookie(cookie);
 		
 		String username = request.getRemoteUser();
 		if (username != null) {
 			User user = usersManager.getUserByUsername(username);
 			if (user != null) {
-				sessionManager.fillDataInSessionBean(sessionBean, user, language);
+				sessionManager.fillDataInSessionBean(sessionBean, user);
 			}
 		}
 		System.out.println(sessionBean.toString());

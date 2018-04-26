@@ -1,6 +1,7 @@
 <%@ tag description="WebApp Template - page header"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 
         <div class="top_nav">
           <div class="nav_menu">
@@ -9,15 +10,15 @@
                 <a id="menu_toggle"><i class="fa fa-bars"></i></a>
               </div>
 			  <ul class="languagepicker">
-				  <c:if test = "${sessionBean.language == 'en'}">
+				  <c:if test = "${fn:substring(lang,0,2) == 'en'}">
 			      	<a href="javascript:void(0);" data-lang="en"><li><img src="http://i64.tinypic.com/fd60km.png"/>English</li></a>
 			      	<a href="javascript:void(0);" data-lang="it"><li><img src="http://i65.tinypic.com/2d0kyno.png"/>Italiano</li></a>
 				  </c:if>
-				  <c:if test = "${sessionBean.language == 'it'}">
+				  <c:if test = "${fn:substring(lang,0,2) == 'it'}">
 				  	<a href="javascript:void(0);" data-lang="it"><li><img src="http://i65.tinypic.com/2d0kyno.png"/>Italiano</li></a>
 				  	<a href="javascript:void(0);" data-lang="en"><li><img src="http://i64.tinypic.com/fd60km.png"/>English</li></a>
 				  </c:if>
-				  <c:if test = "${sessionBean.language == ''}">
+				  <c:if test = "${fn:substring(lang,0,2) == ''}">
 				 	<a href="javascript:void(0);" data-lang="en"><li><img src="http://i64.tinypic.com/fd60km.png"/>English</li></a>
 				  	<a href="javascript:void(0);" data-lang="it"><li><img src="http://i65.tinypic.com/2d0kyno.png"/>Italiano</li></a>
 				  </c:if>

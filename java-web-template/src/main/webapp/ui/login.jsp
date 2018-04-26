@@ -3,13 +3,16 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 
-<c:set var="language" value="${fn:substring(sessionBean.language,0,2)}" scope="session" />
-<fmt:setLocale value="${language}" />
+<c:set var="lang" scope="session">
+   <c:out value="${cookie['JLANG'].value}" default="en_US"/>
+</c:set>
+<fmt:setLocale value="${lang}" />
 <fmt:setBundle basename="global" />
+
 <fmt:message key="login.password.lost" var="login_password_lost" />
 
 
-<html lang="${language}">
+<html lang="${lang}">
 
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -44,8 +47,6 @@
         <div class="animate form login_form" id="login_form">
           <section class="login_content">
             <form action="j_security_check" method="post">
-            
-            <input type="hidden" name="language" value="${language}"/>
             
               <h1>Login Form</h1>
         
@@ -88,8 +89,8 @@
               <!-- i18n -->
               <form>
 	            <select id="languageSelect" onchange="changeLang();" >
-                	<option value="en" ${language == 'en' ? 'selected' : ''}>English</option>
-                	<option value="it" ${language == 'it' ? 'selected' : ''}>Italiano</option>
+                	<option value="en" ${fn:substring(lang,0,2) == 'en' ? 'selected' : ''}>English</option>
+                	<option value="it" ${fn:substring(lang,0,2) == 'it' ? 'selected' : ''}>Italiano</option>
             	</select>
         	  </form>
           </section>
