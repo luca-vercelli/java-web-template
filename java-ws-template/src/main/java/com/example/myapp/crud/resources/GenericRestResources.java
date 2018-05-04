@@ -31,9 +31,9 @@ import com.example.myapp.crud.GenericManager;
 
 /**
  * This REST WS handles not just one entity, but all possible entities. Entites
- * can lie in different packages, however their names must be different (I
- * argue this is assumed by JPA too). This service assumes all entities have a
- * primary key of type Long, called Id.
+ * can lie in different packages, however their names must be different (I argue
+ * this is assumed by JPA too). This service assumes all entities have a primary
+ * key of type Long, called Id.
  * 
  * REST syntax is inspired to OData. For handling parameters, we follow this
  * pattern: @see https://api.stackexchange.com/docs/users
@@ -47,8 +47,6 @@ import com.example.myapp.crud.GenericManager;
 public class GenericRestResources {
 
 	public static final Integer ZERO = 0;
-	//FIXME put in app properties?
-	public static final Integer DEFAULT_PAGESIZE = 20;
 
 	@Inject
 	GenericManager manager;
@@ -70,12 +68,15 @@ public class GenericRestResources {
 		if (clazz == null)
 			return Response.status(Status.NOT_FOUND).build();
 
+		List<?> list;
+
 		if (pagesize == null || pagesize.equals(ZERO))
-			pagesize = DEFAULT_PAGESIZE;
-		if (page == null || page.equals(ZERO))
-			page = 1;
-		
-		List<?> list = manager.find(clazz, pagesize, (page - 1) * pagesize, sort, order);
+			list = manager.findAll(clazz);
+		else {
+			if (page == null || page.equals(ZERO))
+				page = 1;
+			list = manager.find(clazz, pagesize, (page - 1) * pagesize, sort, order);
+		}
 
 		// ListType and GenericEntity are needed in order to handle generics
 		Type genericType = new ListType(clazz);
