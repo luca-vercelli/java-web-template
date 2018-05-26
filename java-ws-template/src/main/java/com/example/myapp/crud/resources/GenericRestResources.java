@@ -60,9 +60,10 @@ public class GenericRestResources {
 	 */
 	@GET
 	@Path("{entity}")
-	public Response find(@PathParam("entity") String entity, @QueryParam("page") Integer page,
-			@QueryParam("pagesize") Integer pagesize, @QueryParam("sort") String sort,
-			@QueryParam("order") String order) {
+	public Response find(@PathParam("entity") String entity, @QueryParam("$skip") Integer skip,
+			@QueryParam("$top") Integer top, @QueryParam("$filter") String filter,
+			@QueryParam("$orderby") String order, 
+			@QueryParam("$count") Boolean count) {
 
 		Class<?> clazz = manager.getEntityClass(entity);
 		if (clazz == null)
@@ -70,18 +71,14 @@ public class GenericRestResources {
 
 		List<?> list;
 
-		if (pagesize == null || pagesize.equals(ZERO))
-			list = manager.findAll(clazz);
-		else {
-			if (page == null || page.equals(ZERO))
-				page = 1;
-			list = manager.find(clazz, pagesize, (page - 1) * pagesize, sort, order);
-		}
+		
+			list = manager.find(clazz, top, skip, filter, orderby);
+		
 
 		// ListType and GenericEntity are needed in order to handle generics
 		Type genericType = new ListType(clazz);
 		GenericEntity<Object> genericList = new GenericEntity<Object>(list, genericType);
-
+//Todo handle count 
 		return Response.ok(genericList).build();
 
 	}
