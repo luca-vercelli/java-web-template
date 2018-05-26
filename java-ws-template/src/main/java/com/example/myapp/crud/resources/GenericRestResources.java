@@ -83,6 +83,10 @@ public class GenericRestResources {
 
 	}
 
+		@GET	@Path("{entity}/$count")	public Long count(){}
+			
+			
+			
 	/**
 	 * Retreive and return (via JSON) a single object by id. We don't know the
 	 * type of returned objects, so we must return a generic "Response".
@@ -102,7 +106,8 @@ public class GenericRestResources {
 
 		return Response.ok(obj).build();
 	}
-
+@GET	@Path("{entity}({id})/{property}/$value")	public String rawProperty(){}
+			
 	/**
 	 * Create and return a single object (via JSON). We don't know the type of
 	 * returned objects, so we must return a generic "Response".
