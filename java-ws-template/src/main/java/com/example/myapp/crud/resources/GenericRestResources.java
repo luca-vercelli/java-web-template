@@ -43,7 +43,7 @@ import com.example.myapp.crud.GenericManager;
  */
 @Stateless
 @Path("/")
-@Produces(MediaType.APPLICATION_JSON)
+@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 public class GenericRestResources {
 
 	public static final Integer ZERO = 0;
@@ -62,8 +62,7 @@ public class GenericRestResources {
 	@Path("{entity}")
 	public Response find(@PathParam("entity") String entity, @QueryParam("$skip") Integer skip,
 			@QueryParam("$top") Integer top, @QueryParam("$filter") String filter,
-			@QueryParam("$orderby") String order, 
-			@QueryParam("$count") Boolean count) {
+			@QueryParam("$orderby") String orderby, @QueryParam("$count") Boolean count) {
 
 		Class<?> clazz = manager.getEntityClass(entity);
 		if (clazz == null)
@@ -71,22 +70,27 @@ public class GenericRestResources {
 
 		List<?> list;
 
-		
-			list = manager.find(clazz, top, skip, filter, orderby);
-		
+		list = manager.find(clazz, top, skip, filter, orderby);
 
 		// ListType and GenericEntity are needed in order to handle generics
 		Type genericType = new ListType(clazz);
 		GenericEntity<Object> genericList = new GenericEntity<Object>(list, genericType);
-//Todo handle count 
+
+		if (count != null && count) {
+			// TODO
+		}
+
 		return Response.ok(genericList).build();
 
 	}
 
-		@GET	@Path("{entity}/$count")	public Long count(){}
-			
-			
-			
+	@GET
+	@Path("{entity}/$count")
+	@Produces(MediaType.TEXT_PLAIN)
+	public Long count(@PathParam("entity") String entity) {
+		return manager.countEntities(manager.getEntityClass(entity));
+	}
+
 	/**
 	 * Retreive and return (via JSON) a single object by id. We don't know the
 	 * type of returned objects, so we must return a generic "Response".
@@ -106,8 +110,22 @@ public class GenericRestResources {
 
 		return Response.ok(obj).build();
 	}
-@GET	@Path("{entity}({id})/{property}/$value")	public String rawProperty(){}
-			
+
+	@GET
+	@Path("{entity}({id})/{property}/$value")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String rawProperty() {
+		// TODO
+		return null;
+	}
+
+	@GET
+	@Path("{entity}({id})/{property}")
+	public Response getProperty() {
+		// TODO
+		return null;
+	}
+
 	/**
 	 * Create and return a single object (via JSON). We don't know the type of
 	 * returned objects, so we must return a generic "Response".
