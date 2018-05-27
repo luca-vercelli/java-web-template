@@ -117,8 +117,8 @@ public class GenericRestResources {
 
 		List<?> list;
 
-		// FIXME we don't parse $filter clause
-		list = manager.find(clazz, top, skip, filter, parseOrderByClause(orderby));
+		list = manager.find(clazz, top, skip, OdataJPAHelper.parseFilterClause(filter),
+				OdataJPAHelper.parseOrderByClause(orderby));
 
 		// ListType and GenericEntity are needed in order to handle generics
 		Type genericType = new ListType(clazz);
@@ -136,33 +136,6 @@ public class GenericRestResources {
 			return Response.ok(d).build();
 		}
 
-	}
-
-	/**
-	 * Parse $orderby clause
-	 * 
-	 * @param orderby
-	 * @return
-	 */
-	private String parseOrderByClause(String orderby) {
-		if (orderby == null)
-			return null;
-		StringBuilder orderbyCondition = new StringBuilder();
-		if (orderby != null && !orderby.trim().isEmpty()) {
-			orderbyCondition.append(" order by ");
-			String comma = "";
-			String[] orderbyPieces = orderby.split(",");
-			for (String piece : orderbyPieces) {
-				String[] attrAndAsc = piece.split(" ");
-				if (attrAndAsc.length > 2 || attrAndAsc.length == 0 || attrAndAsc[0] == null)
-					throw new IllegalArgumentException("Syntax error in $orderby condiction");
-				String attr = attrAndAsc[0];
-				String asc = (attrAndAsc.length == 2) ? attrAndAsc[1].toLowerCase() : "asc";
-				orderbyCondition.append(comma).append(" ").append(attr).append(" ").append(asc);
-				comma = ",";
-			}
-		}
-		return orderbyCondition.toString();
 	}
 
 	@GET
@@ -212,8 +185,13 @@ public class GenericRestResources {
 		if (obj == null)
 			throw new NotFoundException("");
 
-		// TODO
-		return null;
+		Map<String, ?> attributes = manager.object2bean(obj);
+
+		if (!attributes.containsKey(property))
+			throw new NotFoundException("Entity " + entity + " has no property " + property);
+
+		// FIXME toString va bene solo per i tipi primitivi
+		return attributes.get(property) == null ? null : attributes.get(property).toString();
 	}
 
 	@GET
@@ -230,8 +208,13 @@ public class GenericRestResources {
 		if (obj == null)
 			throw new NotFoundException("");
 
-		// TODO
-		return null;
+		Map<String, ?> attributes = manager.object2bean(obj);
+
+		if (!attributes.containsKey(property))
+			throw new NotFoundException("Entity " + entity + " has no property " + property);
+
+		Object value = attributes.get(property);
+		return Response.ok(value).build();
 	}
 
 	// TODO can @POST single property?
