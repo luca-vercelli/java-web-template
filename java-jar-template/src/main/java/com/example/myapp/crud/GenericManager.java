@@ -153,28 +153,31 @@ public class GenericManager {
 	 *            max number of elements to retrieve
 	 * @param firstResult
 	 *            positional order of first element to retrieve (0-based).
-	 * @param sort
-	 *            attribute for ordering (optional)
-	 * @param order
-	 *            ASC or DESC. Default ASC.
+	 * @param where
+	 *            WHERE JPQL clause, without "WHERE".
+	 * @param orderby
+	 *            ORDER BY JPQL clause, without "ORDER BY".
 	 */
-	public <T> List<T> find(Class<T> entity, int maxResults, int firstResult, String sort, String order) {
+	public <T> List<T> find(Class<T> entity, Integer maxResults, Integer firstResult, String where, String orderby) {
 
-		String sortCondition = "";
+		String whereCondition = "";
+		String orderbyCondition = "";
 
-		if (sort != null) {
-			if (order == null)
-				order = "asc";
-			else {
-				order = order.toLowerCase();
-				if (!order.equals("asc") && !order.equals("desc"))
-					throw new IllegalArgumentException("order must be either 'asc' or 'desc'");
-			}
-			sortCondition = " order by " + sort + " " + order;
+		if (where != null && !where.trim().isEmpty()) {
+			whereCondition = " where " + where;
 		}
 
-		return em.createQuery("from " + entity.getName() + sortCondition, entity).setFirstResult(firstResult)
-				.setMaxResults(maxResults).getResultList();
+		if (orderby != null && !orderby.trim().isEmpty()) {
+			whereCondition = " order by " + orderby;
+		}
+
+		TypedQuery<T> query = em.createQuery("from " + entity.getName() + whereCondition + orderbyCondition, entity);
+		if (firstResult != null)
+			query.setFirstResult(firstResult);
+		if (maxResults != null)
+			query.setMaxResults(maxResults);
+
+		return query.getResultList();
 	}
 
 	/**
