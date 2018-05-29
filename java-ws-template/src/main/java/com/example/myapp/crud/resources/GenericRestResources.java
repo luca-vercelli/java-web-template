@@ -13,6 +13,7 @@ import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -25,9 +26,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import com.example.myapp.crud.GenericManager;
+
+import javassist.NotFoundException;
 
 /**
  * This REST WS handles not just one entity, but all possible entities. Entites
@@ -43,7 +45,7 @@ import com.example.myapp.crud.GenericManager;
  */
 @Stateless
 @Path("/")
-@Produces(MediaType.APPLICATION_JSON)
+@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 public class GenericRestResources {
 
 	public static final Integer ZERO = 0;
@@ -52,38 +54,96 @@ public class GenericRestResources {
 	GenericManager manager;
 
 	/**
+	 * Represent a JSON answer with a List inside the "data" field.
+	 */
+	public static class DataList {
+		private GenericEntity<Object> data;
+
+		public GenericEntity<Object> getData() {
+			return data;
+		}
+
+		public void setData(GenericEntity<Object> data) {
+			this.data = data;
+		}
+	}
+
+	/**
+	 * Represent a JSON answer with a List inside the "data" field, plus a
+	 * number inside the "count" field.
+	 */
+	public static class DataListCount extends DataList {
+		private Long count;
+
+		public Long getCount() {
+			return count;
+		}
+
+		public void setCount(Long count) {
+			this.count = count;
+		}
+	}
+
+	/**
+	 * Return the Entity Class with given name.
+	 * 
+	 * @param entity
+	 * @return
+	 * @throws NotFoundException
+	 *             if such entity is not known.
+	 */
+	public Class<?> getEntityOrThrowException(String entity) throws NotFoundException {
+		Class<?> clazz = manager.getEntityClass(entity);
+		if (clazz == null)
+			throw new NotFoundException("Unknown entity set: " + entity);
+		return clazz;
+	}
+
+	/**
 	 * Return a list of objects (via JSON). We don't know the type of returned
 	 * objects, so we must return a generic "Response".
 	 * 
 	 * @param entity
 	 * @return
+	 * @throws NotFoundException
 	 */
 	@GET
 	@Path("{entity}")
-	public Response find(@PathParam("entity") String entity, @QueryParam("page") Integer page,
-			@QueryParam("pagesize") Integer pagesize, @QueryParam("sort") String sort,
-			@QueryParam("order") String order) {
+	public Response find(@PathParam("entity") String entity, @QueryParam("$skip") Integer skip,
+			@QueryParam("$top") Integer top, @QueryParam("$filter") String filter,
+			@QueryParam("$orderby") String orderby, @QueryParam("$count") Boolean count) throws NotFoundException {
 
-		Class<?> clazz = manager.getEntityClass(entity);
-		if (clazz == null)
-			return Response.status(Status.NOT_FOUND).build();
+		Class<?> clazz = getEntityOrThrowException(entity);
 
 		List<?> list;
 
-		if (pagesize == null || pagesize.equals(ZERO))
-			list = manager.findAll(clazz);
-		else {
-			if (page == null || page.equals(ZERO))
-				page = 1;
-			list = manager.find(clazz, pagesize, (page - 1) * pagesize, sort, order);
-		}
+		list = manager.find(clazz, top, skip, OdataJPAHelper.parseFilterClause(filter),
+				OdataJPAHelper.parseOrderByClause(orderby));
 
 		// ListType and GenericEntity are needed in order to handle generics
 		Type genericType = new ListType(clazz);
 		GenericEntity<Object> genericList = new GenericEntity<Object>(list, genericType);
 
-		return Response.ok(genericList).build();
+		if (count != null && count) {
+			Long numItems = manager.countEntities(clazz);
+			DataListCount d = new DataListCount();
+			d.setData(genericList);
+			d.setCount(numItems);
+			return Response.ok(d).build();
+		} else {
+			DataList d = new DataList();
+			d.setData(genericList);
+			return Response.ok(d).build();
+		}
 
+	}
+
+	@GET
+	@Path("{entity}/$count")
+	@Produces(MediaType.TEXT_PLAIN)
+	public Long count(@PathParam("entity") String entity) throws NotFoundException {
+		Class<?> clazz = getEntityOrThrowException(entity);
+		return manager.countEntities(clazz);
 	}
 
 	/**
@@ -92,19 +152,72 @@ public class GenericRestResources {
 	 * 
 	 * @param entity
 	 * @return
+	 * @throws NotFoundException
 	 */
 	@GET
 	@Path("{entity}({id})")
-	public Response findById(@PathParam("entity") String entity, @PathParam("id") Long id) {
+	public Response findById(@PathParam("entity") String entity, @PathParam("id") Long id) throws NotFoundException {
 
-		Class<?> clazz = manager.getEntityClass(entity);
-		if (clazz == null)
-			return Response.status(Status.NOT_FOUND).build();
+		Class<?> clazz = getEntityOrThrowException(entity);
+
+		if (id == null)
+			throw new BadRequestException("Missing id");
 
 		Object obj = manager.findById(clazz, id);
+		if (obj == null)
+			throw new NotFoundException("");
 
 		return Response.ok(obj).build();
 	}
+
+	@GET
+	@Path("{entity}({id})/{property}/$value")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String rawProperty(@PathParam("entity") String entity, @PathParam("id") Long id,
+			@PathParam("property") String property) throws NotFoundException {
+
+		Class<?> clazz = getEntityOrThrowException(entity);
+
+		if (id == null)
+			throw new BadRequestException("Missing id");
+
+		Object obj = manager.findById(clazz, id);
+		if (obj == null)
+			throw new NotFoundException("");
+
+		Map<String, ?> attributes = manager.object2bean(obj);
+
+		if (!attributes.containsKey(property))
+			throw new NotFoundException("Entity " + entity + " has no property " + property);
+
+		// FIXME toString va bene solo per i tipi primitivi
+		return attributes.get(property) == null ? null : attributes.get(property).toString();
+	}
+
+	@GET
+	@Path("{entity}({id})/{property}")
+	public Response getProperty(@PathParam("entity") String entity, @PathParam("id") Long id,
+			@PathParam("property") String property) throws NotFoundException {
+
+		Class<?> clazz = getEntityOrThrowException(entity);
+
+		if (id == null)
+			throw new BadRequestException("Missing id");
+
+		Object obj = manager.findById(clazz, id);
+		if (obj == null)
+			throw new NotFoundException("");
+
+		Map<String, ?> attributes = manager.object2bean(obj);
+
+		if (!attributes.containsKey(property))
+			throw new NotFoundException("Entity " + entity + " has no property " + property);
+
+		Object value = attributes.get(property);
+		return Response.ok(value).build();
+	}
+
+	// TODO can @POST single property?
 
 	/**
 	 * Create and return a single object (via JSON). We don't know the type of
@@ -112,15 +225,15 @@ public class GenericRestResources {
 	 * 
 	 * @param entity
 	 * @return
+	 * @throws NotFoundException
 	 */
 	@POST
 	@Path("{entity}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response create(@PathParam("entity") String entity, Map<String, String> attributes) {
+	public Response create(@PathParam("entity") String entity, Map<String, String> attributes)
+			throws NotFoundException {
 
-		Class<?> clazz = manager.getEntityClass(entity);
-		if (clazz == null)
-			return Response.status(Status.NOT_FOUND).build();
+		Class<?> clazz = getEntityOrThrowException(entity);
 
 		Object obj = manager.bean2object(clazz, attributes);
 		obj = manager.save(obj);
@@ -133,17 +246,15 @@ public class GenericRestResources {
 	 * 
 	 * @param entity
 	 * @return
+	 * @throws NotFoundException
 	 */
 	@DELETE
 	@Path("{entity}({id})")
-	public Response delete(@PathParam("entity") String entity, @PathParam("id") Long id) {
+	public void delete(@PathParam("entity") String entity, @PathParam("id") Long id) throws NotFoundException {
 
-		Class<?> clazz = manager.getEntityClass(entity);
-		if (clazz == null)
-			return Response.status(Status.NOT_FOUND).build();
+		Class<?> clazz = getEntityOrThrowException(entity);
 
 		manager.remove(clazz, id);
-		return Response.ok().build();
 	}
 
 	/**
@@ -151,20 +262,19 @@ public class GenericRestResources {
 	 * 
 	 * @param entity
 	 * @return
+	 * @throws NotFoundException
 	 */
 	@PUT
 	@Path("{entity}({id})")
-	public Response update(@PathParam("entity") String entity, @PathParam("id") Long id,
-			Map<String, String> attributes) {
+	public Response update(@PathParam("entity") String entity, @PathParam("id") Long id, Map<String, String> attributes)
+			throws NotFoundException {
 
 		// FIXME: right way?
 
-		if (id == null)
-			return Response.status(Status.NOT_FOUND).build();
+		Class<?> clazz = getEntityOrThrowException(entity);
 
-		Class<?> clazz = manager.getEntityClass(entity);
-		if (clazz == null)
-			return Response.status(Status.NOT_FOUND).build();
+		if (id == null)
+			throw new BadRequestException("Missing id");
 
 		attributes.put("id", id.toString());
 		Object obj = manager.bean2object(clazz, attributes);
@@ -177,19 +287,18 @@ public class GenericRestResources {
 	 * 
 	 * @param entity
 	 * @return
+	 * @throws NotFoundException
 	 */
 	@GET
-	@Path("{entity}({id})/clone")
-	public Response duplicate(@PathParam("entity") String entity, @PathParam("id") Long id) {
+	@Path("{entity}({id})/Clone")
+	public Response duplicate(@PathParam("entity") String entity, @PathParam("id") Long id) throws NotFoundException {
 
 		// FIXME: right way?
 
-		if (id == null)
-			return Response.status(Status.NOT_FOUND).build();
+		Class<?> clazz = getEntityOrThrowException(entity);
 
-		Class<?> clazz = manager.getEntityClass(entity);
-		if (clazz == null)
-			return Response.status(Status.NOT_FOUND).build();
+		if (id == null)
+			throw new BadRequestException("Missing id");
 
 		Object obj = manager.findById(clazz, id);
 
