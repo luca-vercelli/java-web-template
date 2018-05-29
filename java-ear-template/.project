@@ -3,6 +3,8 @@
 	<name>java-ear-template</name>
 	<comment></comment>
 	<projects>
+		<project>java-web-template</project>
+		<project>java-ws-template</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
