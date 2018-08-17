@@ -117,7 +117,7 @@ public class GridManager {
 				grid.getColumns().add(new GridColumn(grid, a.getName(), a.getName(), colnum++, BooleanYN.N));
 			}
 		}
-		grid = genericManager.save(grid); // FIXME check if columns are saved
+		grid = genericManager.merge(grid); // FIXME check if columns are saved
 		return grid;
 	}
 

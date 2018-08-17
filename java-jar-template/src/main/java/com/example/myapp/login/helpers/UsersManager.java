@@ -26,13 +26,14 @@ import javax.security.auth.login.LoginException;
 
 import org.slf4j.Logger;
 
-import com.example.myapp.crud.GenericManager;
 import com.example.myapp.main.entity.Menu;
 import com.example.myapp.main.entity.Page;
 import com.example.myapp.main.entity.Role;
 import com.example.myapp.main.entity.User;
 import com.example.myapp.main.enums.BooleanYN;
 import com.example.myapp.main.util.ApplicationProperties;
+
+import odata.jpa.AbstractDataManager;
 
 //TODO may split encrypt-related stuff
 @Stateless
@@ -45,7 +46,7 @@ public class UsersManager {
 	@Inject
 	ApplicationProperties appProps;
 	@Inject
-	GenericManager genericManager;
+	AbstractDataManager genericManager;
 
 	public final String ALGORITHM = "SHA-256";
 
@@ -57,8 +58,8 @@ public class UsersManager {
 	}
 
 	/**
-	 * Authenticates user. This is useless using EE security. This method should
-	 * get the same result of jdbcRealm authentication.
+	 * Authenticates user. This is useless using EE security. This method should get
+	 * the same result of jdbcRealm authentication.
 	 * 
 	 * @param email
 	 * @param cleartextPassword
@@ -283,9 +284,9 @@ public class UsersManager {
 	}
 
 	/**
-	 * Return a <b>detached</b> instance of given Menu whose submenus and
-	 * subpages are all and only the ones that the user is allowed to. Return
-	 * null if user is not allowed at all. Please do not save this instance!!!
+	 * Return a <b>detached</b> instance of given Menu whose submenus and subpages
+	 * are all and only the ones that the user is allowed to. Return null if user is
+	 * not allowed at all. Please do not save this instance!!!
 	 * 
 	 * @param user
 	 * @return
@@ -326,8 +327,7 @@ public class UsersManager {
 	}
 
 	/**
-	 * False if there is recorded an authorization for the user to the given
-	 * menu.
+	 * False if there is recorded an authorization for the user to the given menu.
 	 */
 	private boolean isAuthorized(Menu m, User user) {
 		if (m.getAuthorizedRoles().isEmpty())
@@ -340,8 +340,7 @@ public class UsersManager {
 	}
 
 	/**
-	 * False if there is recorded an authorization for the user to the given
-	 * page.
+	 * False if there is recorded an authorization for the user to the given page.
 	 */
 	private boolean isAuthorized(Page p, User user) {
 		if (p.getAuthorizedRoles().isEmpty())
@@ -354,8 +353,8 @@ public class UsersManager {
 	}
 
 	/**
-	 * Return a tree of menus, filtered according to filterMenuForUser(Menu
-	 * menu, User user). Please do not save such menus!!!
+	 * Return a tree of menus, filtered according to filterMenuForUser(Menu menu,
+	 * User user). Please do not save such menus!!!
 	 * 
 	 * @param user
 	 * @return
@@ -375,8 +374,8 @@ public class UsersManager {
 	}
 
 	/**
-	 * Return the (ordered) list of pages the user shall see in his menu. Not
-	 * all pages are required to lie inside a Menu.
+	 * Return the (ordered) list of pages the user shall see in his menu. Not all
+	 * pages are required to lie inside a Menu.
 	 * 
 	 * @param user
 	 * @return
@@ -404,8 +403,8 @@ public class UsersManager {
 	}
 
 	/**
-	 * Create, set and return a new 10-characters-long random password,
-	 * containing only letters and digits.
+	 * Create, set and return a new 10-characters-long random password, containing
+	 * only letters and digits.
 	 * 
 	 * @param user
 	 */

@@ -6,15 +6,13 @@
 package com.example.myapp;
 
 import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
+
+import odata.jpa.AbstractJAXRSApplication;
 
 /**
- * Configures a JAX-RS endpoint. Delete this class, if you are not exposing
- * JAX-RS resources in your application.
- *
- * @author airhacks.com
+ * Configures a JAX-RS endpoint.
  */
 @ApplicationPath("/rest")
-public class JAXRSConfiguration extends Application {
+public class JAXRSConfiguration extends AbstractJAXRSApplication {
 	
 }
