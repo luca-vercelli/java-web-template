@@ -1,112 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- This file is not always needed. -->
-<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
-		 http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
-	version="3.1">
-
-	<!-- Filters order cannot be defined through annotations -->
-	<filter-mapping>
-		<filter-name>i18nFilter</filter-name>
-		<url-pattern />
-	</filter-mapping>
-<!-- 	<filter-mapping> -->
-<!-- 		<filter-name>loginFilter</filter-name> -->
-<!-- 		<url-pattern /> -->
-<!-- 	</filter-mapping> -->
-	<filter-mapping>
-		<filter-name>sessionSetupFilter</filter-name>
-		<url-pattern />
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>authFilter</filter-name>
-		<url-pattern />
-	</filter-mapping>
-
-	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
-	</welcome-file-list>
-
-	<!-- <error-page> <location>/general-error.html</location> </error-page> -->
-	<error-page>
-		<!-- Forbidden directory listing -->
-		<error-code>403</error-code>
-		<location>/ui/page_403.jsp</location>
-	</error-page>
-	<error-page>
-		<!-- Missing resource -->
-		<error-code>404</error-code>
-		<location>/ui/page_404.jsp</location>
-	</error-page>
-	<error-page>
-		<!-- Uncaught exception -->
-		<error-code>500</error-code>
-		<location>/ui/page_500.jsp</location>
-	</error-page>
-
-	<!-- Glassfish does not support json by default. Other webservers may do. -->
-	<mime-mapping>
-		<extension>json</extension>
-		<mime-type>application/json</mime-type>
-	</mime-mapping>
-
-	<!-- Security stuff -->
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>Login page</web-resource-name>
-			<url-pattern>/ui/login.jsp</url-pattern>
-		</web-resource-collection>
-	</security-constraint>
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>Password recovery</web-resource-name>
-			<url-pattern>/ui/login_password_recover.jsp</url-pattern>
-		</web-resource-collection>
-	</security-constraint>
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>Password recovery</web-resource-name>
-			<url-pattern>/ui/doPasswordRecovery</url-pattern>
-		</web-resource-collection>
-	</security-constraint>
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>CSS resources</web-resource-name>
-			<url-pattern>/ui/css/*</url-pattern>
-		</web-resource-collection>
-	</security-constraint>
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>Images</web-resource-name>
-			<url-pattern>/ui/images/*</url-pattern>
-		</web-resource-collection>
-	</security-constraint>
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>Secure pages</web-resource-name>
-			<url-pattern>/ui/*</url-pattern>
-		</web-resource-collection>
-		<auth-constraint>
-			<role-name>standard</role-name>
-			<role-name>admin</role-name>
-		</auth-constraint>
-	</security-constraint>
-
-	<security-role>
-		<role-name>standard</role-name>
-	</security-role>
-
-	<security-role>
-		<role-name>admin</role-name>
-	</security-role>
-
-	<!-- AFAIK, JASPIC does not support FORM auth-method -->
-	<login-config>
-		<auth-method>FORM</auth-method>
-		<realm-name>jdbcRealm</realm-name>
-		<form-login-config>
-			<form-login-page>/redirect-login.jsp</form-login-page>
-			<form-error-page>/redirect-login.jsp</form-error-page>
-		</form-login-config>
-	</login-config>
-
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+  <filter-mapping>
+    <filter-name>i18nFilter</filter-name>
+    <url-pattern></url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>sessionSetupFilter</filter-name>
+    <url-pattern></url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>authFilter</filter-name>
+    <url-pattern></url-pattern>
+  </filter-mapping>
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  <error-page>
+    <error-code>403</error-code>
+    <location>/ui/page_403.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/ui/page_404.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>500</error-code>
+    <location>/ui/page_500.jsp</location>
+  </error-page>
+  <mime-mapping>
+    <extension>json</extension>
+    <mime-type>application/json</mime-type>
+  </mime-mapping>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Login page</web-resource-name>
+      <url-pattern>/ui/login.jsp</url-pattern>
+    </web-resource-collection>
+  </security-constraint>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Password recovery</web-resource-name>
+      <url-pattern>/ui/login_password_recover.jsp</url-pattern>
+    </web-resource-collection>
+  </security-constraint>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Password recovery</web-resource-name>
+      <url-pattern>/ui/doPasswordRecovery</url-pattern>
+    </web-resource-collection>
+  </security-constraint>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>CSS resources</web-resource-name>
+      <url-pattern>/ui/css/*</url-pattern>
+    </web-resource-collection>
+  </security-constraint>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Images</web-resource-name>
+      <url-pattern>/ui/images/*</url-pattern>
+    </web-resource-collection>
+  </security-constraint>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Secure pages</web-resource-name>
+      <url-pattern>/ui/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>standard</role-name>
+      <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
+  <security-role>
+    <role-name>standard</role-name>
+  </security-role>
+  <security-role>
+    <role-name>admin</role-name>
+  </security-role>
+  <login-config>
+    <auth-method>FORM</auth-method>
+    <realm-name>jdbcRealm</realm-name>
+    <form-login-config>
+      <form-login-page>/redirect-login.jsp</form-login-page>
+      <form-error-page>/redirect-login.jsp</form-error-page>
+    </form-login-config>
+  </login-config>
 </web-app>
