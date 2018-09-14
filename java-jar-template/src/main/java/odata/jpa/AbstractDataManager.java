@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
@@ -30,12 +29,11 @@ import org.apache.commons.beanutils.PropertyUtils;
 /**
  * Utility methods for managing persisted entities.
  * 
- * Wraps a JPA EntityManager.
+ * Wraps a JPA EntityManager. Subclasses should be @Stateless.
  * 
  * @author Luca Vercelli 2017-2018
  *
  */
-@Stateless
 public abstract class AbstractDataManager {
 
 	private Map<String, Class<?>> entityCache = new HashMap<String, Class<?>>();
