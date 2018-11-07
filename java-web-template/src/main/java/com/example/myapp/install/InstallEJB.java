@@ -47,7 +47,7 @@ public class InstallEJB {
 
 		// is transaction required?
 		try {
-			TypedQuery<Long> query = em.createQuery("SELECT COUNT(*) FROM Settings", Long.class);
+			TypedQuery<Long> query = em.createQuery("SELECT COUNT(s.id) FROM Settings s", Long.class);
 			query.getSingleResult();
 			return true;
 
@@ -63,7 +63,7 @@ public class InstallEJB {
 
 		// is transaction required?
 		try {
-			TypedQuery<Long> query = em.createQuery("SELECT COUNT(*) FROM Settings", Long.class);
+			TypedQuery<Long> query = em.createQuery("SELECT COUNT(s.id) FROM Settings s", Long.class);
 			Long n = query.getSingleResult();
 			return n > 0;
 
