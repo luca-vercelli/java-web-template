@@ -28,17 +28,23 @@ public class InstallFilter extends AbstractRequestFilter {
 	@Inject
 	ApplicationProperties applicationProperties;
 
+	private static boolean alreadyCheckedThatDbIsPopulated = false;
+	
 	@Override
 	public boolean filterRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		if (!request.getRequestURL().toString().endsWith("/install")) {
 
+			if (alreadyCheckedThatDbIsPopulated)
+				return true;
+			
 			if (!ejb.checkIfDbExists()) {
 				LOG.error("Cannot connect to database, or tables not created. Nothing done.");
 				return false;
 			}
 
 			if (ejb.checkIfDbPopulated()) {
+				alreadyCheckedThatDbIsPopulated = true;
 				return true;
 			}
 

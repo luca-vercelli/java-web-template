@@ -40,6 +40,11 @@ public class InstallEJB {
 	@Inject
 	UsersManager usersManager;
 
+	/**
+	 * Execute a simple query, just to test connection and to see if tables were created.
+	 * 
+	 * @return false on every kind of Exception
+	 */
 	public boolean checkIfDbExists() {
 
 		if (em == null)
@@ -59,6 +64,11 @@ public class InstallEJB {
 		}
 	}
 
+	/**
+	 * Execute a query on table Settings, to see if it exists and is populated.
+	 * 
+	 * @return false on every kind of Exception, or if table is empty
+	 */
 	public boolean checkIfDbPopulated() {
 
 		// is transaction required?
@@ -75,6 +85,9 @@ public class InstallEJB {
 		}
 	}
 
+	/**
+	 * Populate tables. Assume tables were already created.
+	 */
 	public void populateDatabase() {
 		// "ADMIN" ROLE AND USER
 		Role roleAdmin = new Role("admin", "Webapp administrator");
