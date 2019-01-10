@@ -37,7 +37,10 @@ public class ApplicationProperties {
 			internal.load(input);
 
 		} catch (IOException ex) {
-			LOG.error("Exception while loading application.properties", ex);
+			LOG.error("I/O Exception while loading application.properties", ex);
+
+		} catch (NullPointerException ex) {
+			LOG.error("NullPointerException while loading application.properties (missing file?)", ex);
 
 		} finally {
 			if (input != null) {
