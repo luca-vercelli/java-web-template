@@ -12,7 +12,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.example.myapp.crud.GenericManager;
+import com.example.myapp.crud.DataManager;
 import com.example.myapp.main.entity.Page;
 import com.example.myapp.main.entity.Role;
 import com.example.myapp.main.util.AbstractRequestFilter;
@@ -36,7 +36,7 @@ public class AuthorizationFilter extends AbstractRequestFilter {
 	@Inject
 	SessionBean sessionBean;
 	@Inject
-	GenericManager genericManager;
+	DataManager genericManager;
 	@Inject
 	WebFilterHelper webFilterExclude;
 

@@ -8,7 +8,7 @@ package com.example.myapp.crud.resources;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import com.example.myapp.crud.GenericManager;
+import com.example.myapp.crud.DataManager;
 
 import odata.jpa.AbstractDataManager;
 import odata.jpa.AbstractRestResourcesEndpoint;
@@ -20,7 +20,7 @@ import odata.jpa.AbstractRestResourcesEndpoint;
 public class GenericRestResources extends AbstractRestResourcesEndpoint {
 
 	@Inject
-	GenericManager manager;
+	DataManager manager;
 
 	@Override
 	public AbstractDataManager manager() {

@@ -26,7 +26,7 @@ public class GridManager {
 	private EntityManager em;
 
 	@Inject
-	GenericManager genericManager;
+	DataManager genericManager;
 
 	@Inject
 	Exporter exporter;

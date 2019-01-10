@@ -6,7 +6,7 @@ import javax.persistence.PersistenceContext;
 import odata.jpa.AbstractDataManager;
 
 @Stateless
-public class GenericManager extends AbstractDataManager {
+public class DataManager extends AbstractDataManager {
 
 	@PersistenceContext
 	EntityManager em;

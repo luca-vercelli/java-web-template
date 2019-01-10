@@ -20,7 +20,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
 
-import com.example.myapp.crud.GenericManager;
+import com.example.myapp.crud.DataManager;
 import com.example.myapp.crud.GridManager;
 import com.example.myapp.crud.entity.Grid;
 import com.example.myapp.crud.entity.GridColumn;
@@ -31,7 +31,7 @@ import com.example.myapp.crud.entity.GridColumn;
 public class GridResources {
 
 	@Inject
-	GenericManager genericManager;
+	DataManager genericManager;
 	@Inject
 	GridManager gridManager;
 	@Inject

@@ -221,7 +221,8 @@ public abstract class AbstractDataManager {
 		if (where != null && !where.trim().isEmpty()) {
 			whereCondition = " WHERE " + where;
 		}
-		return em().createQuery("select count(*) from " + entity.getName() + whereCondition, Long.class)
+		//FIXME jpa does not accept count(*) so we need a fixed attribute such as x.id
+		return em().createQuery("select count(x.id) from " + entity.getName() + " x " + whereCondition, Long.class)
 				.getSingleResult();
 	}
 
@@ -232,6 +233,9 @@ public abstract class AbstractDataManager {
 	 * Notice that "maxResult" is in fact the size of a page, while "firstResult" =
 	 * (pageNumber-1)*pageSize
 	 * 
+	 * @param bindVariable
+	 *            The variable name to be used as object variable (compulsory). Usually "x".
+	 *            This must be the same variable name used inside "where" and "orderby" conditions.
 	 * @param maxResult
 	 *            max number of elements to retrieve (optional)
 	 * @param firstResult
@@ -242,7 +246,7 @@ public abstract class AbstractDataManager {
 	 * @param orderby
 	 *            ORDER BY JPQL clause, without "ORDER BY" (optional).
 	 */
-	public <T> List<T> find(Class<T> entity, Integer maxResults, Integer firstResult, String where, String orderby) {
+	public <T> List<T> find(Class<T> entity, String bindVariable, Integer maxResults, Integer firstResult, String where, String orderby) {
 
 		String whereCondition = "";
 		String orderbyCondition = "";
@@ -256,7 +260,8 @@ public abstract class AbstractDataManager {
 		}
 
 		TypedQuery<T> query = em()
-				.createQuery("SELECT u FROM " + entity.getName() + " u " + whereCondition + orderbyCondition, entity);
+				.createQuery("SELECT " + bindVariable + " FROM " + entity.getName() + " " + bindVariable + " "
+						+ whereCondition + orderbyCondition, entity);
 		if (firstResult != null)
 			query.setFirstResult(firstResult);
 		if (maxResults != null)
