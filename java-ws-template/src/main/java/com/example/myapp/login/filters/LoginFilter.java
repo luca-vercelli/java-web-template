@@ -18,7 +18,7 @@ import com.example.myapp.main.entity.User;
 import com.example.myapp.main.util.AbstractRequestFilter;
 import com.example.myapp.main.util.ApplicationProperties;
 import com.example.myapp.main.util.SessionBean;
-import com.example.myapp.main.util.WebFilterExclude;
+import com.example.myapp.main.util.WebFilterHelper;
 
 /**
  * Login filter. To be used instead of standard /j_security_check servlet.
@@ -32,7 +32,7 @@ public class LoginFilter extends AbstractRequestFilter {
 	@Inject
 	SessionBean sessionBean;
 	@Inject
-	WebFilterExclude webFilterExclude;
+	WebFilterHelper webFilterHelper;
 	@Inject
 	UsersManager usersManager;
 	@Inject
@@ -41,7 +41,7 @@ public class LoginFilter extends AbstractRequestFilter {
 	@Override
 	public boolean filterRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		if (!webFilterExclude.excludeUrl(appProps.getProperty("login.not.required.uris").split(","), request)) {		
+		if (!webFilterHelper.excludeUrl(appProps.getProperty("login.not.required.uris").split(","), request)) {		
 			String username = request.getRemoteUser();
 			if (username != null) {
 				User user = usersManager.getUserByUsername(username);

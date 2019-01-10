@@ -10,8 +10,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  */
 @Stateless
-@Deprecated
-public class WebFilterExclude {
+public class WebFilterHelper {
 
 	/**
 	 * Return true if the given url is to be excluded by WebFilter. This is

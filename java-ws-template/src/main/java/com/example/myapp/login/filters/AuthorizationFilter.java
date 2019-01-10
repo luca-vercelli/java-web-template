@@ -18,7 +18,7 @@ import com.example.myapp.main.entity.Role;
 import com.example.myapp.main.util.AbstractRequestFilter;
 import com.example.myapp.main.util.ApplicationProperties;
 import com.example.myapp.main.util.SessionBean;
-import com.example.myapp.main.util.WebFilterExclude;
+import com.example.myapp.main.util.WebFilterHelper;
 
 /**
  * Most implementations assume that roles are hard-written in some
@@ -38,7 +38,7 @@ public class AuthorizationFilter extends AbstractRequestFilter {
 	@Inject
 	GenericManager genericManager;
 	@Inject
-	WebFilterExclude webFilterExclude;
+	WebFilterHelper webFilterExclude;
 
 	@Override
 	public boolean filterRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
