@@ -67,8 +67,9 @@ import odata.jpa.beans.ODataValueBean;
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 public abstract class AbstractRestResourcesEndpoint {
 
-	private static final String FILENAME_PROPERTY_SUFFIX = "FileName";
-
+	public static final String FILENAME_PROPERTY_SUFFIX = "FileName";
+	public static final String MAIN_BIND_VARIABLE = "x";
+	
 	/**
 	 * Subclasses must implement this with the AbstractDataManager corresponding to
 	 * the Persistence Unit they want to use.
@@ -142,8 +143,9 @@ public abstract class AbstractRestResourcesEndpoint {
 
 		List<T> list; // this is List<T>
 
-		list = manager().find(clazz, top, skip, oHelper.parseFilterClause(filter, aliases),
-				oHelper.parseOrderByClause(orderby, aliases));
+		list = manager().find(clazz, MAIN_BIND_VARIABLE, top, skip,
+				oHelper.parseFilterClause(filter, MAIN_BIND_VARIABLE, aliases),
+				oHelper.parseOrderByClause(orderby, MAIN_BIND_VARIABLE, aliases));
 
 		if (select != null && !select.isEmpty() && !select.trim().equals("*")) {
 			List<String> jpqlAttributeNames = oHelper.parseAttributes(select);
@@ -230,7 +232,7 @@ public abstract class AbstractRestResourcesEndpoint {
 			@Context HttpServletRequest request) throws NotFoundException {
 		Class<?> clazz = getEntityOrThrowException(entity);
 		Map<String, String> aliases = extractAliases(request);
-		return manager().countEntities(clazz, oHelper.parseFilterClause(filter, aliases));
+		return manager().countEntities(clazz, oHelper.parseFilterClause(filter, MAIN_BIND_VARIABLE, aliases));
 	}
 
 	/**

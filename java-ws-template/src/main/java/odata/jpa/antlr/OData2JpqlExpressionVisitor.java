@@ -15,6 +15,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import odata.antlr.ODataParserBaseVisitor;
 import odata.antlr.ODataParserParser;
+import odata.antlr.ODataParserParser.FirstMemberExprContext;
 
 /**
  * ANTLR 4.5 visitor for Expressions. Its purpose is to parse expressions in
@@ -22,10 +23,10 @@ import odata.antlr.ODataParserParser;
  * 
  * For security reasons, we do not accept functions we do not know.
  * 
- * @author Luca Vercelli 2018
+ * @author Luca Vercelli 2018-2019
  *
  */
-public class ExpressionVisitor extends ODataParserBaseVisitor<String> {
+public class OData2JpqlExpressionVisitor extends ODataParserBaseVisitor<String> {
 
 	static Map<String, String> operators = new HashMap<String, String>();
 	static OdataJPAHelper helper = new OdataJPAHelper();
@@ -104,14 +105,12 @@ public class ExpressionVisitor extends ODataParserBaseVisitor<String> {
 	Queue<String> bindVariables = new ArrayDeque<String>();
 	Map<String, String> aliases = new HashMap<String, String>();
 
-	public ExpressionVisitor() {
-		bindVariables.add("u");
-		// we assume the upper level variable is always "u".
-		// @see HighLevelEntityManager.find()
+	public OData2JpqlExpressionVisitor(String bindVariableName) {
+		bindVariables.add(bindVariableName);
 	}
 
-	public ExpressionVisitor(Map<String, String> aliases) {
-		this();
+	public OData2JpqlExpressionVisitor(String bindVariableName, Map<String, String> aliases) {
+		this(bindVariableName);
 		if (aliases != null)
 			this.aliases = aliases;
 	}
@@ -119,9 +118,11 @@ public class ExpressionVisitor extends ODataParserBaseVisitor<String> {
 	/**
 	 * DEBUG procedure
 	 * 
-	 * @param tree
+	 * @param tree what to format
+	 * @param graphical if true, text will be formatted on more lines
+	 * @param if graphical, the number of spaces on the left. Usually 0.
 	 */
-	public String printContext(ParseTree tree) {
+	public String printContext(ParseTree tree, boolean graphical, int level) {
 		if (tree instanceof ErrorNode) {
 			ErrorNode node = (ErrorNode) tree;
 			return "ErrorNode(" + node.getSymbol() + ")";
@@ -129,16 +130,35 @@ public class ExpressionVisitor extends ODataParserBaseVisitor<String> {
 			TerminalNode node = (TerminalNode) tree;
 			return "TerminalNode(" + node.getSymbol() + ")";
 		} else {
+			StringBuffer padding = (graphical) ? spaces(level) : new StringBuffer();
 			StringBuffer sb = new StringBuffer(tree.getClass().getSimpleName()).append("(");
 			for (int i = 0; i < tree.getChildCount(); ++i) {
 				ParseTree child = tree.getChild(i);
-				if (i != 0)
+				if (i != 0) {
 					sb.append(", ");
-				sb.append(printContext(child));
+				}
+				if (graphical) {
+					sb.append("\r\n").append(padding);
+				}
+				sb.append(printContext(child, graphical, level + 1));
 			}
 			sb.append(")");
 			return sb.toString();
 		}
+	}
+
+	/**
+	 * Creates a string of spaces that is 'spaces' spaces long.
+	 * @see https://stackoverflow.com/questions/2804827
+	 * 
+	 * @param spaces The number of spaces to add to the string.
+	 */
+	private StringBuffer spaces(int length) {
+		StringBuffer sb = new StringBuffer(length);
+		for (int i = 0; i < length; i++){
+		   sb.append(" ");
+		}
+		return sb;
 	}
 
 	/**
@@ -189,7 +209,7 @@ public class ExpressionVisitor extends ODataParserBaseVisitor<String> {
 	@Override
 	public String visitClause(ODataParserParser.ClauseContext ctx) {
 		// just for debug
-		System.out.println("HERE context = " + printContext(ctx));
+		System.out.println("DEBUG visitClause() context = " + printContext(ctx, true, 0));
 		return visitChildren(ctx);
 	}
 
@@ -302,7 +322,10 @@ public class ExpressionVisitor extends ODataParserBaseVisitor<String> {
 
 	@Override
 	public String visitEntityColNavigationProperty(ODataParserParser.EntityColNavigationPropertyContext ctx) {
-		return helper.firstToLower(ctx.getText());
+		String prefix = "";
+		if (ctx.parent.parent instanceof FirstMemberExprContext)
+			prefix = bindVariables.peek() + ".";
+		return  prefix + helper.firstToLower(ctx.getText());
 	}
 
 	@Override

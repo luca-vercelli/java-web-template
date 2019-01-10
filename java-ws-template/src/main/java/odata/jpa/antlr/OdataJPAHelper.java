@@ -21,10 +21,11 @@ public class OdataJPAHelper {
 	 * check).
 	 * 
 	 * @param orderby
+	 * @param bindVariable
 	 * @param aliases 
 	 * @return
 	 */
-	public String parseOrderByClause(String orderby, Map<String, String> aliases) {
+	public String parseOrderByClause(String orderby, String bindVariable, Map<String, String> aliases) {
 		if (orderby == null)
 			return null;
 
@@ -47,7 +48,7 @@ public class OdataJPAHelper {
 				String asc = (attrAndAsc.length == 2) ? attrAndAsc[1].toLowerCase() : "asc";
 				if (!"asc".equals(asc) && !"desc".equals(asc))
 					throw new IllegalArgumentException("Syntax error in $orderby condiction: expected asc or desc");
-				orderbyCondition.append(comma).append(" ").append(attr).append(" ").append(asc);
+				orderbyCondition.append(comma).append(" ").append(bindVariable).append(".").append(attr).append(" ").append(asc);
 				comma = ",";
 			}
 		}
@@ -56,12 +57,13 @@ public class OdataJPAHelper {
 
 	/**
 	 * Convert $filter clause to JPA WHERE clause (without any semantical check).
-	 * @param aliases 
 	 * 
-	 * @param orderby
+	 * @param filter
+	 * @param bindVariable
+	 * @param aliases
 	 * @return
 	 */
-	public String parseFilterClause(String filter, Map<String, String> aliases) {
+	public String parseFilterClause(String filter, String bindVariable, Map<String, String> aliases) {
 		if (filter == null)
 			return null;
 
@@ -83,10 +85,10 @@ public class OdataJPAHelper {
 		// here, the input has already been read and parsed
 
 		// Run the VisitorStringLiteral
-		ExpressionVisitor visitor = new ExpressionVisitor(aliases);
+		OData2JpqlExpressionVisitor visitor = new OData2JpqlExpressionVisitor(bindVariable, aliases);
 		String jpql = visitor.visit(tree);
 
-		System.out.println("DEBUG HERE jpql=" + jpql);
+		System.out.println("DEBUG parseFilterClause() jpql=" + jpql);
 
 		return jpql;
 	}

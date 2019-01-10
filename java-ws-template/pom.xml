@@ -24,23 +24,23 @@
 		</dependency>
 
 		<!-- Hibernate framework -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>5.2.3.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>javassist</groupId>
-			<artifactId>javassist</artifactId>
-			<version>3.11.0.GA</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.hibernate</groupId> -->
+<!-- 			<artifactId>hibernate-core</artifactId> -->
+<!-- 			<version>5.2.3.Final</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>javassist</groupId> -->
+<!-- 			<artifactId>javassist</artifactId> -->
+<!-- 			<version>3.11.0.GA</version> -->
+<!-- 		</dependency> -->
 
 		<!-- Entity manager which is required for JPA -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>5.2.3.Final</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.hibernate</groupId> -->
+<!-- 			<artifactId>hibernate-entitymanager</artifactId> -->
+<!-- 			<version>5.2.3.Final</version> -->
+<!-- 		</dependency> -->
 
 		<!-- logging -->
 		<dependency>
@@ -89,18 +89,23 @@
 			<version>0.7.0</version>
 		</dependency>
 		
-		<!-- Jackson, not MOXy -->
+		<!-- Jackson, not MOXy - use Glassfish' version -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.fasterxml.jackson.jaxrs</groupId> -->
+<!-- 			<artifactId>jackson-jaxrs-json-provider</artifactId> -->
+<!-- 			<version>2.5.1</version> -->
+<!-- 		</dependency> -->
 		<dependency>
-			<groupId>com.fasterxml.jackson.jaxrs</groupId>
-			<artifactId>jackson-jaxrs-json-provider</artifactId>
-			<version>2.5.1</version>  <!-- Glassfish' version -->
+			<groupId>org.glassfish.jersey.media</groupId>
+			<artifactId>jersey-media-json-jackson</artifactId>
+			<version>2.21.1</version>
 		</dependency>
 
 		<!-- Required by odata.jpa -->
 		<dependency>
 			<groupId>org.glassfish.jersey.media</groupId>
 			<artifactId>jersey-media-multipart</artifactId>
-			<version>2.24.1</version>
+			<version>2.21.1</version>
 		</dependency>
 
 		<!-- Required by odata.jpa -->

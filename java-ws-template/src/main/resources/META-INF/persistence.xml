@@ -5,7 +5,8 @@
 
 	<persistence-unit name="MyPersistenceUnit"
 		transaction-type="JTA">
-		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+<!-- 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider> -->
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<jta-data-source>jdbc/mainDataSource</jta-data-source>
 
 		<!-- Entity classes -->
@@ -39,6 +40,9 @@
 
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.DerbyTenSevenDialect" />
+			
+<!-- FIXME missing eclipselink jta platform ? -->
+
 		</properties>
 
 	</persistence-unit>

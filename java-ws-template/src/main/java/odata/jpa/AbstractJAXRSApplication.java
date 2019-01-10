@@ -1,7 +1,9 @@
 package odata.jpa;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
@@ -15,7 +17,7 @@ import javax.ws.rs.core.Application;
 public abstract class AbstractJAXRSApplication extends Application {
 
 	/**
-	 * Enable Jersey Multipart feature
+	 * Enable Jersey Multipart feature. Disable MOXY as JSON serializer.
 	 */
 	@Override
 	public Map<String, Object> getProperties() {
@@ -23,5 +25,16 @@ public abstract class AbstractJAXRSApplication extends Application {
 		props.put("jersey.config.server.provider.classnames", "org.glassfish.jersey.media.multipart.MultiPartFeature");
 		return props;
 	}
+	
+	@Override
+    public Set<Class<?>> getClasses() {
+        final Set<Class<?>> classes = new HashSet<Class<?>>();
+
+        // Add JacksonFeature.
+        //classes.add(JacksonFeature.class);
+        classes.add(JacksonFeatureBugfix.class);
+
+        return classes;
+    }
 
 }
