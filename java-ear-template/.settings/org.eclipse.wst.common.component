@@ -2,15 +2,13 @@
     <wb-module deploy-name="myapp">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/ear-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/application" tag="defaultRootSource"/>
-        <dependent-module archiveName="java-ws-template.war" deploy-path="/" handle="module:/resource/web-template/web-template">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="java-web-template.war" deploy-path="/" handle="module:/resource/java-web-template/java-web-template">
-            <dependent-object/>
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="java-ws-template.war" deploy-path="/" handle="module:/resource/java-ws-template/java-ws-template">
-            <dependent-object/>
+        <dependent-module archiveName="java-ws-template.war" deploy-path="/" handle="module:/resource/java-web-template/java-web-template">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="ws-template-0.0.1-SNAPSHOT.war" deploy-path="/" handle="module:/resource/java-ws-template/java-ws-template">
             <dependency-type>uses</dependency-type>
         </dependent-module>
     </wb-module>

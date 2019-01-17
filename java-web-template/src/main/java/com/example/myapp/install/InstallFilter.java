@@ -13,6 +13,8 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+
 import com.example.myapp.main.util.AbstractRequestFilter;
 import com.example.myapp.main.util.ApplicationProperties;
 
@@ -28,6 +30,9 @@ public class InstallFilter extends AbstractRequestFilter {
 	@Inject
 	ApplicationProperties applicationProperties;
 
+	@Inject
+	private Logger LOG;
+	
 	private static boolean alreadyCheckedThatDbIsPopulated = false;
 	
 	@Override
@@ -49,7 +54,7 @@ public class InstallFilter extends AbstractRequestFilter {
 			}
 
 			LOG.info("Database not populated yet. Going to install.");
-			response.sendRedirect("install");
+			response.sendRedirect("install");	//FIXME fail if user is under /ui !?!
 			return false;
 		}
 

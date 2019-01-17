@@ -33,15 +33,15 @@
 
 			<!-- If your DBA allows that, use CREATE the first time in order to create 
 				all tables. This won't populate tables. -->
-<!-- 			<property name="javax.persistence.schema-generation.database.action" -->
-<!-- 				value="drop-and-create" /> -->
+<!--  			<property name="javax.persistence.schema-generation.database.action" -->
+<!--  				value="drop-and-create" /> -->
 			<!-- <property name="javax.persistence.sql-load-script-source" value="FIRST-RUN.SQL" 
 				/> -->
 
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.DerbyTenSevenDialect" />
 			
-<!-- FIXME missing eclipselink jta platform ? -->
+<!-- FIXME missing eclipselink jta platform ? see https://stackoverflow.com/questions/33296319 -->
 
 		</properties>
 

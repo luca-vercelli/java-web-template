@@ -12,6 +12,8 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+
 import com.example.myapp.crud.DataManager;
 import com.example.myapp.main.entity.Page;
 import com.example.myapp.main.entity.Role;
@@ -39,6 +41,9 @@ public class AuthorizationFilter extends AbstractRequestFilter {
 	DataManager genericManager;
 	@Inject
 	WebFilterHelper webFilterExclude;
+
+	@Inject
+	private Logger LOG;
 
 	@Override
 	public boolean filterRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {

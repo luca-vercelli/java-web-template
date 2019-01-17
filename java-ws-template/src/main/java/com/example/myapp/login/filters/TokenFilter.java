@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
+import org.slf4j.Logger;
+
 import com.example.myapp.login.actions.TokenManager;
 import com.example.myapp.main.util.AbstractRequestFilter;
 
@@ -30,6 +32,9 @@ public class TokenFilter
 	@Inject
 	TokenManager tokenManager;
 
+	@Inject
+	private Logger LOG;
+	
 	/**
 	 * Do filter
 	 */

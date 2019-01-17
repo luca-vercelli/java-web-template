@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 public abstract class AbstractRequestFilter implements Filter {
 
 	@Inject
-	protected Logger LOG;
+	private Logger LOG;
 
 	@Override
 	public final void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
@@ -32,7 +32,7 @@ public abstract class AbstractRequestFilter implements Filter {
 
 			try {
 
-				LOG.info("Entering filter " + this.getClass().getName());
+				LOG.debug("Entering filter " + this.getClass().getName());
 
 				if (filterRequest(request, response))
 					chain.doFilter(req, resp); // continue chain

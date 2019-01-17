@@ -283,10 +283,10 @@ public abstract class AbstractDataManager {
 	private <T> TypedQuery<T> createFindByPropertyQuery(Class<T> entity, String propertyName, Object value) {
 		if (value != null) {
 			return em()
-					.createQuery("select u from " + entity.getName() + " u where " + propertyName + " = :param", entity)
+					.createQuery("select x from " + entity.getName() + " x where x." + propertyName + " = :param", entity)
 					.setParameter("param", value);
 		} else {
-			return em().createQuery("select u from " + entity.getName() + " u where " + propertyName + " is null",
+			return em().createQuery("select x from " + entity.getName() + " x where x." + propertyName + " is null",
 					entity);
 		}
 	}

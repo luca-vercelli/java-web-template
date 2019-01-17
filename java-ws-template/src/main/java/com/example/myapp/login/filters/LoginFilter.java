@@ -21,10 +21,10 @@ import com.example.myapp.main.util.SessionBean;
 import com.example.myapp.main.util.WebFilterHelper;
 
 /**
- * Login filter. To be used instead of standard /j_security_check servlet.
+ * Login filter. To be used instead of standard /j_security_check servlet. Currently not used.
  *
  */
-@WebFilter(value = "loginFilter", urlPatterns = { "*.html", "*.htm", "*.xhtml", "*.jsp" })
+// @WebFilter(value = "loginFilter", urlPatterns = { "*.html", "*.htm", "*.xhtml", "*.jsp" })
 public class LoginFilter extends AbstractRequestFilter {
 
 	@Inject
