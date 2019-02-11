@@ -7,9 +7,12 @@ import javax.ws.rs.ext.MessageBodyWriter;
 
 import org.glassfish.jersey.CommonProperties;
 
+import com.fasterxml.jackson.databind.AnnotationIntrospector;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.jaxrs.base.JsonMappingExceptionMapper;
 import com.fasterxml.jackson.jaxrs.base.JsonParseExceptionMapper;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 
 /**
  * This Feature should enable Jackson and disable MOXY.
@@ -48,7 +51,14 @@ public class JacksonFeatureBugfix implements Feature {
 
 		// context.register(JacksonJaxbJsonProvider.class, MessageBodyReader.class,
 		// MessageBodyWriter.class);
-		context.register(JacksonJsonProvider.class, MessageBodyReader.class, MessageBodyWriter.class);
+		
+		// default provider ignores JAXB annotations!
+        ObjectMapper mapper = new ObjectMapper();
+        AnnotationIntrospector introspector = new JaxbAnnotationIntrospector();
+        mapper.setAnnotationIntrospector(introspector);
+        JacksonJsonProvider provider = new JacksonJsonProvider(mapper);
+        
+		context.register(provider, MessageBodyReader.class, MessageBodyWriter.class);
 		return true;
 	}
 }
