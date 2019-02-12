@@ -150,22 +150,22 @@ public class InstallEJB {
 		menu = new Menu("menu.admin", 15, menuGeneral, "table");
 		pages = menu.getPages();
 
-		page = new Page("crud.jsp?entity=User", "page.crud_users", 10, null);
+		page = new Page("users.jsp", "page.crud_users", 10, null);
 		page.getAuthorizedRoles().add(roleAdmin);
 		em.persist(page);
 		pages.add(page);
 
-		page = new Page("crud.jsp?entity=Role", "page.crud_roles", 20, null);
+		page = new Page("roles.jsp", "page.crud_roles", 20, null);
 		page.getAuthorizedRoles().add(roleAdmin);
 		em.persist(page);
 		pages.add(page);
 
-		page = new Page("crud.jsp?entity=Page", "page.crud_pages", 30, null);
+		page = new Page("pages.jsp", "page.crud_pages", 30, null);
 		page.getAuthorizedRoles().add(roleAdmin);
 		em.persist(page);
 		pages.add(page);
 
-		page = new Page("crud.jsp?entity=Menu", "page.crud_menus", 40, null);
+		page = new Page("menus.jsp", "page.crud_menus", 40, null);
 		page.getAuthorizedRoles().add(roleAdmin);
 		em.persist(page);
 		pages.add(page);

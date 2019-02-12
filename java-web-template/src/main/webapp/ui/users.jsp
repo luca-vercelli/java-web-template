@@ -8,7 +8,7 @@
 </c:set>
 <fmt:setLocale value="${lang}" />
 <fmt:setBundle basename="com.example.myapp.crud.crud" />
-<c:set var="entity" value="${ param.entity }" />
+<c:set var="entity" value="User" />
 
 <t:template>
 	<jsp:attribute name="head_area">
@@ -65,6 +65,24 @@
 	
 	<script>
      var entity = '${entity}';
+     var columns = [
+    	 {
+    		 "data" : "name",
+    		 "title" : "Username"
+    	 },
+    	 {
+    		 "data" : "personName",
+    		 "title" : "Nome"
+    	 },
+    	 {
+    		 "data" : "personSurname",
+    		 "title" : "Cognome"
+    	 }
+     ];
+     $(document).ready(function(){
+    		pageData = new PageData(entity, columns, '#mainTable', '#modalDialog');
+    		pageData.buildDataTable();
+    	});
     </script>
     
 	<script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>

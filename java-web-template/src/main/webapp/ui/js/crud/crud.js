@@ -9,21 +9,15 @@
 var pageData = null;
 var  WS_URL = "../../ws/rest/";
 
-$(document).ready(function(){
-	
-	pageData = new PageData(entity, '#mainTable', '#modalDialog');
-	pageData.askForGridAndDataThenBuildDataTable();
-	
-});
 
-function PageData(entity, tableSelector, modalDialogSelector) {
-	
+
+function PageData(entity, columns, tableSelector, modalDialogSelector) {
+
 	this.entity = entity;
+	this._columns = columns;
 	this.tableSelector = tableSelector;
 	this.modalDialogSelector = modalDialogSelector;
 	this.datatable = null;
-	this._gridData = null;
-	this._columns = null;
 
 	/**
 	 * Output an error message
@@ -38,32 +32,6 @@ function PageData(entity, tableSelector, modalDialogSelector) {
 	};
 
 	/**
-	 * Create and return DataTable's columns definition array
-	 */
-	this.createColumns = function(gridData) {
-
-		var _columns = [];
-		for (var x in gridData) {
-			_columns.push({
-				data: gridData[x].columnDefinition,
-				title: gridData[x].columnDefinition // FIXME ...should decode...
-			});
-		}
-		return _columns;
-	};
-
-	/**
-	 * Ask server for data, then call buildDataTable()
-	 */
-	this.askForDataThenBuildDataTable = function(gridData) {
-		
-		this._gridData = gridData;
-		this._columns = this.createColumns(gridData);
-		this.buildDataTable();
-
-	};
-
-	/**
 	 * Build a DataTable with 'ajax' option, single select, buttons, altEditor
 	 */
 	this.buildDataTable = function() {
@@ -73,8 +41,7 @@ function PageData(entity, tableSelector, modalDialogSelector) {
 	    this.datatable = $(this.tableSelector).DataTable( {
 			// order: [[ 0, "desc" ]],
 	        ajax: {
-	            url: WS_URL + this.entity,
-				dataSrc: ""
+	            url: WS_URL + this.entity
 			},
 			columns: this._columns,
 	        language: {
@@ -108,31 +75,6 @@ function PageData(entity, tableSelector, modalDialogSelector) {
 					}
 				}]
 		});
-	};
-
-	/**
-	 * Ask server for grid data, if needed, then call
-	 * askForDataThenBuildDataTable()
-	 */
-	this.askForGridAndDataThenBuildDataTable = function() {
-		
-		if (this._gridData != null)
-			return this.askForDataThenBuildDataTable(this._gridData);
-		
-		var myself = this;
-		
-		$.ajax({
-			url: WS_URL + entity + "/gridMetadata",
-			type: "GET",
-			dataType : "json",
-			success: function(data) {
-				myself.askForDataThenBuildDataTable(data);
-			},
-			error: function(data) {
-				myself.serverError(data);
-			}
-		});
-
 	};
 
 	this.exportXls = function() {
