@@ -5,6 +5,8 @@
 */
 package com.example.myapp.login.resources;
 
+import java.security.Principal;
+
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.security.auth.login.LoginContext;
@@ -21,7 +23,6 @@ import org.slf4j.Logger;
 
 import com.example.myapp.login.actions.TokenManager;
 import com.example.myapp.login.helpers.UsersManager;
-import com.example.myapp.main.entity.User;
 
 /**
  * Authentication endpoint for token-based (JWT) security. Currently we do not
@@ -91,7 +92,7 @@ public class TokenAuthenticationEndPoint {
 	 * @return
 	 */
 	private JSONResponse commonGetToken(Credentials credentials) {
-		User user = null;
+		Principal user = null;
 		JSONResponse resp = new JSONResponse();
 
 		if (credentials == null || credentials.userId == null || credentials.userId.equals("")) {
@@ -105,7 +106,7 @@ public class TokenAuthenticationEndPoint {
 		LoginContext lc = usersManager.authenticate(credentials.userId, credentials.pwd.toCharArray(), "MainApp");
 
 		if (lc != null && !lc.getSubject().getPrincipals().isEmpty()) {
-			user = (User) lc.getSubject().getPrincipals().iterator().next();
+			user = lc.getSubject().getPrincipals().iterator().next();
 		}
 
 		if (user == null) {
