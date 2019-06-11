@@ -1,11 +1,15 @@
 package odata.jpa;
 
+import javax.ejb.EJBTransactionRolledbackException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import odata.jpa.beans.ODataExceptionBean;
 
@@ -20,24 +24,38 @@ import odata.jpa.beans.ODataExceptionBean;
 @Provider
 public class DefaultExceptionHandler implements ExceptionMapper<Exception> {
 
+	public static final Logger LOG = LoggerFactory.getLogger(DefaultExceptionHandler.class);
+
 	@Override
 	public Response toResponse(Exception e) {
 
 		int status;
 		String message;
+		
+		//EJBTransactionRolledbackException usually unuseful
+		if (e instanceof EJBTransactionRolledbackException && e.getCause() != null && e.getCause().getCause() != null
+				&& e.getCause().getCause() instanceof Exception) {
+			e = (Exception)e.getCause().getCause();
+		}
+		
 		if (e instanceof WebApplicationException) {
-			// don't print stack trace
-			// Unluckily, someone prints it anyway.
+			// don't print stack trace, if client issue
+			// Unluckily, some library prints it anyway.
 			status = ((WebApplicationException) e).getResponse().getStatus();
 
 			if (status == Status.INTERNAL_SERVER_ERROR.getStatusCode())
-				e.printStackTrace();
+				LOG.error("Internal server error", e);
 
 			message = Status.fromStatusCode(status).getReasonPhrase();
 			if (e.getMessage() != null)
 				message += " - " + e.getMessage();
+			
+		} else if (e instanceof IllegalArgumentException) {
+			status = Status.BAD_REQUEST.getStatusCode();
+			message = e.getMessage();
+			
 		} else {
-			e.printStackTrace();
+			LOG.error("Internal server error", e);
 			status = Status.INTERNAL_SERVER_ERROR.getStatusCode();
 			message = Status.INTERNAL_SERVER_ERROR.getReasonPhrase();
 		}
