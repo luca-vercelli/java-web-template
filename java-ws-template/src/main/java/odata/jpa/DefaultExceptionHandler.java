@@ -32,10 +32,9 @@ public class DefaultExceptionHandler implements ExceptionMapper<Exception> {
 		int status;
 		String message;
 		
-		//EJBTransactionRolledbackException usually unuseful
-		if (e instanceof EJBTransactionRolledbackException && e.getCause() != null && e.getCause().getCause() != null
-				&& e.getCause().getCause() instanceof Exception) {
-			e = (Exception)e.getCause().getCause();
+		// EJBException / EJBTransactionRolledbackException usually unuseful
+		while (e instanceof EJBException && e.getCause() != null && e.getCause() instanceof Exception) {
+			e = (Exception) e.getCause();
 		}
 		
 		if (e instanceof WebApplicationException) {
