@@ -82,13 +82,53 @@ public class MailManager {
 	 * @param recipients
 	 *            comma-separated emails.
 	 * @param subject
+	 *            email subject, i.e. title
 	 * @param text
+	 *            plain-text email content
+	 * @param attachments
+	 *            file to send as attachments
 	 * @throws MessagingException
 	 */
-	public void sendSimpleTextMail(String recipients, String subject, String text) throws MessagingException {
+	public void sendSimpleTextMail(String recipients, String subject, String text, File... attachments)
+			throws MessagingException {
 		try {
 			SimpleMessage message = new SimpleMessage(session, FROM, recipients, subject);
 			message.setText(text);
+			message.addAttachments(attachments);
+			message.send();
+
+			logger.info("Sent email to " + recipients);
+
+		} catch (MessagingException e) {
+			logger.error("Error sending email", e);
+			throw e;
+		}
+	}
+
+	/**
+	 * Send a simple-text email.
+	 * 
+	 * @param recipients
+	 *            comma-separated emails.
+	 * @param recipientsCC
+	 *            comma-separated emails.
+	 * @param recipientsBCC
+	 *            comma-separated emails.
+	 * @param subject
+	 *            email subject, i.e. title
+	 * @param text
+	 *            plain-text email content
+	 * @param attachments
+	 *            file to send as attachments
+	 * @param attachments
+	 * @throws MessagingException
+	 */
+	public void sendSimpleTextMail(String recipients, String recipientsCC, String recipientsBCC, String subject,
+			String text, File... attachments) throws MessagingException {
+		try {
+			SimpleMessage message = new SimpleMessage(session, FROM, recipients, recipientsCC, recipientsBCC, subject);
+			message.setText(text);
+			message.addAttachments(attachments);
 			message.send();
 
 			logger.info("Sent email to " + recipients);
@@ -105,6 +145,7 @@ public class MailManager {
 	 * @param recipients
 	 *            comma-separated emails.
 	 * @param subject
+	 *            email subject, i.e. title
 	 * @param text
 	 *            plain-text email content
 	 * @param HTML
@@ -115,7 +156,47 @@ public class MailManager {
 	 */
 	public void sendSimpleHTMLMail(String recipients, String subject, String text, String HTML, File... attachments)
 			throws MessagingException {
+
 		try {
+
+			SimpleMessage message = new SimpleMessage(session, FROM, recipients, subject);
+			message.setText(text);
+			message.setHtmlText(HTML);
+			message.addAttachments(attachments);
+			message.send();
+
+			logger.info("Sent email to " + recipients);
+
+		} catch (MessagingException e) {
+			logger.error("Error sending email", e);
+			throw e;
+		}
+	}
+
+	/**
+	 * Send a multipart text/HTML email.
+	 * 
+	 * @param recipients
+	 *            comma-separated emails.
+	 * @param recipientsCC
+	 *            comma-separated emails.
+	 * @param recipientsBCC
+	 *            comma-separated emails.
+	 * @param subject
+	 *            email subject, i.e. title
+	 * @param text
+	 *            plain-text email content
+	 * @param HTML
+	 *            HTML email content
+	 * @param attachments
+	 *            file to send as attachments
+	 * @throws MessagingException
+	 */
+	public void sendSimpleHTMLMail(String recipients, String recipientsCC, String recipientsBCC, String subject,
+			String text, String HTML, File... attachments) throws MessagingException {
+
+		try {
+
 			SimpleMessage message = new SimpleMessage(session, FROM, recipients, subject);
 			message.setText(text);
 			message.setHtmlText(HTML);
