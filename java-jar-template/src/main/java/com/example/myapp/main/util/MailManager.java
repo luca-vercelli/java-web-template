@@ -39,12 +39,13 @@ import org.slf4j.Logger;
 public class MailManager {
 
 	@Inject
-	Logger LOG;
+	Logger logger;
 
 	@Resource(name = "mail/mainMailSession")
 	private Session session;
 
-
+	private final static String FROM = "me@example.com";
+	
 	/**
 	 * Alternative way to create current session, with hard-coded parameters
 	 * 
