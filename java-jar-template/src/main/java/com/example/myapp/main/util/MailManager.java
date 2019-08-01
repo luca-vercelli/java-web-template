@@ -149,7 +149,7 @@ public class MailManager {
 	 * 
 	 * If you need some more Transport options, you can call getMessage(), then send it by yourself. 
 	 * 
-	 * @author u0i8226
+	 * @author LV
 	 *
 	 */
 	public static class SimpleMessage {
