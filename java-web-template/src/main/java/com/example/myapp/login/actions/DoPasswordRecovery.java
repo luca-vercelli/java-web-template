@@ -16,6 +16,7 @@ import com.example.myapp.login.helpers.UsersManager;
 import com.example.myapp.main.entity.User;
 import com.example.myapp.main.util.ApplicationProperties;
 import com.example.myapp.main.util.MailManager;
+import com.example.myapp.main.util.SimpleMessage;
 import com.example.myapp.main.util.SessionBean;
 
 /**
@@ -77,10 +78,11 @@ public class DoPasswordRecovery extends HttpServlet {
 			String pwdRecCode = usersManager.createPasswordRecoveryCode(user);
 
 			// TODO some more clever text
-			mailManager.sendSimpleTextMail(email, "Password reset",
-					"You have requested to reset " + address + " login password.\r\n"
-							+ "If you really want to proceed, follow this link:\r\n" + address
-							+ "/ui/confirmPasswordRecovery?code=" + pwdRecCode + "\r\n");
+			SimpleMessage msg = mailManager.prepareEmail(email, "Password reset")
+				.setText("You have requested to reset " + address + " login password.\r\n" +
+					"If you really want to proceed, follow this link:\r\n" + address +
+					"/ui/confirmPasswordRecovery?code=" + pwdRecCode + "\r\n")
+				.send();
 
 			session.setAttribute(ERROR_MESSAGE, "email.recovery.sent");
 			response.sendRedirect(request.getContextPath() + appProps.getProperty("password.recovery.uri"));
