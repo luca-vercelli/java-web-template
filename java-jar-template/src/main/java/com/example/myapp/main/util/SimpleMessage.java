@@ -26,8 +26,12 @@ import javax.mail.util.ByteArrayDataSource;
  * 
  * This class automatically decides if the message needs to be multipart or not.
  * 
- * Please use either the setText() or setHtmlText() methods, add attachments as
- * required, then send with send().
+ * <br>
+ * 
+ * Usage: call either the setText() or setHtmlText() methods, add attachments as
+ * required, then call send().
+ * 
+ * <br>
  * 
  * If you need some more Transport options, you can call getMessage(), then send
  * it by yourself.
@@ -36,12 +40,15 @@ import javax.mail.util.ByteArrayDataSource;
  *
  */
 public class SimpleMessage {
+
 	private String text;
 	private String htmlText;
 	private List<MimeBodyPart> attachments = new ArrayList<>();
+
+	// calculated attributes
 	private MimeMessage message;
 	private Multipart multipart;
-	private boolean completed = false;
+	private boolean compiled = false;
 
 	public SimpleMessage(Session session, String from, String recipients, String subject) throws MessagingException {
 		this(session, from, recipients, null, null, subject);
@@ -52,7 +59,7 @@ public class SimpleMessage {
 
 		message = new MimeMessage(session);
 		message.setSubject(subject);
-		message.setFrom(from);
+		message.setFrom(new InternetAddress(from));
 		if (recipients != null)
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipients));
 		if (recipientsCC != null)
@@ -65,9 +72,17 @@ public class SimpleMessage {
 		return text;
 	}
 
+	/**
+	 * Set a simple text for email content.
+	 * 
+	 * If both Text and HtmlText are set, the client decides what to show.
+	 * 
+	 * @param text
+	 * @return
+	 */
 	public SimpleMessage setText(String text) {
-		if (completed)
-			throw new IllegalStateException("The Message has already been completed.");
+		if (compiled)
+			throw new IllegalStateException("The Message has already been compiled.");
 		this.text = text;
 		return this;
 	}
@@ -76,9 +91,19 @@ public class SimpleMessage {
 		return htmlText;
 	}
 
+	/**
+	 * Set a HTML text for email content.
+	 * 
+	 * If both Text and HtmlText are set, the client decides what to show.
+	 * 
+	 * @param htmlText
+	 *            Something like "&lt;HTML&gt;&lt;BODY&gt; Some text ...
+	 *            &lt;/BODY&gt;&lt;/HTML&gt;
+	 * @return
+	 */
 	public SimpleMessage setHtmlText(String htmlText) {
-		if (completed)
-			throw new IllegalStateException("The Message has already been completed.");
+		if (compiled)
+			throw new IllegalStateException("The Message has already been compiled.");
 		this.htmlText = htmlText;
 		return this;
 	}
@@ -87,32 +112,66 @@ public class SimpleMessage {
 		return attachments;
 	}
 
+	/**
+	 * Add a given file as attachment, guessing its MIME type.
+	 * 
+	 * @param attachment
+	 * @return
+	 * @throws MessagingException
+	 */
 	public SimpleMessage addAttachment(File attachment) throws MessagingException {
-		if (completed)
-			throw new IllegalStateException("The Message has already been completed.");
+		if (compiled)
+			throw new IllegalStateException("The Message has already been compiled.");
 		this.attachments.add(file2MimeBodyPart(attachment));
 		return this;
 	}
 
+	/**
+	 * Add an attachment whose content is a given byte array.
+	 * 
+	 * @param fileContent
+	 * @param mimeType
+	 * @param filename
+	 * @return
+	 * @throws MessagingException
+	 */
 	public SimpleMessage addAttachment(byte[] fileContent, String mimeType, String filename) throws MessagingException {
-		if (completed)
-			throw new IllegalStateException("The Message has already been completed.");
+		if (compiled)
+			throw new IllegalStateException("The Message has already been compiled.");
 		this.attachments.add(byte2MimeBodyPart(fileContent, mimeType, filename));
 		return this;
 	}
 
-	public SimpleMessage addAttachment(InputStream mimeBodyPart) throws MessagingException {
-		if (completed)
-			throw new IllegalStateException("The Message has already been completed.");
-		this.attachments.add(new MimeBodyPart(mimeBodyPart));
-		return this;
-	}
-
+	/**
+	 * Add an attachment whose content is a given InputStream.
+	 * 
+	 * @param fileContent
+	 * @param mimeType
+	 * @param filename
+	 * @return
+	 * @throws MessagingException
+	 * @throws IOException
+	 */
 	public SimpleMessage addAttachment(InputStream fileContent, String mimeType, String filename)
 			throws MessagingException, IOException {
-		if (completed)
-			throw new IllegalStateException("The Message has already been completed.");
-		this.attachments.add(byte2MimeBodyPart(fileContent, mimeType, filename));
+		if (compiled)
+			throw new IllegalStateException("The Message has already been compiled.");
+		this.attachments.add(inputStream2MimeBodyPart(fileContent, mimeType, filename));
+		return this;
+	}
+
+	/**
+	 * Add a MimeBodyPart as attachment, whose whole content is given by an
+	 * InputStream.
+	 * 
+	 * @param mimeBodyPart
+	 * @return
+	 * @throws MessagingException
+	 */
+	public SimpleMessage addAttachment(InputStream mimeBodyPart) throws MessagingException {
+		if (compiled)
+			throw new IllegalStateException("The Message has already been compiled.");
+		this.attachments.add(new MimeBodyPart(mimeBodyPart));
 		return this;
 	}
 
@@ -129,7 +188,7 @@ public class SimpleMessage {
 	}
 
 	/**
-	 * Complete and return the internal MimeMessage object.
+	 * Compile the message, then return the internal MimeMessage object.
 	 * 
 	 * When you call this method, the internal object is filled with all
 	 * required data, and no more edits are allowed.
@@ -139,40 +198,57 @@ public class SimpleMessage {
 	 */
 	public MimeMessage getMessage() throws MessagingException {
 
-		if (!completed) {
-			if (htmlText == null) {
-				// simple text mail
+		if (!compiled) {
+			if (htmlText == null && attachments.isEmpty()) {
+				// simple text mail, without attachments
 				message.setText(text);
-			} else if (text == null) {
-				// HTML only mail
+
+			} else if (text == null && attachments.isEmpty()) {
+				// HTML only mail, without attachments
 				message.setContent(htmlText, "text/html");
+
 			} else {
-				// both simple text and HTML, so this mail is multipart
-				final MimeBodyPart textPart = new MimeBodyPart();
-				textPart.setContent(text, "text/plain");
 
-				final MimeBodyPart htmlPart = new MimeBodyPart();
-				htmlPart.setContent(htmlText, "text/html");
+				// multipart mail
+				// either because this is both simple text and HTML,
+				// or because there is some attachment
 
 				multipart = new MimeMultipart();
-				multipart.addBodyPart(textPart);
-				multipart.addBodyPart(htmlPart);
-			}
 
-			if (!attachments.isEmpty() && multipart == null) {
-				multipart = new MimeMultipart();
-			}
+				// HTML part must be first
+				if (htmlText != null) {
+					MimeBodyPart htmlPart = new MimeBodyPart();
+					htmlPart.setContent(htmlText, "text/html");
+					multipart.addBodyPart(htmlPart);
+				}
 
-			for (MimeBodyPart bodyPart : attachments) {
-				multipart.addBodyPart(bodyPart);
-			}
+				// Then, text part
+				if (text != null) {
+					MimeBodyPart textPart = new MimeBodyPart();
+					textPart.setContent(text, "text/plain");
+					multipart.addBodyPart(textPart);
+				}
 
-			if (multipart != null) {
+				// At last, attachments
+				for (MimeBodyPart bodyPart : attachments) {
+					multipart.addBodyPart(bodyPart);
+				}
+
 				message.setContent(multipart);
 			}
-			completed = true;
+
+			compiled = true;
 		}
 		return message;
+	}
+
+	/**
+	 * Return true if the object has not been compiled yet.
+	 * 
+	 * @return
+	 */
+	public boolean canBeModified() {
+		return !compiled;
 	}
 
 	/**
@@ -225,7 +301,7 @@ public class SimpleMessage {
 	 * @throws MessagingException
 	 * @throws IOException
 	 */
-	private static MimeBodyPart byte2MimeBodyPart(InputStream fileContent, String mimeType, String filename)
+	private static MimeBodyPart inputStream2MimeBodyPart(InputStream fileContent, String mimeType, String filename)
 			throws MessagingException, IOException {
 		final MimeBodyPart messageBodyPart = new MimeBodyPart();
 		DataSource source = new ByteArrayDataSource(fileContent, mimeType);
