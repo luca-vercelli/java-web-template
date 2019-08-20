@@ -48,7 +48,7 @@ We like EE technologies such as JTA, EJB, Injection, JAX-RS, so we cannot suppor
 * transactions: JTA + EJB
 * logging: sl4j + log4j + custom CDI Producer
 * Gentelella 1.4 frontend (jquery 3 + bootstrap 3). This could be replaced by tenths of other templates. Modified for use with JSP.
-* CRUD module: "free datatables editor alternative" from http://kingkode.com/free-datatables-editor-alternative/
+* CRUD module: "free datatables editor alternative" from https://github.com/KasperOlesen/DataTable-AltEditor
 * Testing: junit 4. Jacoco?
 * javax.emails + custom EJB
 * Java EE security + jdbcRealm
