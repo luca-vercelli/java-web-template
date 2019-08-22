@@ -28,7 +28,7 @@ import javax.mail.util.ByteArrayDataSource;
  * 
  * <br>
  * 
- * Usage: call either the setText() or setHtmlText() methods, add attachments as
+ * Usage: call either the setText() and/or setHtmlText() methods, add attachments as
  * required, then call send().
  * 
  * <br>
