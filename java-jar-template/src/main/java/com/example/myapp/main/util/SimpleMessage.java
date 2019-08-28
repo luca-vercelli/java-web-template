@@ -1,4 +1,4 @@
-package com.intesasanpaolo.bdor0be.util;
+package com.example.myapp.util;
 
 import java.io.File;
 import java.io.IOException;
