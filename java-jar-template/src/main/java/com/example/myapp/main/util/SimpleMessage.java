@@ -1,19 +1,20 @@
-package com.example.myapp.main.util;
+package com.intesasanpaolo.bdor0be.util;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
 import javax.mail.Session;
-import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -28,45 +29,24 @@ import javax.mail.util.ByteArrayDataSource;
  * 
  * <br>
  * 
- * Usage: call either the setText() and/or setHtmlText() methods, add attachments as
- * required, then call send().
+ * Usage: call either the setText() or setHtmlText() methods, add attachments as
+ * required, then send with Transport.send(message.getMessage()).
  * 
- * <br>
- * 
- * If you need some more Transport options, you can call getMessage(), then send
- * it by yourself.
  * 
  * @author LV
  *
  */
 public class SimpleMessage {
 
+	private String subject;
+	private String from;
+	private InternetAddress[] recipients;
+	private InternetAddress[] recipientsCC;
+	private InternetAddress[] recipientsBCC;
 	private String text;
 	private String htmlText;
 	private List<MimeBodyPart> attachments = new ArrayList<>();
-
-	// calculated attributes
-	private MimeMessage message;
-	private Multipart multipart;
-	private boolean compiled = false;
-
-	public SimpleMessage(Session session, String from, String recipients, String subject) throws MessagingException {
-		this(session, from, recipients, null, null, subject);
-	}
-
-	public SimpleMessage(Session session, String from, String recipients, String recipientsCC, String recipientsBCC,
-			String subject) throws MessagingException {
-
-		message = new MimeMessage(session);
-		message.setSubject(subject);
-		message.setFrom(new InternetAddress(from));
-		if (recipients != null)
-			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipients));
-		if (recipientsCC != null)
-			message.setRecipients(Message.RecipientType.CC, InternetAddress.parse(recipientsCC));
-		if (recipientsBCC != null)
-			message.setRecipients(Message.RecipientType.BCC, InternetAddress.parse(recipientsBCC));
-	}
+	private Map<String, Object> parameters = new HashMap<>();
 
 	public String getText() {
 		return text;
@@ -81,8 +61,6 @@ public class SimpleMessage {
 	 * @return
 	 */
 	public SimpleMessage setText(String text) {
-		if (compiled)
-			throw new IllegalStateException("The Message has already been compiled.");
 		this.text = text;
 		return this;
 	}
@@ -102,9 +80,102 @@ public class SimpleMessage {
 	 * @return
 	 */
 	public SimpleMessage setHtmlText(String htmlText) {
-		if (compiled)
-			throw new IllegalStateException("The Message has already been compiled.");
 		this.htmlText = htmlText;
+		return this;
+	}
+
+	public Map<String, Object> getParameters() {
+		return parameters;
+	}
+
+	/**
+	 * Set a map of parameters that will be replaced inside the mail body and
+	 * subject.
+	 * 
+	 * For example, if the map contains an entry "NAME" = "Goofy", alle
+	 * occurrences of string "{NAME}" will be replaced with "Goofy" before send.
+	 * 
+	 * @param parameters
+	 */
+	public SimpleMessage setParameters(Map<String, Object> parameters) {
+		this.parameters = parameters;
+		return this;
+	}
+
+	public SimpleMessage addParameters(String key, Object value) {
+		this.parameters.put(key, value);
+		return this;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public SimpleMessage setSubject(String subject) {
+		this.subject = subject;
+		return this;
+	}
+
+	public String getFrom() {
+		return from;
+	}
+
+	public SimpleMessage setFrom(String from) {
+		this.from = from;
+		return this;
+	}
+
+	public InternetAddress[] getRecipients() {
+		return recipients;
+	}
+
+	public SimpleMessage setRecipients(InternetAddress[] recipients) {
+		this.recipients = recipients;
+		return this;
+	}
+
+	public SimpleMessage setRecipients(String recipients) throws AddressException {
+		if (recipients == null) {
+			this.recipients = null;
+		} else {
+			this.recipients = InternetAddress.parse(recipients);
+		}
+		return this;
+	}
+
+	public InternetAddress[] getRecipientsCC() {
+		return recipientsCC;
+	}
+
+	public SimpleMessage setRecipientsCC(InternetAddress[] recipientsCC) {
+		this.recipientsCC = recipientsCC;
+		return this;
+	}
+
+	public SimpleMessage setRecipientsCC(String recipients) throws AddressException {
+		if (recipients == null) {
+			this.recipientsCC = null;
+		} else {
+			this.recipientsCC = InternetAddress.parse(recipients);
+		}
+		return this;
+	}
+
+	public InternetAddress[] getRecipientsBCC() {
+		return recipientsBCC;
+	}
+
+	public SimpleMessage setRecipientsBCC(InternetAddress[] recipientsBCC) {
+		this.recipientsBCC = recipientsBCC;
+		return this;
+	}
+
+	public SimpleMessage setRecipientsBCC(String recipients) throws AddressException {
+		if (recipients == null) {
+			this.recipientsBCC = null;
+		} else {
+			this.recipientsBCC = InternetAddress.parse(recipients);
+		}
 		return this;
 	}
 
@@ -120,8 +191,6 @@ public class SimpleMessage {
 	 * @throws MessagingException
 	 */
 	public SimpleMessage addAttachment(File attachment) throws MessagingException {
-		if (compiled)
-			throw new IllegalStateException("The Message has already been compiled.");
 		this.attachments.add(file2MimeBodyPart(attachment));
 		return this;
 	}
@@ -136,8 +205,6 @@ public class SimpleMessage {
 	 * @throws MessagingException
 	 */
 	public SimpleMessage addAttachment(byte[] fileContent, String mimeType, String filename) throws MessagingException {
-		if (compiled)
-			throw new IllegalStateException("The Message has already been compiled.");
 		this.attachments.add(byte2MimeBodyPart(fileContent, mimeType, filename));
 		return this;
 	}
@@ -154,8 +221,6 @@ public class SimpleMessage {
 	 */
 	public SimpleMessage addAttachment(InputStream fileContent, String mimeType, String filename)
 			throws MessagingException, IOException {
-		if (compiled)
-			throw new IllegalStateException("The Message has already been compiled.");
 		this.attachments.add(inputStream2MimeBodyPart(fileContent, mimeType, filename));
 		return this;
 	}
@@ -169,8 +234,6 @@ public class SimpleMessage {
 	 * @throws MessagingException
 	 */
 	public SimpleMessage addAttachment(InputStream mimeBodyPart) throws MessagingException {
-		if (compiled)
-			throw new IllegalStateException("The Message has already been compiled.");
 		this.attachments.add(new MimeBodyPart(mimeBodyPart));
 		return this;
 	}
@@ -196,69 +259,77 @@ public class SimpleMessage {
 	 * @return
 	 * @throws MessagingException
 	 */
-	public MimeMessage getMessage() throws MessagingException {
+	public MimeMessage getMessage(Session session) throws MessagingException {
 
-		if (!compiled) {
-			if (htmlText == null && attachments.isEmpty()) {
-				// simple text mail, without attachments
-				message.setText(text);
+		if (subject == null) {
+			throw new MessagingException("Missing 'subject' field");
+		}
+		if (from == null) {
+			throw new MessagingException("Missing 'from' field");
+		}
+		if ((recipients == null || recipients.length == 0) && (recipientsCC == null || recipientsCC.length == 0)
+				&& (recipientsBCC == null || recipientsBCC.length == 0)) {
+			throw new MessagingException("At least one recipient is required");
+		}
 
-			} else if (text == null && attachments.isEmpty()) {
-				// HTML only mail, without attachments
-				message.setContent(htmlText, "text/html");
+		MimeMessage message = new MimeMessage(session);
+		message.setSubject(replaceParameters(subject));
+		message.setFrom(new InternetAddress(from));
+		if (recipients != null)
+			message.setRecipients(Message.RecipientType.TO, recipients);
+		if (recipientsCC != null)
+			message.setRecipients(Message.RecipientType.CC, recipientsCC);
+		if (recipientsBCC != null)
+			message.setRecipients(Message.RecipientType.BCC, recipientsBCC);
 
-			} else {
+		if (htmlText == null && attachments.isEmpty()) {
+			// simple text mail, without attachments
+			message.setText(text);
 
-				// multipart mail
-				// either because this is both simple text and HTML,
-				// or because there is some attachment
+		} else if (text == null && attachments.isEmpty()) {
+			// HTML only mail, without attachments
+			message.setContent(htmlText, "text/html");
 
-				multipart = new MimeMultipart();
+		} else {
 
-				// HTML part must be first
-				if (htmlText != null) {
-					MimeBodyPart htmlPart = new MimeBodyPart();
-					htmlPart.setContent(htmlText, "text/html");
-					multipart.addBodyPart(htmlPart);
-				}
+			// multipart mail
+			// either because this is both simple text and HTML,
+			// or because there is some attachment
 
-				// Then, text part
-				if (text != null) {
-					MimeBodyPart textPart = new MimeBodyPart();
-					textPart.setContent(text, "text/plain");
-					multipart.addBodyPart(textPart);
-				}
+			MimeMultipart multipart = new MimeMultipart();
 
-				// At last, attachments
-				for (MimeBodyPart bodyPart : attachments) {
-					multipart.addBodyPart(bodyPart);
-				}
-
-				message.setContent(multipart);
+			// HTML part must be first
+			if (htmlText != null) {
+				MimeBodyPart htmlPart = new MimeBodyPart();
+				htmlPart.setContent(replaceParameters(htmlText), "text/html");
+				multipart.addBodyPart(htmlPart);
 			}
 
-			compiled = true;
+			// Then, text part
+			if (text != null) {
+				MimeBodyPart textPart = new MimeBodyPart();
+				textPart.setContent(replaceParameters(text), "text/plain");
+				multipart.addBodyPart(textPart);
+			}
+
+			// At last, attachments
+			for (MimeBodyPart bodyPart : attachments) {
+				multipart.addBodyPart(bodyPart);
+			}
+
+			message.setContent(multipart);
 		}
+
 		return message;
 	}
 
-	/**
-	 * Return true if the object has not been compiled yet.
-	 * 
-	 * @return
-	 */
-	public boolean canBeModified() {
-		return !compiled;
-	}
-
-	/**
-	 * Create and send the email
-	 * 
-	 * @throws MessagingException
-	 */
-	public SimpleMessage send() throws MessagingException {
-		Transport.send(getMessage());
-		return this;
+	private String replaceParameters(String text) {
+		for (String key : parameters.keySet()) {
+			String value = parameters.containsKey(key) && parameters.get(key) != null ? parameters.get(key).toString()
+					: "";
+			text = text.replace("{" + key + "}", value);
+		}
+		return text;
 	}
 
 	/**
@@ -309,4 +380,5 @@ public class SimpleMessage {
 		messageBodyPart.setFileName(filename);
 		return messageBodyPart;
 	}
+
 }
