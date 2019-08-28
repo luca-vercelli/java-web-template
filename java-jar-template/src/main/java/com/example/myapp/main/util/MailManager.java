@@ -78,7 +78,7 @@ public class MailManager {
 	 * @throws MessagingException
 	 */
 	public SimpleMessage prepareEmail(String recipients, String subject) throws MessagingException {
-		return new SimpleMessage(session, FROM, recipients, subject);
+		return new SimpleMessage().setFrom(FROM).setRecipients(recipients).setSubject(subject);
 	}
 
 	/**
@@ -94,6 +94,11 @@ public class MailManager {
 	 */
 	public SimpleMessage prepareEmail(String recipients, String recipientsCC, String recipientsBCC,
 			String subject) throws MessagingException {
-		return new SimpleMessage(session, FROM, recipients, recipientsCC, recipientsBCC, subject);
+		return new SimpleMessage().setFrom(FROM).setRecipients(recipients).setRecipientsCC(recipientsCC)
+				.setRecipientsBCC(recipientsBCC).setSubject(subject);
+	}
+
+	public void send(SimpleMessage msg) throws MessagingException {
+		Transport.send(msg.getMessage(getSession()));
 	}
 }
