@@ -81,8 +81,8 @@ public class DoPasswordRecovery extends HttpServlet {
 			SimpleMessage msg = mailManager.prepareEmail(email, "Password reset")
 				.setText("You have requested to reset " + address + " login password.\r\n" +
 					"If you really want to proceed, follow this link:\r\n" + address +
-					"/ui/confirmPasswordRecovery?code=" + pwdRecCode + "\r\n")
-				.send();
+					"/ui/confirmPasswordRecovery?code=" + pwdRecCode + "\r\n");
+			mailManager.send(msg);
 
 			session.setAttribute(ERROR_MESSAGE, "email.recovery.sent");
 			response.sendRedirect(request.getContextPath() + appProps.getProperty("password.recovery.uri"));
