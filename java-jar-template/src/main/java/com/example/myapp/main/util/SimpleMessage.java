@@ -284,11 +284,11 @@ public class SimpleMessage {
 
 		if (htmlText == null && attachments.isEmpty()) {
 			// simple text mail, without attachments
-			message.setText(text);
+			message.setText(replaceParameters(text));
 
 		} else if (text == null && attachments.isEmpty()) {
 			// HTML only mail, without attachments
-			message.setContent(htmlText, "text/html");
+			message.setContent(replaceParameters(htmlText), "text/html");
 
 		} else {
 
