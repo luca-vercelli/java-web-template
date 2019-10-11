@@ -8,89 +8,195 @@ import java.io.OutputStream;
 import java.io.StringReader;
 import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
 import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.pdf.PdfWriter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+/**
+ * This class is meant to export a list of beans into a table of some kind.
+ * 
+ * @author LV
+ *
+ */
 @Stateless
 public class Exporter {
 
-	@Inject
-	Logger LOG;
+	static final Logger logger = LoggerFactory.getLogger(ExportService.class);
+
+	public static final String MEDIA_TYPE_XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+	public static final String MEDIA_TYPE_XLS = "application/vnd.ms-excel";
+	public static final String MEDIA_TYPE_DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+	public static final String MEDIA_TYPE_DOC = "application/msword";
+	public static final String MEDIA_TYPE_PDF = "application/pdf";
 
 	/**
 	 * Simple export to a standard CSV file ("." as decimal separator, "," as
 	 * column delimiter, '"' as string delimiter)
 	 * 
 	 * @param headers
+	 *            if null, header will be omitted
 	 * @param rows
 	 * @return
 	 * @throws IOException
 	 */
 	public File exportCSV(String[] headers, List<Object[]> rows) throws IOException {
+		return exportCSV(headers, rows, null, null, null, null, null, null);
+	}
+
+	/**
+	 * Export to CSV file with given formatters.
+	 * 
+	 * Nulls are replaced with defaults.
+	 * 
+	 * @param headers
+	 *            if null, header will be omitted
+	 * 
+	 * @param rows
+	 * @param fieldDelimiter
+	 * @param rowDelimiter
+	 * @param stringDelimiter
+	 * @param stringDelimiterReplacement
+	 * @param dateFormatter
+	 * @param numberFormatter
+	 * @return
+	 * @throws IOException
+	 */
+	public File exportCSV(String[] headers, List<Object[]> rows, String fieldDelimiter, String rowDelimiter,
+			String stringDelimiter, String stringDelimiterReplacement, DateFormat dateFormatter,
+			NumberFormat numberFormatter) throws IOException {
+
+		if (rows == null) {
+			throw new IllegalArgumentException("rows cannot be null");
+		}
+
+		if (fieldDelimiter == null) {
+			fieldDelimiter = ", ";
+		}
+		if (rowDelimiter == null) {
+			rowDelimiter = "\r\n";
+		}
+		if (stringDelimiter == null) {
+			stringDelimiter = "\"";
+		}
+		if (stringDelimiterReplacement == null) {
+			stringDelimiterReplacement = "'";
+		}
+		if (dateFormatter == null) {
+			dateFormatter = DateFormat.getInstance();
+		}
+		if (numberFormatter == null) {
+			numberFormatter = NumberFormat.getInstance(Locale.US);
+		}
+
 		File f = File.createTempFile("export", ".csv");
 		FileWriter fw = new FileWriter(f);
 
-		final String FIELD_DELIMITER = ", ";
-		final String ROW_DELIMITER = "\r\n";
-		final String STRING_DELIMITER = "\"";
-
-		String comma = "";
-		for (String s : headers) {
-			fw.write(comma + "\"" + s + "\"");
-			comma = ", ";
+		if (headers != null) {
+			String line = formatCsvRow(headers, fieldDelimiter, rowDelimiter, stringDelimiter,
+					stringDelimiterReplacement, dateFormatter, numberFormatter);
+			fw.write(line);
 		}
 
-		for (Object[] item : rows) {
-			comma = "";
-			for (Object value : item) {
+		for (Object[] row : rows) {
 
-				fw.write(comma + formatCSVField(value, STRING_DELIMITER));
-				comma = FIELD_DELIMITER;
-			}
-			fw.write(ROW_DELIMITER);
-			fw.flush();
+			String line = formatCsvRow(row, fieldDelimiter, rowDelimiter, stringDelimiter, stringDelimiterReplacement,
+					dateFormatter, numberFormatter);
+			fw.write(line);
 		}
 
+		fw.flush();
 		fw.close();
 		return f;
 	}
 
-	private NumberFormat formatter = NumberFormat.getInstance(Locale.US);
-	private DateFormat dateFormatter = DateFormat.getInstance();
+	/**
+	 * Format a single row.
+	 * 
+	 * Arguments must not be null.
+	 * 
+	 * @param row
+	 * @param fieldDelimiter
+	 * @param rowDelimiter
+	 * @param stringDelimiter
+	 * @param stringDelimiterReplacement
+	 * @param dateFormatter
+	 * @param numberFormatter
+	 * @return
+	 */
+	private String formatCsvRow(Object[] row, String fieldDelimiter, String rowDelimiter, String stringDelimiter,
+			String stringDelimiterReplacement, DateFormat dateFormatter, NumberFormat numberFormatter) {
+		boolean firstColumn = true;
+		StringBuilder sb = new StringBuilder();
+		for (Object value : row) {
+			if (!firstColumn) {
+				sb.append(fieldDelimiter);
+			}
+			sb.append(
+					formatCsvField(value, stringDelimiter, stringDelimiterReplacement, dateFormatter, numberFormatter));
+			firstColumn = false;
+		}
+		sb.append(rowDelimiter);
+		return sb.toString();
+	}
 
-	private String formatCSVField(Object value, String stringDelimiter) {
+	/**
+	 * Format a single field.
+	 * 
+	 * Arguments must not be null.
+	 * 
+	 * @param value
+	 * @param stringDelimiter
+	 * @param stringDelimiterReplacement
+	 * @param dateFormatter
+	 * @param numberFormatter
+	 * @return
+	 */
+	private String formatCsvField(Object value, String stringDelimiter, String stringDelimiterReplacement,
+			DateFormat dateFormatter, NumberFormat numberFormatter) {
 
-		if (value == null)
+		if (value == null) {
 			return "";
-
-		if (value instanceof Number) {
-			return formatter.format(value);
+		} else if (value instanceof Number) {
+			return numberFormatter.format(value);
 		} else if (value instanceof Date) {
-			return dateFormatter.format(value);
+			return stringDelimiter + dateFormatter.format((Date) value) + stringDelimiter;
+		} else if (value instanceof Calendar) {
+			return stringDelimiter + dateFormatter.format(((Calendar) value).getTime()) + stringDelimiter;
 		} else {
-			String sanitizedString = value.toString().replaceAll("\r", "").replaceAll("\n", "").replaceAll("\"", "'");
+			String sanitizedString = value.toString().replace("\r", "").replace("\n", "");
+			if (!stringDelimiter.isEmpty()) {
+				sanitizedString = sanitizedString.replace(stringDelimiter, stringDelimiterReplacement);
+			}
 			return stringDelimiter + sanitizedString + stringDelimiter;
 		}
 	}
@@ -99,99 +205,421 @@ public class Exporter {
 	 * Create a (currently very simple) XLSX workbook that contains given data.
 	 * 
 	 * @param headers
+	 *            if null, header will be omitted
+	 * @param rows
+	 * @param headerStyle
+	 *            CellStyle to be used for header cells. If null, a default will
+	 *            be used.
+	 * @param cellStyle
+	 *            CellStyle to be used for all other cells. Can be null.
+	 * @param sheetName
+	 *            can be null
+	 * @return
+	 * @throws IOException
+	 */
+	public File exportXLSX(String[] headers, List<Object[]> rows, CellStyle headerStyle, CellStyle cellStyle,
+			String sheetName) throws IOException {
+
+		if (rows == null) {
+			throw new IllegalArgumentException("rows cannot be null");
+		}
+
+		// FIXME handle columns format
+		// FIXME auto size columns ???
+
+		File f = File.createTempFile("export", ".xlsx");
+
+		XSSFWorkbook wb = new XSSFWorkbook();
+		Sheet sheet = wb.createSheet();
+		if (sheetName != null && !sheetName.isEmpty()) {
+			wb.setSheetName(0, sheetName);
+		}
+		int rownum = 0;
+
+		if (headers != null) {
+			if (headerStyle == null) {
+				headerStyle = createCellStyleWhiteBold(wb);
+			}
+			createXlsxRow(headers, sheet, rownum, headerStyle);
+			++rownum;
+		}
+
+		for (Object[] row : rows) {
+			createXlsxRow(row, sheet, rownum, cellStyle);
+			++rownum;
+		}
+
+		// Autosize columns, if there is some column
+		if (headers != null || rows.size() > 0) {
+			int numOfColumns = (headers != null) ? headers.length : rows.get(0).length;
+			for (int colnum = 0; colnum < numOfColumns; ++colnum) {
+				sheet.autoSizeColumn(colnum);
+			}
+		}
+		
+		FileOutputStream fos = new FileOutputStream(f);
+		wb.write(fos);
+		fos.close();
+
+		return f;
+	}
+
+	/**
+	 * Create a (currently very simple) XLSX workbook that contains given data.
+	 * 
+	 * @param headers
+	 *            if null, header will be omitted
 	 * @param rows
 	 * @return
 	 * @throws IOException
 	 * @throws InvalidFormatException
 	 */
 	public File exportXLSX(String[] headers, List<Object[]> rows) throws IOException {
+		return exportXLSX(headers, rows, null, null, null);
+	}
 
-		// FIXME handle columns format
-
-		File f = File.createTempFile("export", ".xlsx");
-
-		XSSFWorkbook wb = new XSSFWorkbook();
-		Sheet sheet = wb.createSheet();
-		Row row = sheet.createRow(0);
-
-		CellStyle headerStyle = createCellStyleWhiteBold(wb);
-
+	private void createXlsxRow(Object[] row, Sheet sheet, int rownum, CellStyle cellStyle) {
+		Row sheeetRow = sheet.createRow(rownum);
 		int colnum = 0;
-		for (String s : headers) {
-			Cell c = row.createCell(colnum++);
-			c.setCellStyle(headerStyle);
-			c.setCellValue(s);
+		for (Object value : row) {
+			createXlsxCell(value, sheeetRow, colnum, cellStyle);
+			++colnum;
 		}
+	}
 
-		int rownum = 1;
-		for (Object[] item : rows) {
-			row = sheet.createRow(rownum);
-			colnum = 0;
-			for (Object value : item) {
-				Cell cell = row.createCell(colnum);
-				formatXLSXField(value, cell);
-				++colnum;
-			}
-			++rownum;
+	private void createXlsxCell(Object value, Row sheeetRow, int colnum, CellStyle cellStyle) {
+
+		Cell cell = sheeetRow.createCell(colnum);
+		if (cellStyle != null)
+			cell.setCellStyle(cellStyle);
+
+		if (value == null)
+			return;
+		if (value instanceof Number) {
+			cell.setCellValue(((Number) value).doubleValue());
+		} else if (value instanceof Date) {
+			cell.setCellValue((Date) value);
+		} else if (value instanceof Calendar) {
+			cell.setCellValue((Calendar) value);
+		} else {
+			cell.setCellValue(value.toString());
 		}
-
-		FileOutputStream fileOut = new FileOutputStream(f.getAbsolutePath());
-		wb.write(fileOut);
-		fileOut.close();
-
-		return f;
-
 	}
 
 	private CellStyle createCellStyleWhiteBold(Workbook wb) {
 		CellStyle cs = wb.createCellStyle();
-		cs.setFillForegroundColor(HSSFColor.WHITE.index);
-		cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+		cs.setFillForegroundColor(IndexedColors.WHITE.index);
+		cs.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 		Font fontBlueBold = wb.createFont();
-		fontBlueBold.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-		fontBlueBold.setColor(HSSFColor.DARK_BLUE.index);
+		fontBlueBold.setBold(true);
+		fontBlueBold.setColor(IndexedColors.DARK_BLUE.index);
 		cs.setFont(fontBlueBold);
 		return cs;
 	}
 
-	private void formatXLSXField(Object value, Cell c) {
-		if (value == null)
-			return;
-		if (value instanceof Number) {
-			c.setCellValue(((Number) value).doubleValue());
-		} else if (value instanceof Date) {
-			c.setCellValue((Date) value);
-		} else if (value instanceof Calendar) {
-			c.setCellValue((Calendar) value);
-		} else {
-			c.setCellValue(value.toString());
+	/**
+	 * Return a HTML &lt;TABLE&gt; using given data
+	 * 
+	 * @param headers
+	 *            if null, header will be omitted
+	 * @param rows
+	 * @return
+	 * @throws IOException
+	 */
+	public String exportHtmlTable(String[] headers, List<Object[]> rows) throws IOException {
+		return exportHtmlTable(headers, rows, null, null);
+	}
+
+	/**
+	 * 
+	 * Return a HTML &lt;TABLE&gt; using given data
+	 * 
+	 * @param headers
+	 *            if null, header will be omitted
+	 * @param rows
+	 * @param dateFormatter
+	 * @param numberFormatter
+	 * @return
+	 * @throws IOException
+	 */
+	public String exportHtmlTable(String[] headers, List<Object[]> rows, DateFormat dateFormatter,
+			NumberFormat numberFormatter) throws IOException {
+
+		if (rows == null) {
+			throw new IllegalArgumentException("rows cannot be null");
 		}
+
+		if (dateFormatter == null) {
+			dateFormatter = DateFormat.getInstance();
+		}
+		if (numberFormatter == null) {
+			numberFormatter = NumberFormat.getInstance(Locale.US);
+		}
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("<table>");
+		if (headers != null) {
+			sb.append("<thead><tr>");
+			for (String c : headers) {
+				sb.append("<td>").append(c).append("</td>");
+			}
+			sb.append("</tr></thead>");
+		}
+		sb.append("<tbody>");
+		for (Object[] row : rows) {
+			sb.append("<tr>");
+			for (Object field : row) {
+				String fieldAsStr = formatHtmlField(field, dateFormatter, numberFormatter);
+				sb.append("<td>").append(fieldAsStr).append("</td>");
+			}
+			sb.append("</tr>");
+		}
+		sb.append("</tbody></table>");
+		return sb.toString();
+	}
+
+	/**
+	 * Format a single field.
+	 * 
+	 * Arguments must not be null.
+	 * 
+	 * @param value
+	 * @param dateFormatter
+	 * @param numberFormatter
+	 * @return
+	 */
+	private String formatHtmlField(Object value, DateFormat dateFormatter, NumberFormat numberFormatter) {
+
+		String s;
+		if (value == null) {
+			s = "";
+		} else if (value instanceof Number) {
+			s = numberFormatter.format(value);
+		} else if (value instanceof Date) {
+			s = dateFormatter.format((Date) value);
+		} else if (value instanceof Calendar) {
+			s = dateFormatter.format(((Calendar) value).getTime());
+		} else {
+			s = value.toString();
+		}
+		return StringEscapeUtils.escapeHtml4(s);
+	}
+
+	/**
+	 * Return a HTML file
+	 * 
+	 * @param headers
+	 *            if null, header will be omitted
+	 * @param rows
+	 * @return
+	 * @throws IOException
+	 */
+	public String exportHTML(String[] headers, List<Object[]> rows) throws IOException {
+		return exportHTML(headers, rows, null, null);
+	}
+
+	/**
+	 * 
+	 * Return a HTML file
+	 * 
+	 * @param headers
+	 *            if null, header will be omitted
+	 * @param rows
+	 * @param dateFormatter
+	 * @param numberFormatter
+	 * @return
+	 * @throws IOException
+	 */
+	public String exportHTML(String[] headers, List<Object[]> rows, DateFormat dateFormatter,
+			NumberFormat numberFormatter) throws IOException {
+		return "<html><body>" + exportHtmlTable(headers, rows, dateFormatter, numberFormatter) + "</body></html>";
 	}
 
 	/**
 	 * Generate a PDF from given HTML source code.
 	 * 
-	 * @param HTMLtext
+	 * @param htmlText
+	 * @throws IOException
+	 * @throws DocumentException
 	 */
-	public File HTML2PDFExport(String HTMLtext) {
-		try {
+	public File exportPDF(String htmlText) throws IOException, DocumentException {
 
-			File f = File.createTempFile("export", ".xlsx");
+		File f = File.createTempFile("export", ".pdf");
 
-			OutputStream os = new FileOutputStream(f);
-			Document doc = new Document();
-			PdfWriter.getInstance(doc, os);
-			doc.open();
-			HTMLWorker hw = new HTMLWorker(doc);
-			hw.parse(new StringReader(HTMLtext));
-			doc.close();
-			os.close();
+		OutputStream fos = new FileOutputStream(f);
+		Document doc = new Document();
+		PdfWriter.getInstance(doc, fos);
+		doc.open();
+		HTMLWorker hw = new HTMLWorker(doc);
+		hw.parse(new StringReader(htmlText));
+		doc.close();
+		fos.close();
 
-			return f;
+		return f;
+	}
 
-		} catch (Exception e) {
-			LOG.error("Exception during PDF conversion", e);
-			return null;
+	/**
+	 * Create a DOCX document with a single table within
+	 * 
+	 * @param headers
+	 * @param rows
+	 * @return
+	 * @throws IOException
+	 */
+	public File exportDOCX(String[] headers, List<Object[]> rows) throws IOException {
+		return exportDOCX(headers, rows, null, null);
+	}
+
+	/**
+	 * Create a DOCX document with a single table within
+	 * 
+	 * @param headers
+	 * @param rows
+	 * @return
+	 * @throws IOException
+	 */
+	public File exportDOCX(String[] headers, List<Object[]> rows, DateFormat dateFormatter,
+			NumberFormat numberFormatter) throws IOException {
+
+		if (rows == null) {
+			throw new IllegalArgumentException("rows cannot be null");
 		}
+
+		File f = File.createTempFile("export", ".docx");
+
+		if (dateFormatter == null) {
+			dateFormatter = DateFormat.getInstance();
+		}
+		if (numberFormatter == null) {
+			numberFormatter = NumberFormat.getInstance(Locale.US);
+		}
+
+		XWPFDocument document = new XWPFDocument();
+		FileOutputStream fos = new FileOutputStream(f);
+		XWPFTable table = document.createTable();
+
+		if (headers != null) {
+			// should make it bold
+			createDocxRow(headers, table, dateFormatter, numberFormatter);
+		}
+
+		for (Object[] row : rows) {
+			createDocxRow(row, table, dateFormatter, numberFormatter);
+		}
+
+		document.write(fos);
+		fos.close();
+		document.close();
+
+		return f;
+	}
+
+	/**
+	 * Create a single row.
+	 * 
+	 * Arguments must not be null.
+	 * 
+	 * @param row
+	 * @param table
+	 * @param dateFormatter
+	 * @param numberFormatter
+	 */
+	private void createDocxRow(Object[] row, XWPFTable table, DateFormat dateFormatter, NumberFormat numberFormatter) {
+		XWPFTableRow tableRow = table.createRow();
+		int colnum = 0;
+		for (Object value : row) {
+			tableRow.getCell(colnum).setText(formaDocxField(value, dateFormatter, numberFormatter));
+			++colnum;
+		}
+	}
+
+	/**
+	 * Format a single field.
+	 * 
+	 * Arguments must not be null.
+	 * 
+	 * @param value
+	 * @param dateFormatter
+	 * @param numberFormatter
+	 * @return
+	 */
+	private String formaDocxField(Object value, DateFormat dateFormatter, NumberFormat numberFormatter) {
+
+		String s;
+		if (value == null) {
+			s = "";
+		} else if (value instanceof Number) {
+			s = numberFormatter.format(value);
+		} else if (value instanceof Date) {
+			s = dateFormatter.format((Date) value);
+		} else if (value instanceof Calendar) {
+			s = dateFormatter.format(((Calendar) value).getTime());
+		} else {
+			s = value.toString();
+		}
+		return s;
+	}
+
+	/**
+	 * Convert entity beans given in form of Map's into Array's, using given
+	 * attribute names.
+	 * 
+	 * @param rows
+	 * @param headers
+	 * @return
+	 */
+	public List<Object[]> maps2Arrays(List<Map<String, Object>> rowsAsMaps, String[] attributeNames) {
+		List<Object[]> list = new ArrayList<Object[]>(rowsAsMaps.size());
+		for (Map<String, Object> rowAsMap : rowsAsMaps) {
+			Object[] rowAsArray = new Object[attributeNames.length];
+			for (int i = 0; i < attributeNames.length; ++i) {
+				rowAsArray[i] = rowAsMap.get(attributeNames[i]);
+			}
+			list.add(rowAsArray);
+		}
+		return list;
+	}
+
+	/**
+	 * Convert entity beans given in form of Object's into Array's, using given
+	 * attribute names.
+	 * 
+	 * @param rows
+	 * @param headers
+	 * @return
+	 */
+	public List<Object[]> objects2Arrays(List<Object> rowsAsObjects, String[] attributeNames) {
+		List<Object[]> list = new ArrayList<Object[]>(rowsAsObjects.size());
+		ObjectMapper oMapper = new ObjectMapper();
+		for (Object rowAsObject : rowsAsObjects) {
+			@SuppressWarnings("unchecked")
+			Map<String, Object> rowAsMap = oMapper.convertValue(rowAsObject, Map.class);
+			Object[] rowAsArray = new Object[attributeNames.length];
+			for (int i = 0; i < attributeNames.length; ++i) {
+				rowAsArray[i] = rowAsMap.get(attributeNames[i]);
+			}
+			list.add(rowAsArray);
+		}
+		return list;
+	}
+
+	/**
+	 * Convert entity beans given in form of Arrays's into Map's, using given
+	 * attribute names.
+	 * 
+	 * @param items
+	 * @param columns
+	 * @return
+	 */
+	public List<Map<String, Object>> arrays2Maps(List<Object[]> rowsAsArrays, String[] attributeNames) {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		for (Object[] row : rowsAsArrays) {
+			Map<String, Object> rowAsMap = new HashMap<String, Object>();
+			for (int i = 0; i < attributeNames.length; ++i) {
+				rowAsMap.put(attributeNames[i], row[i]);
+			}
+			list.add(rowAsMap);
+		}
+		return list;
 	}
 }
