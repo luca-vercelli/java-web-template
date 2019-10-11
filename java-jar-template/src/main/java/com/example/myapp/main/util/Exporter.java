@@ -51,7 +51,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Stateless
 public class Exporter {
 
-	static final Logger logger = LoggerFactory.getLogger(ExportService.class);
+	static final Logger logger = LoggerFactory.getLogger(Exporter.class);
 
 	public static final String MEDIA_TYPE_XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 	public static final String MEDIA_TYPE_XLS = "application/vnd.ms-excel";
