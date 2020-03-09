@@ -220,7 +220,7 @@ public class Exporter {
 			throw new IllegalArgumentException("rows cannot be null");
 		}
 
-		File f = File.createTempFile(EXPORT_FILE_PREFIX, ".csv");
+		File f = File.createTempFile("export", ".csv");
 		try (FileWriter fw = new FileWriter(f)) {
 
 			if (headers != null) {
