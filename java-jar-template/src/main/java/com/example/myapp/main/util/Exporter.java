@@ -60,17 +60,146 @@ public class Exporter {
 	public static final String MEDIA_TYPE_PDF = "application/pdf";
 
 	/**
-	 * Simple export to a standard CSV file ("." as decimal separator, "," as
-	 * column delimiter, '"' as string delimiter)
+	 * This class represent all parameters that define a CSV file
+	 *
+	 */
+	public static class CsvParameters {
+
+		/**
+		 * CSV with default parameters
+		 */
+		public CsvParameters() {
+			fieldDelimiter = ", ";
+			rowDelimiter = "\r\n";
+			stringDelimiter = "\"";
+			stringDelimiterReplacement = "'";
+			nullReplacement = "";
+			dateFormatter = DateFormat.getInstance();
+			numberFormatter = NumberFormat.getInstance(Locale.US);
+		}
+
+		/**
+		 * CSV with default parameters, but the fieldDelimiter
+		 */
+		public CsvParameters(String fieldDelimiter) {
+			this();
+			this.fieldDelimiter = fieldDelimiter;
+		}
+
+		/**
+		 * CSV with custom parameters. All parameters may be "null", in that case
+		 * default value will be used.
+		 * 
+		 * @param fieldDelimiter
+		 * @param rowDelimiter
+		 * @param stringDelimiter
+		 * @param stringDelimiterReplacement
+		 * @param dateFormatter
+		 * @param numberFormatter
+		 */
+		public CsvParameters(String fieldDelimiter, String rowDelimiter, String stringDelimiter,
+				String stringDelimiterReplacement, String nullReplacement, DateFormat dateFormatter,
+				NumberFormat numberFormatter) {
+			this();
+			if (fieldDelimiter != null) {
+				this.fieldDelimiter = fieldDelimiter;
+			}
+			if (rowDelimiter != null) {
+				this.rowDelimiter = rowDelimiter;
+			}
+			if (stringDelimiter != null) {
+				this.stringDelimiter = stringDelimiter;
+			}
+			if (stringDelimiterReplacement != null) {
+				this.stringDelimiterReplacement = stringDelimiterReplacement;
+			}
+			if (nullReplacement != null) {
+				this.nullReplacement = nullReplacement;
+			}
+			if (dateFormatter != null) {
+				this.dateFormatter = dateFormatter;
+			}
+			if (numberFormatter != null) {
+				this.numberFormatter = numberFormatter;
+			}
+		}
+
+		private String fieldDelimiter;
+		private String rowDelimiter;
+		private String stringDelimiter;
+		private String stringDelimiterReplacement;
+		private String nullReplacement;
+		private DateFormat dateFormatter;
+		private NumberFormat numberFormatter;
+
+		public String getFieldDelimiter() {
+			return fieldDelimiter;
+		}
+
+		public void setFieldDelimiter(String fieldDelimiter) {
+			this.fieldDelimiter = fieldDelimiter;
+		}
+
+		public String getRowDelimiter() {
+			return rowDelimiter;
+		}
+
+		public void setRowDelimiter(String rowDelimiter) {
+			this.rowDelimiter = rowDelimiter;
+		}
+
+		public String getStringDelimiter() {
+			return stringDelimiter;
+		}
+
+		public void setStringDelimiter(String stringDelimiter) {
+			this.stringDelimiter = stringDelimiter;
+		}
+
+		public String getStringDelimiterReplacement() {
+			return stringDelimiterReplacement;
+		}
+
+		public void setStringDelimiterReplacement(String stringDelimiterReplacement) {
+			this.stringDelimiterReplacement = stringDelimiterReplacement;
+		}
+
+		public String getNullReplacement() {
+			return nullReplacement;
+		}
+
+		public void setNullReplacement(String nullReplacement) {
+			this.nullReplacement = nullReplacement;
+		}
+
+		public DateFormat getDateFormatter() {
+			return dateFormatter;
+		}
+
+		public void setDateFormatter(DateFormat dateFormatter) {
+			this.dateFormatter = dateFormatter;
+		}
+
+		public NumberFormat getNumberFormatter() {
+			return numberFormatter;
+		}
+
+		public void setNumberFormatter(NumberFormat numberFormatter) {
+			this.numberFormatter = numberFormatter;
+		}
+	}
+
+	/**
+	 * Simple export to a standard CSV file ("." as decimal separator, "," as column
+	 * delimiter, '"' as string delimiter)
 	 * 
-	 * @param headers
-	 *            if null, header will be omitted
+	 * @param headers if null, header will be omitted
 	 * @param rows
 	 * @return
 	 * @throws IOException
 	 */
 	public File exportCSV(String[] headers, List<Object[]> rows) throws IOException {
-		return exportCSV(headers, rows, null, null, null, null, null, null);
+		return exportCSV(headers, rows, new CsvParameters());
 	}
 
 	/**
@@ -78,64 +207,35 @@ public class Exporter {
 	 * 
 	 * Nulls are replaced with defaults.
 	 * 
-	 * @param headers
-	 *            if null, header will be omitted
+	 * @param headers if null, header will be omitted
 	 * 
 	 * @param rows
-	 * @param fieldDelimiter
-	 * @param rowDelimiter
-	 * @param stringDelimiter
-	 * @param stringDelimiterReplacement
-	 * @param dateFormatter
-	 * @param numberFormatter
+	 * @param params
 	 * @return
 	 * @throws IOException
 	 */
-	public File exportCSV(String[] headers, List<Object[]> rows, String fieldDelimiter, String rowDelimiter,
-			String stringDelimiter, String stringDelimiterReplacement, DateFormat dateFormatter,
-			NumberFormat numberFormatter) throws IOException {
+	public File exportCSV(String[] headers, List<Object[]> rows, CsvParameters params) throws IOException {
 
 		if (rows == null) {
-			throw new IllegalArgumentException("rows cannot be null");
+			throw new IllegalArgumentException(MSG_ROWS_NULL);
 		}
 
-		if (fieldDelimiter == null) {
-			fieldDelimiter = ", ";
-		}
-		if (rowDelimiter == null) {
-			rowDelimiter = "\r\n";
-		}
-		if (stringDelimiter == null) {
-			stringDelimiter = "\"";
-		}
-		if (stringDelimiterReplacement == null) {
-			stringDelimiterReplacement = "'";
-		}
-		if (dateFormatter == null) {
-			dateFormatter = DateFormat.getInstance();
-		}
-		if (numberFormatter == null) {
-			numberFormatter = NumberFormat.getInstance(Locale.US);
-		}
+		File f = File.createTempFile(EXPORT_FILE_PREFIX, ".csv");
+		try (FileWriter fw = new FileWriter(f)) {
 
-		File f = File.createTempFile("export", ".csv");
-		FileWriter fw = new FileWriter(f);
+			if (headers != null) {
+				String line = formatCsvRow(headers, params);
+				fw.write(line);
+			}
 
-		if (headers != null) {
-			String line = formatCsvRow(headers, fieldDelimiter, rowDelimiter, stringDelimiter,
-					stringDelimiterReplacement, dateFormatter, numberFormatter);
-			fw.write(line);
+			for (Object[] row : rows) {
+
+				String line = formatCsvRow(row, params);
+				fw.write(line);
+			}
+
+			fw.flush();
 		}
-
-		for (Object[] row : rows) {
-
-			String line = formatCsvRow(row, fieldDelimiter, rowDelimiter, stringDelimiter, stringDelimiterReplacement,
-					dateFormatter, numberFormatter);
-			fw.write(line);
-		}
-
-		fw.flush();
-		fw.close();
 		return f;
 	}
 
@@ -145,27 +245,20 @@ public class Exporter {
 	 * Arguments must not be null.
 	 * 
 	 * @param row
-	 * @param fieldDelimiter
-	 * @param rowDelimiter
-	 * @param stringDelimiter
-	 * @param stringDelimiterReplacement
-	 * @param dateFormatter
-	 * @param numberFormatter
+	 * @param params
 	 * @return
 	 */
-	private String formatCsvRow(Object[] row, String fieldDelimiter, String rowDelimiter, String stringDelimiter,
-			String stringDelimiterReplacement, DateFormat dateFormatter, NumberFormat numberFormatter) {
+	private String formatCsvRow(Object[] row, CsvParameters params) {
 		boolean firstColumn = true;
 		StringBuilder sb = new StringBuilder();
 		for (Object value : row) {
 			if (!firstColumn) {
-				sb.append(fieldDelimiter);
+				sb.append(params.fieldDelimiter);
 			}
-			sb.append(
-					formatCsvField(value, stringDelimiter, stringDelimiterReplacement, dateFormatter, numberFormatter));
+			sb.append(formatCsvField(value, params));
 			firstColumn = false;
 		}
-		sb.append(rowDelimiter);
+		sb.append(params.rowDelimiter);
 		return sb.toString();
 	}
 
@@ -175,29 +268,27 @@ public class Exporter {
 	 * Arguments must not be null.
 	 * 
 	 * @param value
-	 * @param stringDelimiter
-	 * @param stringDelimiterReplacement
-	 * @param dateFormatter
-	 * @param numberFormatter
+	 * @param params
 	 * @return
 	 */
-	private String formatCsvField(Object value, String stringDelimiter, String stringDelimiterReplacement,
-			DateFormat dateFormatter, NumberFormat numberFormatter) {
+	private String formatCsvField(Object value, CsvParameters params) {
 
 		if (value == null) {
-			return "";
+			return params.nullReplacement;
 		} else if (value instanceof Number) {
-			return numberFormatter.format(value);
+			return params.numberFormatter.format(value);
 		} else if (value instanceof Date) {
-			return stringDelimiter + dateFormatter.format((Date) value) + stringDelimiter;
+			String dateFmt = params.dateFormatter.format((Date) value);
+			return params.stringDelimiter + dateFmt + params.stringDelimiter;
 		} else if (value instanceof Calendar) {
-			return stringDelimiter + dateFormatter.format(((Calendar) value).getTime()) + stringDelimiter;
+			String dateFmt = params.dateFormatter.format(((Calendar) value).getTime());
+			return params.stringDelimiter + dateFmt + params.stringDelimiter;
 		} else {
 			String sanitizedString = value.toString().replace("\r", "").replace("\n", "");
-			if (!stringDelimiter.isEmpty()) {
-				sanitizedString = sanitizedString.replace(stringDelimiter, stringDelimiterReplacement);
+			if (!params.stringDelimiter.isEmpty()) {
+				sanitizedString = sanitizedString.replace(params.stringDelimiter, params.stringDelimiterReplacement);
 			}
-			return stringDelimiter + sanitizedString + stringDelimiter;
+			return params.stringDelimiter + sanitizedString + params.stringDelimiter;
 		}
 	}
 
