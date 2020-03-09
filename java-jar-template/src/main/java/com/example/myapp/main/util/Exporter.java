@@ -217,7 +217,7 @@ public class Exporter {
 	public File exportCSV(String[] headers, List<Object[]> rows, CsvParameters params) throws IOException {
 
 		if (rows == null) {
-			throw new IllegalArgumentException(MSG_ROWS_NULL);
+			throw new IllegalArgumentException("rows cannot be null");
 		}
 
 		File f = File.createTempFile(EXPORT_FILE_PREFIX, ".csv");
