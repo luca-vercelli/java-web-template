@@ -679,7 +679,7 @@ public class Exporter {
 	 * @param headers
 	 * @return
 	 */
-	public List<Object[]> objects2Arrays(List<Object> rowsAsObjects, String[] attributeNames) {
+	public List<Object[]> objects2Arrays(List<? extends Object> rowsAsObjects, String[] attributeNames) {
 		List<Object[]> list = new ArrayList<Object[]>(rowsAsObjects.size());
 		ObjectMapper oMapper = new ObjectMapper();
 		for (Object rowAsObject : rowsAsObjects) {
