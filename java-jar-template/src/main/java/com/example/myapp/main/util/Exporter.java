@@ -664,11 +664,36 @@ public class Exporter {
 		for (Map<String, Object> rowAsMap : rowsAsMaps) {
 			Object[] rowAsArray = new Object[attributeNames.length];
 			for (int i = 0; i < attributeNames.length; ++i) {
-				rowAsArray[i] = rowAsMap.get(attributeNames[i]);
+				rowAsArray[i] = multiget(rowAsMap, attributeNames[i]);
 			}
 			list.add(rowAsArray);
 		}
 		return list;
+	}
+
+	/**
+	 * Retrieve a property such as "element.parent.id"
+	 * 
+	 * @param map
+	 * @param attributeNameWithDots
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private Object multiget(Map<String, Object> map, String attributeNameWithDots) {
+		if (attributeNameWithDots.contains(".")) {
+			int index = attributeNameWithDots.indexOf('.');
+			String firstPart = attributeNameWithDots.substring(0, index);
+			String moreParts = attributeNameWithDots.substring(index + 1);
+			Object first = map.get(firstPart);
+			if (first instanceof Map) {
+				return multiget((Map<String, Object>) first, moreParts);
+			} else {
+				// Parent property not found
+				return null;
+			}
+		} else {
+			return map.get(attributeNameWithDots);
+		}
 	}
 
 	/**
