@@ -81,4 +81,3 @@ there can be issues e.g. with i18n.
 the problem here is that every container has its own login methods, and they're not always good. For example, Glassfish' jdbcRealm is nice, however it supports a limited number of encryption algorithms.
 * JASPIC is a solution, but it's not so easy, you need to modify the container itself. 
 * We also tried to use an old JAAS LoginModule directly, however we do not recommend this.
-
